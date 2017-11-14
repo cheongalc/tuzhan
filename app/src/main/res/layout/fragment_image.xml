@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_imageContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_gameplayInfo"
+        android:background="@drawable/background_white"
+        android:layout_marginStart="@dimen/MarginML"
+        android:layout_marginEnd="@dimen/MarginML">
+
+        <ImageView
+            android:id="@+id/iv_gameplayImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/MarginS"
+            android:layout_centerVertical="true"
+            android:background="@drawable/background_image"
+            android:maxHeight="300dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/teacher_with_blackboard"/>
+
+        <TextView
+            android:id="@+id/tv_imageCredits"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/background_image_credits"
+            android:padding="@dimen/PaddingS"
+            android:text="摘于 Sapann | Freepik"
+            android:textColor="@color/colorAccent"
+            android:textAlignment="center"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

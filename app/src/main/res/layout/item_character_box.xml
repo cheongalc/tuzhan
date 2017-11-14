@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="64dp"
+    android:layout_height="64dp"
+    android:layout_gravity="center_horizontal"
+    android:background="@drawable/background_accent_blue"
+    android:padding="@dimen/PaddingS"
+    android:layout_marginStart="@dimen/MarginS"
+    android:layout_marginEnd="@dimen/MarginS"
+    android:textSize="@dimen/Heading1"
+    android:textColor="@color/colorAccent"
+    android:gravity="center">
+
+</TextView>

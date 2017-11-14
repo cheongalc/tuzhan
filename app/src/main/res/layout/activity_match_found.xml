@@ -9,8 +9,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start Game"
         android:layout_centerInParent="true"
-        android:onClick="findMatch" />
+        android:text="Start Match"
+        android:onClick="startGame"/>
 
 </RelativeLayout>

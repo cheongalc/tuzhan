@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Text Sizes-->
+    <dimen name="Heading1">30sp</dimen>
+    <dimen name="Heading2">20sp</dimen>
+    <!--Paddings-->
+    <dimen name="PaddingS">8dp</dimen>
+    <dimen name="PaddingM">16dp</dimen>
+    <!--Margins-->
+    <dimen name="MarginS">4dp</dimen>
+    <dimen name="MarginM">8dp</dimen>
+    <dimen name="MarginML">12dp</dimen>
+    <!--Border Radii-->
+    <dimen name="RadiusS">8dp</dimen>
+</resources>

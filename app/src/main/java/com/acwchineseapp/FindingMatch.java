@@ -5,16 +5,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-public class MainActivity extends AppCompatActivity {
+public class FindingMatch extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_finding_match);
     }
 
-    public void findMatch(View view) {
-        Intent i = new Intent(MainActivity.this, FindingMatch.class);
+    public void matchFound(View view) {
+        Intent i = new Intent(FindingMatch.this, MatchFound.class);
         startActivity(i);
     }
 }

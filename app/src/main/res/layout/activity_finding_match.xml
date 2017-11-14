@@ -7,10 +7,22 @@
     android:background="@color/colorPrimary">
 
     <Button
+        android:id="@+id/btn_matchFound"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start Game"
         android:layout_centerInParent="true"
-        android:onClick="findMatch" />
+        android:text="Continue"
+        android:onClick="matchFound"/>
+
+    <TextView
+        android:id="@+id/tv_findingMatch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/btn_matchFound"
+        android:text="搜素对手..."
+        android:textColor="@color/colorAccent"
+        android:textAlignment="center"
+        android:textSize="@dimen/Heading1"
+        android:textStyle="bold"/>
 
 </RelativeLayout>
