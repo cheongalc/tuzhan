@@ -44,6 +44,8 @@ public class GameplayUI extends AppCompatActivity implements GameFragmentInterfa
     private List<String> formattedAnswers = new ArrayList<>(); // global list to store the answers
     private List< Pair<String, Integer> > possibleMatches = new ArrayList<>();
 
+    private String playerAnswers = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,12 +137,15 @@ public class GameplayUI extends AppCompatActivity implements GameFragmentInterfa
         final Runnable scoreThreadRunnable = new Runnable() {
             @Override
             public void run() {
-                awardScore();
-                showAnswers();
+                int numFilledBoxes = countFilledBoxes();
+                awardScore(numFilledBoxes);
+                showAnswers(numFilledBoxes);
                 if (currentImage < NUM_IMAGES) {
                     handler.postDelayed(this, DELAY);
                 } else {
                     Intent i = new Intent(GameplayUI.this, GameFinished.class);
+                    i.putExtra("playerEntries", playerAnswers);
+                    i.putExtra("playerScore", playerScore);
                     startActivity(i);
                 }
             }
@@ -148,9 +153,8 @@ public class GameplayUI extends AppCompatActivity implements GameFragmentInterfa
         handler.postDelayed(scoreThreadRunnable, DELAY-1000); // 12 seconds delay then check the answers
     }
 
-    private void showAnswers() {
+    private void showAnswers(int numFilledBoxes) {
         final int answerLength = formattedAnswers.get(0).length();
-        int numFilledBoxes = countFilledBoxes();
         if (numFilledBoxes < answerLength) {
             //Show the first answer because it is the most important.
             for (int i = 0; i < answerLength; i++) {
@@ -161,9 +165,7 @@ public class GameplayUI extends AppCompatActivity implements GameFragmentInterfa
         }
     }
 
-    private void awardScore() {
-        // Firstly, count the number of boxes which are filled
-        int numFilledBoxes = countFilledBoxes();
+    private void awardScore(int numFilledBoxes) {
         playerScore += numFilledBoxes * 5;
         TextView tv_playerScore = (TextView) findViewById(R.id.tv_playerScore);
         tv_playerScore.setText(String.valueOf(playerScore));
@@ -171,14 +173,21 @@ public class GameplayUI extends AppCompatActivity implements GameFragmentInterfa
 
     private int countFilledBoxes() {
         int result = 0;
+        String stack = "";
         for (int i = 0; i < formattedAnswers.get(0).length(); i++) {
             TextView tv_characterBox = (TextView) rootLayout.findViewWithTag(i);
             String content = String.valueOf(tv_characterBox.getText());
             if (!content.equals("")) {
                 // it is filled
                 result++;
+                stack += content;
             }
         }
+        if (stack.length() < formattedAnswers.get(0).length()) {
+            // this means it is partial
+            playerAnswers += "p";
+        }
+        playerAnswers = playerAnswers + stack + "-";
         return result;
     }
 

@@ -31,7 +31,7 @@
         android:layout_margin="@dimen/MarginM">
 
         <TextView
-            android:id="@+id/tv_playerScore"
+            android:id="@+id/tv_playerFinalScore"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -120,7 +120,37 @@
                         android:layout_weight="1"
                         android:layout_gravity="center_vertical"
                         android:orientation="vertical"
-                        android:padding="@dimen/PaddingS" />
+                        android:padding="@dimen/PaddingS">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="老师"
+                            android:textColor="@color/colorAccentRed"
+                            android:textStyle="bold"
+                            android:textAlignment="center"
+                            android:textSize="@dimen/Heading2"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="红苹"
+                            android:textColor="@color/colorAccentOrange"
+                            android:textStyle="bold"
+                            android:textAlignment="center"
+                            android:textSize="@dimen/Heading2"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="书本"
+                            android:textColor="@color/colorAccentRed"
+                            android:textStyle="bold"
+                            android:textAlignment="center"
+                            android:textSize="@dimen/Heading2"/>
+
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
