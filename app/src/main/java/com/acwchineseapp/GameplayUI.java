@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import it.sephiroth.android.library.tooltip.Tooltip;
+
 public class GameplayUI extends AppCompatActivity implements GameFragmentInterface {
 
     private static final String LOG_TAG = "GAMEPLAYUI";
@@ -35,7 +37,8 @@ public class GameplayUI extends AppCompatActivity implements GameFragmentInterfa
 
 
     private static final int NUM_IMAGES = 4;
-    private static final int DELAY = 13000;
+    private static final int DELAY = 15000;
+    private static final int TOOLTIP_SHOW_ANS_ID = 123;
     private int playerScore = 0, currentImage = 0; // currImage represents the current position in ViewPager
     private List<String> formattedAnswers = new ArrayList<>(); // global list to store the answers
     private List< Pair<String, Integer> > possibleMatches = new ArrayList<>();
@@ -68,7 +71,7 @@ public class GameplayUI extends AppCompatActivity implements GameFragmentInterfa
 
     public void startTimer() {
         final TextView tv_playerTime = (TextView) findViewById(R.id.tv_playerTime);
-        new CountDownTimer(DELAY-2, 1000) {
+        new CountDownTimer(DELAY-5000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 tv_playerTime.setText(String.valueOf(millisUntilFinished / 1000));
@@ -123,7 +126,7 @@ public class GameplayUI extends AppCompatActivity implements GameFragmentInterfa
                 currentImage++;
 
                 if (currentImage < NUM_IMAGES) {
-                    handler.postDelayed(this, DELAY); // 12 seconds delay is to make sure that user can see the full countdown
+                    handler.postDelayed(this, DELAY); // 15 seconds delay is to make sure that user can see the full countdown
                 }
             }
         };
@@ -135,12 +138,11 @@ public class GameplayUI extends AppCompatActivity implements GameFragmentInterfa
                 showAnswers();
 
                 if (currentImage < NUM_IMAGES) {
-                    handler.postDelayed(this, DELAY);
+                    handler.postDelayed(this, DELAY-(DELAY-12000));
                 }
             }
         };
         handler.postDelayed(scoreThreadRunnable, DELAY); // 12 seconds delay then check the answers
-        handler.postDelayed(scoreThreadRunnable, DELAY * NUM_IMAGES); // for final checking of images
         if (currentImage == NUM_IMAGES) {
             // go to finish game activity
             Toast.makeText(this, "Game Finished", Toast.LENGTH_SHORT).show();
@@ -148,22 +150,40 @@ public class GameplayUI extends AppCompatActivity implements GameFragmentInterfa
     }
 
     private void showAnswers() {
+        final int answerLength = formattedAnswers.get(0).length();
+        int numFilledBoxes = countFilledBoxes();
+        if (numFilledBoxes < answerLength) {
+            //Show the first answer because it is the most important.
+            for (int i = 0; i < answerLength; i++) {
+                TextView tv_characterBox = (TextView) rootLayout.findViewWithTag(i);
+                String content = String.valueOf(tv_characterBox.getText());
+                if (content.equals("")) {
+                    tv_characterBox.setText(String.valueOf(formattedAnswers.get(0).charAt(i)));
+                    tv_characterBox.setBackgroundResource(R.drawable.background_accent_red);
+                }
+            }
+        }
     }
 
     private void awardScore() {
         // Firstly, count the number of boxes which are filled
-        int numFilledBoxes = 0;
+        int numFilledBoxes = countFilledBoxes();
+        playerScore += numFilledBoxes * 5;
+        TextView tv_playerScore = (TextView) findViewById(R.id.tv_playerScore);
+        tv_playerScore.setText(String.valueOf(playerScore));
+    }
+
+    private int countFilledBoxes() {
+        int result = 0;
         for (int i = 0; i < formattedAnswers.get(0).length(); i++) {
             TextView tv_characterBox = (TextView) rootLayout.findViewWithTag(i);
             String content = String.valueOf(tv_characterBox.getText());
             if (!content.equals("")) {
                 // it is filled
-                numFilledBoxes++;
+                result++;
             }
         }
-        playerScore += numFilledBoxes * 5;
-        TextView tv_playerScore = (TextView) findViewById(R.id.tv_playerScore);
-        tv_playerScore.setText(String.valueOf(playerScore));
+        return result;
     }
 
     private void submitWord(String word) {
@@ -197,7 +217,7 @@ public class GameplayUI extends AppCompatActivity implements GameFragmentInterfa
             char currentCharacter = word.charAt(i);
             for (int j = 0; j < possibleMatches.size(); j++) {
                 if (possibleMatches.get(j).getLeft().equals(String.valueOf(currentCharacter))) {
-                    fillBlueBox(possibleMatches.get(j).getRight(), currentCharacter);
+                    fillBlueBox(possibleMatches.get(j).getRight(), currentCharacter, 0);
                 }
             }
         }
@@ -219,17 +239,21 @@ public class GameplayUI extends AppCompatActivity implements GameFragmentInterfa
             String s = formattedAnswers.get(i);
             int index = s.indexOf(firstCharacter);
             if (index != -1) {
-                fillBlueBox(index, firstCharacter);
+                fillBlueBox(index, firstCharacter, 0);
                 output = true;
             }
         }
         return output;
     }
 
-    private void fillBlueBox(int index, char firstCharacter) {
+    private void fillBlueBox(int index, char firstCharacter, int mode) {
         TextView tv_characterBox = (TextView) rootLayout.findViewWithTag(index);
         tv_characterBox.setText(String.valueOf(firstCharacter));
-        tv_characterBox.setBackgroundResource(R.drawable.background_accent_green);
+        if (mode == 0) {
+            tv_characterBox.setBackgroundResource(R.drawable.background_accent_green);
+        } else if (mode == 1) {
+            tv_characterBox.setBackgroundResource(R.drawable.background_accent_red);
+        }
     }
 
     private List< Pair <String, Integer> > findPossibleMatches(char character) {
