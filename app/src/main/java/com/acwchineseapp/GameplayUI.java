@@ -1,6 +1,7 @@
 package com.acwchineseapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
@@ -37,7 +38,7 @@ public class GameplayUI extends AppCompatActivity implements GameFragmentInterfa
 
 
     private static final int NUM_IMAGES = 4;
-    private static final int DELAY = 15000;
+    private static final int DELAY = 12000;
     private static final int TOOLTIP_SHOW_ANS_ID = 123;
     private int playerScore = 0, currentImage = 0; // currImage represents the current position in ViewPager
     private List<String> formattedAnswers = new ArrayList<>(); // global list to store the answers
@@ -71,7 +72,7 @@ public class GameplayUI extends AppCompatActivity implements GameFragmentInterfa
 
     public void startTimer() {
         final TextView tv_playerTime = (TextView) findViewById(R.id.tv_playerTime);
-        new CountDownTimer(DELAY-5000, 1000) {
+        new CountDownTimer(DELAY-1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 tv_playerTime.setText(String.valueOf(millisUntilFinished / 1000));
@@ -136,17 +137,15 @@ public class GameplayUI extends AppCompatActivity implements GameFragmentInterfa
             public void run() {
                 awardScore();
                 showAnswers();
-
                 if (currentImage < NUM_IMAGES) {
-                    handler.postDelayed(this, DELAY-(DELAY-12000));
+                    handler.postDelayed(this, DELAY);
+                } else {
+                    Intent i = new Intent(GameplayUI.this, GameFinished.class);
+                    startActivity(i);
                 }
             }
         };
-        handler.postDelayed(scoreThreadRunnable, DELAY); // 12 seconds delay then check the answers
-        if (currentImage == NUM_IMAGES) {
-            // go to finish game activity
-            Toast.makeText(this, "Game Finished", Toast.LENGTH_SHORT).show();
-        }
+        handler.postDelayed(scoreThreadRunnable, DELAY-1000); // 12 seconds delay then check the answers
     }
 
     private void showAnswers() {
@@ -156,11 +155,8 @@ public class GameplayUI extends AppCompatActivity implements GameFragmentInterfa
             //Show the first answer because it is the most important.
             for (int i = 0; i < answerLength; i++) {
                 TextView tv_characterBox = (TextView) rootLayout.findViewWithTag(i);
-                String content = String.valueOf(tv_characterBox.getText());
-                if (content.equals("")) {
-                    tv_characterBox.setText(String.valueOf(formattedAnswers.get(0).charAt(i)));
-                    tv_characterBox.setBackgroundResource(R.drawable.background_accent_red);
-                }
+                tv_characterBox.setText(String.valueOf(formattedAnswers.get(0).charAt(i)));
+                tv_characterBox.setBackgroundResource(R.drawable.background_accent_red);
             }
         }
     }
