@@ -86,7 +86,7 @@
 
             </LinearLayout>
 
-            <com.acwchineseapp.NonSwipeableViewPager
+            <com.tuzhan.NonSwipeableViewPager
                 android:id="@+id/vp_imagePager"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"

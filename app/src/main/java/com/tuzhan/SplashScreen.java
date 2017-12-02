@@ -1,4 +1,4 @@
-package com.acwchineseapp;
+package com.tuzhan;
 
 import android.content.Intent;
 import android.os.Handler;

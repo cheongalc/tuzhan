@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.acwchineseapp">
+    package="com.tuzhan">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -14,22 +14,22 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name="com.tuzhan.MainActivity"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".FindingMatch"
+            android:name="com.tuzhan.FindingMatch"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MatchFound"
+            android:name="com.tuzhan.MatchFound"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".GameplayUI"
+            android:name="com.tuzhan.GameplayUI"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".GameFinished"
+            android:name="com.tuzhan.GameFinished"
             android:screenOrientation="portrait" />
-        <activity android:name=".SplashScreen">
+        <activity android:name="com.tuzhan.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

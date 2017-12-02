@@ -1,20 +1,20 @@
-package com.acwchineseapp;
+package com.tuzhan;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-public class FindingMatch extends AppCompatActivity {
+public class MatchFound extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_finding_match);
+        setContentView(R.layout.activity_match_found);
     }
 
-    public void matchFound(View view) {
-        Intent i = new Intent(FindingMatch.this, MatchFound.class);
+    public void startGame(View view) {
+        Intent i = new Intent(MatchFound.this, GameplayUI.class);
         startActivity(i);
     }
 }

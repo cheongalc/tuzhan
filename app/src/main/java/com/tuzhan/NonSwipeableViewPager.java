@@ -1,4 +1,4 @@
-package com.acwchineseapp;
+package com.tuzhan;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;

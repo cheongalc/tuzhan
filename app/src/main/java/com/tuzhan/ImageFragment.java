@@ -1,7 +1,6 @@
-package com.acwchineseapp;
+package com.tuzhan;
 
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,12 +16,10 @@ import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 
 /**
  * Created by Al Cheong on 13/11/2017.

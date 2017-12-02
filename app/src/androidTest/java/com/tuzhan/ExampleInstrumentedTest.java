@@ -1,4 +1,4 @@
-package com.acwchineseapp;
+package com.tuzhan;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.acwchineseapp", appContext.getPackageName());
+        assertEquals("com.tuzhan", appContext.getPackageName());
     }
 }
