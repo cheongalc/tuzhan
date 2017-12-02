@@ -9,4 +9,5 @@
     <color name="colorAccentBlue">#73e8ff</color>
     <color name="colorBlack">#000000</color>
     <color name="colorBlackTranslucent">#8c000000</color>
+    <color name="colorSecondaryBlue">#00EBCC</color>
 </resources>

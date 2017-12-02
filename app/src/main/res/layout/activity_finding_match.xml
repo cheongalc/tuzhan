@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/btn_matchFound"
-        android:text="搜素对手..."
+        android:text="搜索对手..."
         android:textColor="@color/colorAccent"
         android:textAlignment="center"
         android:textSize="@dimen/Heading1"
