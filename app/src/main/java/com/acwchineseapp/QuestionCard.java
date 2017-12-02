@@ -15,18 +15,18 @@ public class QuestionCard {
     String theme;
     String credit;
     List<String> answers;
-    List<String> answers_1;
+    List<String> harderAnswers;
 
     public QuestionCard(){}
 
-    public QuestionCard(String theme, URL image_url, @Nullable String credit, String answers, @Nullable String answers_1){
+    public QuestionCard(String theme, URL image_url, @Nullable String credit, String answers, @Nullable String harderAnswers){
         this.theme = theme;
         this.image_url = image_url;
         this.credit = credit;
 
         this.answers = Arrays.asList(answers.split("-"));
-        if(answers_1 != null) {
-            this.answers_1 = Arrays.asList(answers_1.split("-"));
-        }else this.answers_1 = new ArrayList<>();
+        if(harderAnswers != null) {
+            this.harderAnswers = Arrays.asList(harderAnswers.split("-"));
+        }else this.harderAnswers = new ArrayList<>();
     }
 }
