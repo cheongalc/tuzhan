@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "329183178662",
+    "firebase_url": "https://tuzhan-6585f.firebaseio.com",
+    "project_id": "tuzhan-6585f",
+    "storage_bucket": "tuzhan-6585f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:329183178662:android:754e87e6bd6b4234",
+        "android_client_info": {
+          "package_name": "com.tuzhan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "329183178662-d32j6d1vbpokh642qcqi97bjdr15rqvr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_jWZ5QlXs_dmInVLEIdqX_0WXfYwSnzE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
