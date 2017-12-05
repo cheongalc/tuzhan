@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "329183178662-m6h6250dqo5grr5tf90tvhgcq6ge85lo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tuzhan",
+            "certificate_hash": "0c29ecac1b2e2a39c34cd1e05650f99db7eaca95"
+          }
+        },
+        {
+          "client_id": "329183178662-nj6si87cht6bm75j7vmdurll4n0j44ma.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tuzhan",
+            "certificate_hash": "b24da8248fa0efca524b27717f48e707414d7833"
+          }
+        },
+        {
           "client_id": "329183178662-d32j6d1vbpokh642qcqi97bjdr15rqvr.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +45,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "329183178662-d32j6d1vbpokh642qcqi97bjdr15rqvr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
