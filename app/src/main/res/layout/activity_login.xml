@@ -13,13 +13,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/tuzhan_card_pattern" />
+        android:src="@mipmap/tuzhan_card_pattern" />
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/background_darken_gradient" />
+        android:src="@drawable/darken_background" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/darken_background" />
 
     <LinearLayout
         android:id="@+id/linear_container"
@@ -54,11 +60,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/background_login_button"
+        android:background="@drawable/bordered_card_background_rounded"
         android:layout_marginTop="40dp"
         android:orientation="horizontal">
 
         <ImageView
+            android:tint="@color/colorAccentYellow"
             android:id="@+id/google_icon"
             android:layout_width="60dp"
             android:layout_height="60dp"

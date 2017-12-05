@@ -1,34 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary">
+    android:background="@drawable/bordered_card_background"
+    android:orientation="vertical">
 
-    <android.support.v7.widget.AppCompatImageView
-        android:layout_above="@+id/launcher_icon"
-        android:layout_width="200dp"
-        android:layout_height="100dp"
-        android:src="@drawable/tuzhan_title"
-        android:layout_marginBottom="15dp"
-        android:layout_centerHorizontal="true"/>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/tuzhan_card_pattern" />
 
-    <android.support.v7.widget.AppCompatImageView
-        android:id="@+id/launcher_icon"
-        android:paddingBottom="10dp"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_centerInParent="true"
-        android:layout_marginBottom="10dp"
-         android:src="@mipmap/ic_launcher"/>
 
-    <com.wang.avi.AVLoadingIndicatorView
-        android:layout_below="@id/launcher_icon"
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/darken_background" />
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/darken_background" />
+
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
-        app:indicatorColor="@color/colorAccent"
-        app:indicatorName="BallPulseIndicator"/>
+        android:orientation="vertical"
+        android:paddingTop="80dp">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="170dp"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/tuzhan_horn"
+           />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/launcher_icon"
+            android:layout_width="200dp"
+            android:layout_height="100dp"
+            android:layout_marginBottom="10dp"
+            android:paddingBottom="10dp"
+            android:src="@drawable/tuzhan_title" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.wang.avi.AVLoadingIndicatorView
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:indicatorColor="@color/colorAccentOrange"
+                app:indicatorName="BallPulseIndicator" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
 
 </RelativeLayout>
