@@ -7,8 +7,9 @@
     <color name="colorAccentGreen">#9edf54</color>
     <color name="colorAccentRed">#f44336</color>
     <color name="colorAccentBlue">#73e8ff</color>
-    <color name="colorBlack">#000000</color>
-    <color name="colorBlackTranslucent">#8c000000</color>
+    <color name="colorAccentYellow">#FFCA00</color>
+    <color name="colorBlackTranslucentMore">#52000000</color>
+    <color name="colorBlackTranslucentLess">#11000000</color>
     <color name="colorSecondaryBlue">#00EBCC</color>
     <color name="colorSecondaryBlue1">#00EBCC</color>
 </resources>
