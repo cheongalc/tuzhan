@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.tuzhan">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -14,30 +15,33 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.tuzhan.MainActivity"
-            android:screenOrientation="portrait">
-        </activity>
+            android:name=".MainActivity"
+            android:screenOrientation="portrait"/>
         <activity
-            android:name="com.tuzhan.FindingMatch"
+            android:name=".FindingMatch"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.tuzhan.MatchFound"
+            android:name=".MatchFound"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.tuzhan.GameplayUI"
+            android:name=".GameplayUI"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.tuzhan.GameFinished"
+            android:name=".GameFinished"
             android:screenOrientation="portrait" />
-        <activity android:name="com.tuzhan.SplashScreen">
+        <activity android:name=".SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.tuzhan.LoginPage"
+        <activity
+            android:name=".LoginPage"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".UserInfo"
+            android:theme="@style/AppTheme.PopUp"/>
     </application>
 
 </manifest>

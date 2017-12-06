@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_color_primary_dark"
+    android:background="@color/colorPrimary"
     android:windowSoftInputMode="adjustResize"
     tools:context="com.tuzhan.LoginPage">
 
@@ -13,19 +13,35 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@mipmap/tuzhan_card_pattern" />
+        android:src="@mipmap/tuzhan_pattern" />
+
+
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/darken_background" />
+        android:src="@mipmap/darken_background" />
 
-    <ImageView
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/progress_overlay"
+        android:elevation="10dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/darken_background" />
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:background="@color/colorBlackTranslucentMore" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"/>
+
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/linear_container"
@@ -65,11 +81,10 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:tint="@color/colorAccentYellow"
             android:id="@+id/google_icon"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:padding="10dp"
+            android:padding="7dp"
             android:src="@mipmap/google_icon" />
 
         <ImageButton

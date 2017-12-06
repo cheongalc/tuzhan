@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -24,14 +25,20 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class LoginPage extends AppCompatActivity {
 
     ImageButton bLogin;
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
+    private RelativeLayout progress_overlay;
     int RC_SIGN_IN = 666;
     String TAG = "LoginActivity";
+    DatabaseReference root;
+    FirebaseDatabase database;
+    DatabaseReference user_directory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,37 +48,57 @@ public class LoginPage extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         FirebaseApp.initializeApp(this);
-
-        bLogin = (ImageButton) findViewById(R.id.login_button);
-
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
         mAuth = FirebaseAuth.getInstance();
 
-        bLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                signIn();
-            }
-        });
+        //set up database
+        database = FirebaseDatabase.getInstance();
+        root = database.getReference();
+
+        //move to user directory
+        user_directory = root.child("Users");
+
+        //check if this activity is created for the first time
+        Intent intent = getIntent();
+        boolean isFirstStart = intent.getBooleanExtra("isFirstStart", true);
+
+        //check if user has already logged in
+        if (isFirstStart && mAuth.getCurrentUser() != null) {
+            //user has already connected to the app from previous sessions, move to mainactivity
+            Intent intent_main = new Intent(LoginPage.this, MainActivity.class);
+            startActivity(intent_main);
+            finish();
+        } else {
+            //set up onclick listeners for login
+            progress_overlay = (RelativeLayout) findViewById(R.id.progress_overlay);
+            bLogin = (ImageButton) findViewById(R.id.login_button);
+            bLogin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    signIn();
+                }
+            });
+        }
     }
 
     //sign in to firebase
     private void signIn() {
+        progress_overlay.setVisibility(View.VISIBLE);
         //intent to start activity for gmail sign in
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
+    //receive result from sign in pop up
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        // result returned from launching the Intent in signin();
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
@@ -80,7 +107,11 @@ public class LoginPage extends AppCompatActivity {
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
                 //google sign in failed, toast to the user
-                Toast.makeText(this, "登陆失败", Toast.LENGTH_SHORT).show();
+                //status code 12501 is returned when user cancels the login
+                if (e.getStatusCode() != 12501) {
+                    Toast.makeText(this, "登陆失败" + e.getStatusCode(), Toast.LENGTH_SHORT).show();
+                }
+                progress_overlay.setVisibility(View.GONE);
             }
         }
     }
@@ -98,14 +129,21 @@ public class LoginPage extends AppCompatActivity {
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
 
+                            //upload user data to firebase
+                            //convert uri to string as uri is not supported by firebase
+                            User curuser = new User(user.getDisplayName(), user.getEmail(), user.getUid(), user.getPhotoUrl().toString());
+                            //replace '.' in email address with ',' as firebase paths must not contain '.'
+                            user_directory.child(user.getEmail().replace('.',',')).setValue(curuser);
+
                             //move to main activity
                             Intent intent = new Intent(LoginPage.this, MainActivity.class);
                             startActivity(intent);
-
+                            finish();
                         } else {
                             // sign in fails, toast to the user
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(LoginPage.this, "登陆失败", Toast.LENGTH_SHORT).show();
+                            progress_overlay.setVisibility(View.GONE);
                         }
                     }
                 });
