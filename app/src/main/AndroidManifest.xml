@@ -42,6 +42,8 @@
         <activity
             android:name=".UserInfo"
             android:theme="@style/AppTheme.PopUp"/>
+        <service android:name=".ClosingService"
+            android:stopWithTask="false"/>
     </application>
 
 </manifest>

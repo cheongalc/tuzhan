@@ -129,11 +129,15 @@ public class LoginPage extends AppCompatActivity {
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
 
+                            DatabaseReference curUserDir = user_directory.child(user.getEmail().replace('.',','));
                             //upload user data to firebase
                             //convert uri to string as uri is not supported by firebase
                             User curuser = new User(user.getDisplayName(), user.getEmail(), user.getUid(), user.getPhotoUrl().toString());
                             //replace '.' in email address with ',' as firebase paths must not contain '.'
-                            user_directory.child(user.getEmail().replace('.',',')).setValue(curuser);
+                            curUserDir.child("displayname").setValue(curuser.displayname);
+                            curUserDir.child("email").setValue(curuser.email);
+                            curUserDir.child("userId").setValue(curuser.userId);
+                            curUserDir.child("dpURL").setValue(curuser.dpURL);
 
                             //move to main activity
                             Intent intent = new Intent(LoginPage.this, MainActivity.class);

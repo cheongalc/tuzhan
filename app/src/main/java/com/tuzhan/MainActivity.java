@@ -19,6 +19,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -30,12 +32,20 @@ public class MainActivity extends AppCompatActivity {
     GoogleSignInClient mGoogleSignInClient;
     CircleImageView civDpPhoto;
     TextView tvUserName;
+    TextView tvUserKD;
+    TextView tvUserRoundsPlayed;
     RelativeLayout userInfoButton;
+    FirebaseDatabase database;
+    DatabaseReference root;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //set up database
+        database = FirebaseDatabase.getInstance();
+        root = database.getReference();
 
         //retrieve user info
         mAuth = FirebaseAuth.getInstance();
@@ -50,12 +60,19 @@ public class MainActivity extends AppCompatActivity {
 
         civDpPhoto = (CircleImageView) findViewById(R.id.user_dp);
         tvUserName = (TextView) findViewById(R.id.user_dn);
+        tvUserKD = (TextView) findViewById(R.id.user_kd);
+        tvUserRoundsPlayed = (TextView) findViewById(R.id.user_rounds_played);
         userInfoButton = (RelativeLayout) findViewById(R.id.u_info_button);
 
         Picasso.with(this).load(curUser.getPhotoUrl()).into(civDpPhoto);
         tvUserName.setText(curUser.getDisplayName());
 
         userInfoButton.setOnClickListener(userInfoClick);
+
+        root.child("Users").child(curUser.getEmail().replace('.',',')).child("isOnline").setValue(true);
+        Intent intent = new Intent(this, ClosingService.class);
+        intent.putExtra("email", curUser.getEmail());
+        startService(intent);
     }
 
     View.OnClickListener userInfoClick = new View.OnClickListener() {
@@ -97,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void signout()
     {
+        root.child("Users").child(curUser.getEmail().replace('.',',')).child("isOnline").setValue(false);
         //sign out of firebase
         mAuth.signOut();
         //sign out of google
@@ -115,4 +133,5 @@ public class MainActivity extends AppCompatActivity {
         Intent i = new Intent(MainActivity.this, FindingMatch.class);
         startActivity(i);
     }
+
 }
