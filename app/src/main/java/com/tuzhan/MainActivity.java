@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,17 +40,17 @@ public class MainActivity extends AppCompatActivity {
     FirebaseUser currUser;
     FirebaseAuth mAuth;
     GoogleSignInClient mGoogleSignInClient;
-    CircleImageView civDpPhoto;
-    TextView tvUserName;
-    TextView tvUserKD;
-    TextView tvUserRoundsPlayed;
-    ListView lvPrevMatches;
-    RelativeLayout userInfoButton;
+    CircleImageView civ_displayPhoto;
+    TextView tv_displayName;
+    TextView tv_userKD;
+    TextView tv_userRoundsPlayed;
+    ListView lv_prevMatches;
+    RelativeLayout rl_userInfoBtnContainer;
     FirebaseDatabase database;
     DatabaseReference root;
 
-    List<String> prev_match_ids = new ArrayList<>();
-    List<MatchDetails> prev_match_details = new ArrayList<>();
+    List<String> prevMatchIds = new ArrayList<>();
+    List<MatchDetails> prevMatchDetails = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,17 +74,17 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        civDpPhoto = (CircleImageView) findViewById(R.id.user_dp);
-        tvUserName = (TextView) findViewById(R.id.user_dn);
-        tvUserKD = (TextView) findViewById(R.id.tv_userKD);
-        tvUserRoundsPlayed = (TextView) findViewById(R.id.tv_userRoundsPlayed);
-        userInfoButton = (RelativeLayout) findViewById(R.id.u_info_button);
-        lvPrevMatches = (ListView) findViewById(R.id.lv_prev_matches);
+        civ_displayPhoto = (CircleImageView) findViewById(R.id.user_dp);
+        tv_displayName = (TextView) findViewById(R.id.user_dn);
+        tv_userKD = (TextView) findViewById(R.id.tv_userKD);
+        tv_userRoundsPlayed = (TextView) findViewById(R.id.tv_userRoundsPlayed);
+        rl_userInfoBtnContainer = (RelativeLayout) findViewById(R.id.rl_userInfoBtnContainer);
+        lv_prevMatches = (ListView) findViewById(R.id.lv_prev_matches);
 
-        Picasso.with(this).load(currUser.getPhotoUrl()).into(civDpPhoto);
-        tvUserName.setText(currUser.getDisplayName());
+        Picasso.with(this).load(currUser.getPhotoUrl()).into(civ_displayPhoto);
+        tv_displayName.setText(currUser.getDisplayName());
 
-        userInfoButton.setOnClickListener(userInfoClick);
+        rl_userInfoBtnContainer.setOnClickListener(userInfoClick);
 
         getPrevMatches();
 
@@ -112,19 +111,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 //remove match from global list
-                prev_match_ids.remove(dataSnapshot.getKey());
+                prevMatchIds.remove(dataSnapshot.getKey());
                 List<MatchDetails> matches_to_remove = new ArrayList<>();
-                for(MatchDetails matchDetails : prev_match_details){
+                for(MatchDetails matchDetails : prevMatchDetails){
                     if(matchDetails.match_id.equals(dataSnapshot.getKey())){
                         matches_to_remove.add(matchDetails);
                     }
                 }
-                prev_match_details.removeAll(matches_to_remove);
+                prevMatchDetails.removeAll(matches_to_remove);
 
                 //refresh list
-                PrevMatchesAdapter prevMatchesAdapter = new PrevMatchesAdapter(MainActivity.this, prev_match_ids, prev_match_details);
-                lvPrevMatches.setAdapter(prevMatchesAdapter);
-                setListViewHeightBasedOnChildren(lvPrevMatches);
+                PrevMatchesAdapter prevMatchesAdapter = new PrevMatchesAdapter(MainActivity.this, prevMatchIds, prevMatchDetails);
+                lv_prevMatches.setAdapter(prevMatchesAdapter);
+                setListViewHeightBasedOnChildren(lv_prevMatches);
             }
 
             @Override
@@ -186,15 +185,15 @@ public class MainActivity extends AppCompatActivity {
                         MatchDetails matchDetails = new MatchDetails(match_id, opponent, fin_outcome, topic);
 
                         //add match details into global list
-                        prev_match_details.add(matchDetails);
+                        prevMatchDetails.add(matchDetails);
 
                         //adds match id to global list
-                        prev_match_ids.add(match_id);
+                        prevMatchIds.add(match_id);
 
                         //all info retrieved, set listview
-                        PrevMatchesAdapter prevMatchesAdapter = new PrevMatchesAdapter(MainActivity.this, prev_match_ids, prev_match_details);
-                        lvPrevMatches.setAdapter(prevMatchesAdapter);
-                        setListViewHeightBasedOnChildren(lvPrevMatches);
+                        PrevMatchesAdapter prevMatchesAdapter = new PrevMatchesAdapter(MainActivity.this, prevMatchIds, prevMatchDetails);
+                        lv_prevMatches.setAdapter(prevMatchesAdapter);
+                        setListViewHeightBasedOnChildren(lv_prevMatches);
                     }
 
                     @Override
@@ -229,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        signout();
+                        signOut();
                     }
                 })
                 .setCancelable(true);
@@ -246,8 +245,7 @@ public class MainActivity extends AppCompatActivity {
         logout_dialog.show();
     }
 
-    private void signout()
-    {
+    private void signOut() {
         //change user status
         root.child("Users").child(currUser.getEmail().replace('.',',')).child("isOnline").setValue(false);
         root.child("Users").child(currUser.getEmail().replace('.',',')).child("isOnline").setValue(false);

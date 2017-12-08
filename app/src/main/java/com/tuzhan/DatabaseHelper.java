@@ -21,7 +21,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
             "scoreSelf integer,"    +
             "scoreOpp integer,"     +
             "timeSelf double,"      +
-            "timeOpp double,"       +
+        "timeOpp double,"       +
             "entriesSelf text,"     +
             "entriesOpp text,"      +
             "scoresSelf integer,"   +

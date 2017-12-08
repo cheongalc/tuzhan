@@ -138,7 +138,7 @@ public class DataSource extends Application {
         Cursor cursor = database.rawQuery("SELECT * FROM MATCHES", null);
         ArrayList<MatchRecord> matches = new ArrayList<>();
 
-        if(cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             do{
                 matches.add(new MatchRecord(cursor));
             } while(cursor.moveToNext());

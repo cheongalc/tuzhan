@@ -25,7 +25,7 @@
         app:cardCornerRadius="10dp">
 
         <RelativeLayout
-            android:id="@+id/u_info_button"
+            android:id="@+id/rl_userInfoBtnContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"

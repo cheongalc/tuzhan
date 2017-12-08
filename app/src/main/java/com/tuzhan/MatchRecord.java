@@ -2,11 +2,13 @@ package com.tuzhan;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.widget.ListView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -24,8 +26,10 @@ public class MatchRecord extends DB_DataModel {
     List<Integer> scoresSelf, scoresOpp;
     String oppEmail, winnerEmail;
 
+    static ListView prevMatchesListView;
+
     // initialize a match record with partial data immediately when this user completes the match
-    public MatchRecord(String id, List<Integer> cardIds, String oppEmail, Integer scoreSelf, Double timeSelf, List<String> entriesSelf, List<Integer> scoresSelf){
+    public MatchRecord(String id, List<Integer> cardIds, String oppEmail, Integer scoreSelf, Double timeSelf, List<String> entriesSelf, List<Integer> scoresSelf, ListView prevMatchesListView){
         this.id = id;
         this.cardIds = cardIds;
         this.oppEmail = oppEmail;
@@ -33,6 +37,7 @@ public class MatchRecord extends DB_DataModel {
         this.timeSelf = timeSelf;
         this.entriesSelf = entriesSelf;
         this.scoresSelf = scoresSelf;
+        this.prevMatchesListView = prevMatchesListView;
         uploadToFB();
     }
 
@@ -75,6 +80,9 @@ public class MatchRecord extends DB_DataModel {
                 if(dataSnapshot.exists()){
                     // update local db match info here then detach listener(s)
                     DataSource.shared.rootRef.child("Matches").child(id).child(oppEmail).removeEventListener(this);
+                    PrevMatchesAdapter adapter = (PrevMatchesAdapter) prevMatchesListView.getAdapter();
+                    ArrayList<MatchRecord> arrayList = (ArrayList<MatchRecord>) DataSource.shared.matches;
+                    arrayList
                 }
                 // else do nothing
             }
