@@ -7,79 +7,95 @@
     android:background="@color/colorPrimary">
 
     <ImageView
-        android:elevation="-10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:elevation="-10dp"
         android:scaleType="centerCrop"
         android:src="@mipmap/tuzhan_pattern" />
 
 
     <android.support.v7.widget.CardView
         android:id="@+id/user_info"
-        app:cardCornerRadius="@dimen/RadiusS"
-        android:elevation="@dimen/PaddingSM"
-        android:layout_margin="@dimen/PaddingSM"
-        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/colorAccentYellow">
+        android:layout_alignParentTop="true"
+        android:layout_margin="10dp"
+        android:backgroundTint="@color/colorAccentYellow"
+        android:elevation="10dp"
+        app:cardCornerRadius="10dp">
 
         <RelativeLayout
             android:id="@+id/u_info_button"
-            android:orientation="horizontal"
-            android:padding="5dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:padding="1dp"
-                app:civ_border_width="3dp"
-                app:civ_border_color="@android:color/white"
-                android:id="@+id/civ_userDisplayPhoto"
+                android:id="@+id/user_dp"
                 android:layout_width="50dp"
-                android:layout_height="50dp" />
+                android:layout_height="50dp"
+                android:padding="1dp"
+                app:civ_border_color="@android:color/white"
+                app:civ_border_width="3dp" />
 
             <TextView
-                android:id="@+id/tv_userDisplayName"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
-                android:layout_centerVertical="true"
-                android:layout_toEndOf="@+id/civ_userDisplayPhoto"
+                android:id="@+id/user_dn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@+id/user_dp"
                 android:text="dummy text"
                 android:textAlignment="center"
-                android:layout_marginStart="@dimen/PaddingSM"
+                android:textColor="@android:color/white"
                 android:textSize="25sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:textStyle="bold" />
 
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>
 
-    <ImageButton
-        android:id="@+id/ib_startGame"
-        android:backgroundTint="@android:color/transparent"
-        android:src="@mipmap/tuzhan_start_game"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:scaleType="fitCenter"
-        android:layout_below="@+id/user_info"
-        android:layout_centerHorizontal="true"
-        android:onClick="findMatch" />
-
-    <android.support.v7.widget.CardView
-        app:cardBackgroundColor="@color/colorAccentYellow"
-        app:cardCornerRadius="@dimen/RadiusS"
-        android:layout_margin="@dimen/PaddingSM"
-        android:id="@+id/cv_pastMatchesContainer"
-        android:layout_below="@+id/ib_startGame"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
+        android:layout_below="@+id/user_info">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
+            <ImageButton
+                android:layout_centerHorizontal="true"
+                android:id="@+id/bStartGame"
+                android:layout_width="420dp"
+                android:layout_height="200dp"
+                android:backgroundTint="@android:color/transparent"
+                android:onClick="findMatch"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/tuzhan_start_game" />
 
-    </android.support.v7.widget.CardView>
+            <LinearLayout
+                android:layout_margin="10dp"
+                android:layout_below="@id/bStartGame"
+                android:layout_centerHorizontal="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ListView
+                    android:scrollbars="none"
+                    android:divider="@android:color/transparent"
+                    android:id="@+id/lv_prev_matches"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:dividerHeight="10dp" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
 
 </RelativeLayout>
