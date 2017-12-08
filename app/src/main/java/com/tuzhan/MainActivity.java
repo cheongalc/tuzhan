@@ -90,7 +90,19 @@ public class MainActivity extends AppCompatActivity {
 
         rl_userInfoBtnContainer.setOnClickListener(userInfoClick);
 
-        getPrevMatches();
+//        getPrevMatches();
+
+        MatchRecord dummy = new MatchRecord(
+                "test_match_3",
+                "dummyTopic",
+                new ArrayList<>(),
+                "yiqinw4@gmail,com",
+                10,
+                100.0,
+                new ArrayList<>(),
+                new ArrayList<>());
+
+        DataSource.shared.addMatch(dummy);
 
         //set user status to online
         root.child("Users").child(currUser.getEmail().replace('.',',')).child("isOnline").setValue(true);
@@ -102,50 +114,50 @@ public class MainActivity extends AppCompatActivity {
         startService(intent);
     }
 
-    private void getPrevMatches() {
-        DatabaseReference user_matches_ref = root.child("Users").child(currUser.getEmail().replace('.',',')).child("matches");
-
-        user_matches_ref.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                //retrieves individual match details
-                getMatchesDetails(dataSnapshot.getKey());
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                //remove match from global list
-                prevMatchIds.remove(dataSnapshot.getKey());
-                List<MatchDetails> matches_to_remove = new ArrayList<>();
-                for(MatchDetails matchDetails : prevMatchDetails){
-                    if(matchDetails.match_id.equals(dataSnapshot.getKey())){
-                        matches_to_remove.add(matchDetails);
-                    }
-                }
-                prevMatchDetails.removeAll(matches_to_remove);
-
-                //refresh list
-                PrevMatchesAdapter prevMatchesAdapter = new PrevMatchesAdapter(MainActivity.this, prevMatchIds, prevMatchDetails);
-                lv_prevMatches.setAdapter(prevMatchesAdapter);
-                setListViewHeightBasedOnChildren(lv_prevMatches);
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
+//    private void getPrevMatches() {
+//        DatabaseReference user_matches_ref = root.child("Users").child(currUser.getEmail().replace('.',',')).child("matches");
+//
+//        user_matches_ref.addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                //retrieves individual match details
+//                getMatchesDetails(dataSnapshot.getKey());
+//            }
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//                //remove match from global list
+//                prevMatchIds.remove(dataSnapshot.getKey());
+//                List<MatchDetails> matches_to_remove = new ArrayList<>();
+//                for(MatchDetails matchDetails : prevMatchDetails){
+//                    if(matchDetails.match_id.equals(dataSnapshot.getKey())){
+//                        matches_to_remove.add(matchDetails);
+//                    }
+//                }
+//                prevMatchDetails.removeAll(matches_to_remove);
+//
+//                //refresh list
+//                PrevMatchesAdapter prevMatchesAdapter = new PrevMatchesAdapter(MainActivity.this, prevMatchIds, prevMatchDetails);
+//                lv_prevMatches.setAdapter(prevMatchesAdapter);
+//                setListViewHeightBasedOnChildren(lv_prevMatches);
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
     private void getMatchesDetails(final String match_id) {
         DatabaseReference match_details_ref = root.child("Matches").child(match_id);

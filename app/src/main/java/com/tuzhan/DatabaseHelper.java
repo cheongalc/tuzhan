@@ -9,25 +9,26 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper{
 
     // Database Meta Info
-    public static int DATABASE_VERSION = 1;
+    public static int DATABASE_VERSION = 2;
     public static String DATABASE_NAME = "Records.db";
 
     // Database init
-    public static final String CREATE_DAYS_TABLE = "create table MATCHES(" +
+    public static final String CREATE_MATCHES_TABLE = "create table MATCHES(" +
             "id text primary key,"  +
+            "topic text,"           +
             "cardIds text,"         +
             "emailOpp text,"        +
             "winnerEmail text"      +
             "scoreSelf integer,"    +
             "scoreOpp integer,"     +
             "timeSelf double,"      +
-        "timeOpp double,"       +
+            "timeOpp double,"       +
             "entriesSelf text,"     +
             "entriesOpp text,"      +
             "scoresSelf integer,"   +
             "scoresOpp integer"     +
             ");";
-    public static final String CREATE_TASKS_TABLE = "create table CARDS(" +
+    public static final String CREATE_CARDS_TABLE = "create table CARDS(" +
             "id integer,"             +
             "theme text,"             +
             "imageURL text primary key,"          +
@@ -44,8 +45,8 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase database) {
-        database.execSQL(CREATE_DAYS_TABLE);
-        database.execSQL(CREATE_TASKS_TABLE);
+        database.execSQL(CREATE_MATCHES_TABLE);
+        database.execSQL(CREATE_CARDS_TABLE);
     }
 
     @Override

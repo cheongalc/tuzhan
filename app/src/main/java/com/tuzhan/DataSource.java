@@ -31,7 +31,7 @@ public class DataSource extends Application {
 
     // private database objects
     private FirebaseDatabase fireDatabase = FirebaseDatabase.getInstance();
-    private SQLiteDatabase database;
+    public SQLiteDatabase database;
     private DatabaseHelper dbHelper;
 
     private void open() throws SQLException{database = dbHelper.getWritableDatabase();}
