@@ -5,6 +5,7 @@
     <dimen name="Heading2">20sp</dimen>
     <!--Paddings-->
     <dimen name="PaddingS">8dp</dimen>
+    <dimen name="PaddingSM">10dp</dimen>
     <dimen name="PaddingM">16dp</dimen>
     <!--Margins-->
     <dimen name="MarginS">4dp</dimen>

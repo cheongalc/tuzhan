@@ -12,4 +12,5 @@
     <color name="colorBlackTranslucentLess">#50000000</color>
     <color name="colorSecondaryBlue">#00EBCC</color>
     <color name="colorSecondaryBlue1">#00EBCC</color>
+    <color name="colorWhite">#FFFFFF</color>
 </resources>
