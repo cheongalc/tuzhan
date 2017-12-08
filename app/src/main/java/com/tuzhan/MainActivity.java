@@ -37,6 +37,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity {
 
+    static MainActivity shared;
+
     FirebaseUser currUser;
     FirebaseAuth mAuth;
     GoogleSignInClient mGoogleSignInClient;
@@ -56,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        MainActivity.shared = this;
 
         DataSource.init(this);
 
