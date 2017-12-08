@@ -86,7 +86,7 @@ public class MatchRecord extends DB_DataModel {
                 // update local db match info & detach listener if opp info is uploaded to firebase
                 if(dataSnapshot.exists()){
                     scoreOpp = (int) (long) dataSnapshot.child("score").getValue();
-                    updateDB(DataSource.shared.database);
+                    updateDB(DataSource.shared.database, DatabaseHelper.TABLE_MATCHES);
                     // update local db match info here then detach listener(s)
                     DataSource.shared.rootRef.child("Matches").child(id).child(oppEmail).removeEventListener(this);
                     ArrayList<MatchRecord> arrayList = (ArrayList<MatchRecord>) DataSource.shared.matches;
@@ -130,7 +130,6 @@ public class MatchRecord extends DB_DataModel {
         values2Update.put("timeSelf", timeSelf);
         values2Update.put("entriesSelf", Utils.concatenate(entriesSelf));
         values2Update.put("scoresSelf", Utils.concatenate(scoresSelf));
-        Toast.makeText(MainActivity.shared, scoreOpp+"", Toast.LENGTH_SHORT).show();
 //        if(scoreOpp != null){
 //            values2Update.put("scoreOpp", scoreOpp);
 //            values2Update.put("entriesOpp", Utils.concatenate(entriesOpp));
