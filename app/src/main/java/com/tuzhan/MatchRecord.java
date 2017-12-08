@@ -34,6 +34,7 @@ public class MatchRecord extends DB_DataModel {
 
     // initialize a match record with partial data immediately when this user completes the match
     public MatchRecord(String id, String topic, List<Integer> cardIds, String oppEmail, Integer scoreSelf, Double timeSelf, List<String> entriesSelf, List<Integer> scoresSelf){
+        this.tableName = "MATCHES";
         this.id = id;
         this.topic = topic;
         this.cardIds = cardIds;
@@ -47,6 +48,7 @@ public class MatchRecord extends DB_DataModel {
     }
 
     public MatchRecord(Cursor dbCursor){
+        this.tableName = "MATCHES";
         this.id = dbCursor.getString(0);
         this.topic = dbCursor.getString(1);
         this.cardIds = Utils.splitToInts(dbCursor.getString(2));
@@ -86,7 +88,7 @@ public class MatchRecord extends DB_DataModel {
                 // update local db match info & detach listener if opp info is uploaded to firebase
                 if(dataSnapshot.exists()){
                     scoreOpp = (int) (long) dataSnapshot.child("score").getValue();
-                    updateDB(DataSource.shared.database, DatabaseHelper.TABLE_MATCHES);
+                    updateDB(DataSource.shared.database);
                     // update local db match info here then detach listener(s)
                     DataSource.shared.rootRef.child("Matches").child(id).child(oppEmail).removeEventListener(this);
                     ArrayList<MatchRecord> arrayList = (ArrayList<MatchRecord>) DataSource.shared.matches;
@@ -128,6 +130,8 @@ public class MatchRecord extends DB_DataModel {
         values2Update.put("timeSelf", timeSelf);
         values2Update.put("entriesSelf", Utils.concatenate(entriesSelf));
         values2Update.put("scoresSelf", Utils.concatenate(scoresSelf));
+        values2Update.put("emailOpp", oppEmail);
+        values2Update.put("scoreSelf", scoreSelf);
 //        if(scoreOpp != null){
 //            values2Update.put("scoreOpp", scoreOpp);
 //            values2Update.put("entriesOpp", Utils.concatenate(entriesOpp));

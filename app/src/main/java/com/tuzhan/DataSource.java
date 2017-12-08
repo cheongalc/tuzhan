@@ -59,7 +59,7 @@ public class DataSource extends Application {
     }
 
     private void addCard(QuestionCard card){
-        card.updateDB(database, DatabaseHelper.TABLE_CARDS);
+        card.updateDB(database);
         if(!themeToCards.containsKey(card.theme)){
             themeToCards.put(card.theme, new ArrayList<QuestionCard>());
         }
@@ -97,7 +97,7 @@ public class DataSource extends Application {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 QuestionCard card = new QuestionCard(dataSnapshot, theme, id);
-                card.updateDB(database, DatabaseHelper.TABLE_CARDS);
+                card.updateDB(database);
                 addCard(card);
                 callback.fetched(card);
             }
@@ -148,7 +148,7 @@ public class DataSource extends Application {
 
     // use this method to add a newly created MatchRecord to memory & database
     public void addMatch(MatchRecord match){
-        match.updateDB(database, DatabaseHelper.TABLE_MATCHES);
+        match.updateDB(database);
         matches.add(match);
     }
 

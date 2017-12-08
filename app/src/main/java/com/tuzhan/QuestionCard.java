@@ -29,11 +29,11 @@ public class QuestionCard extends DB_DataModel {
     }
 
     public QuestionCard(DataSnapshot snapshot, String theme, Integer id){
-        Log.d("datasnapshot", snapshot.getValue()+"");
         init(theme, id, snapshot.child("imageURL").getValue().toString(), snapshot.child("answersRaw").getValue().toString(), snapshot.child("credit").getValue().toString());
     }
 
     private void init(String theme, Integer id, String image_url , String answersRaw, String credit){
+        this.tableName = "CARDS";
         String[] anss = answersRaw.split(";");
         this.id = id;
         this.theme = theme;

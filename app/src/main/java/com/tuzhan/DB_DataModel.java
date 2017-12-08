@@ -6,15 +6,15 @@ import android.util.Log;
 
 public abstract class DB_DataModel implements DB_DataModel_Interface{
 
+    String tableName;
 
-
-    public void updateDB(SQLiteDatabase  database, String TABLE_NAME){
-        if(this.isInDatabase(database, TABLE_NAME)) database.update(TABLE_NAME, this.composeUpdateValues(), this.selector(), null);
-        else database.insert(TABLE_NAME,null, this.composeUpdateValues());
+    public void updateDB(SQLiteDatabase  database){
+        if(this.isInDatabase(database, tableName)) database.update(tableName, this.composeUpdateValues(), this.selector(), null);
+        else database.insert(tableName,null, this.composeUpdateValues());
     }
 
     public boolean isInDatabase(SQLiteDatabase database, String TABLE_NAME){
-        Cursor cursor = database.rawQuery("Select * from " + TABLE_NAME + " where " + this.selector(), null);
+        Cursor cursor = database.rawQuery("SELECT * FROM " + tableName + " WHERE " + this.selector(), null);
         if(cursor.getCount() > 0){
             cursor.close();
             return true;
