@@ -125,8 +125,6 @@ public class MatchRecord extends DB_DataModel {
         values2Update.put("id", id);
         values2Update.put("topic", topic);
         values2Update.put("cardIds", Utils.concatenate(cardIds));
-        values2Update.put("oppEmail", oppEmail);
-        values2Update.put("scoreSelf", scoreSelf);
         values2Update.put("timeSelf", timeSelf);
         values2Update.put("entriesSelf", Utils.concatenate(entriesSelf));
         values2Update.put("scoresSelf", Utils.concatenate(scoresSelf));
