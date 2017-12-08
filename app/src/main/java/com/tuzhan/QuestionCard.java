@@ -1,11 +1,13 @@
 package com.tuzhan;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -18,8 +20,8 @@ public class QuestionCard extends DB_DataModel {
     Integer id;
     String theme;
     URL image_url;
-    List<String> answers;
-    List<String> harderAnswers;
+    List<String> answers = new ArrayList<>();
+    List<String> harderAnswers = new ArrayList<>();
     String credit;
 
     public QuestionCard(Cursor dbCursor){
@@ -27,6 +29,7 @@ public class QuestionCard extends DB_DataModel {
     }
 
     public QuestionCard(DataSnapshot snapshot, String theme, Integer id){
+        Log.d("datasnapshot", snapshot.getValue()+"");
         init(theme, id, snapshot.child("imageURL").getValue().toString(), snapshot.child("answersRaw").getValue().toString(), snapshot.child("credit").getValue().toString());
     }
 
@@ -41,12 +44,14 @@ public class QuestionCard extends DB_DataModel {
         }
         this.credit = credit;
         this.answers = Utils.split(anss[0]);
-        this.harderAnswers = Utils.split(anss[1]);
+        if(anss.length>1) {
+            this.harderAnswers = Utils.split(anss[1]);
+        }
     }
 
     @Override
     public String selector() {
-        return "theme=" + theme + " AND id=" + id;
+        return "theme='" + theme + "' AND id=" + id;
     }
 
     @Override

@@ -19,6 +19,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,6 +96,7 @@ public class DataSource extends Application {
         rootRef.child("Cards").child(theme).child(String.valueOf(id)).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+//                Log.d("cardKey", dataSnapshot.child("imageURL").getValue()+"");
                 QuestionCard card = new QuestionCard(dataSnapshot, theme, id);
                 card.updateDB(database);
                 addCard(card);
@@ -115,6 +118,7 @@ public class DataSource extends Application {
         else fetchCardFromFirebase(theme, id, callback);
     }
 
+
     // use this method to fetch a group of cards
     // note for current implementation: elements of returned cards array CAN BE NULL if fetch fails for that card!
     public void fetchCards(String theme, final int[] ids, final DataFetchedCallback<ArrayList<QuestionCard>> callback){
@@ -123,6 +127,7 @@ public class DataSource extends Application {
             fetchCard(theme, id, data -> {
                 fetched.add(data);
                 if(fetched.size() == ids.length){
+                    Collections.sort(fetched, (o1, o2) -> o1.id.compareTo(o2.id));
                     callback.fetched(fetched);
                 }
             });
