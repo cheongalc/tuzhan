@@ -22,21 +22,21 @@ public class UserInfo extends AppCompatActivity {
 
     int windowHeight = 0;
     int windowWidth = 0;
-    CircleImageView civDpPhoto;
-    TextView tvUserName;
+    CircleImageView civ_userDisplayPhoto;
+    TextView tv_userDisplayName;
     FirebaseAuth mAuth;
-    TextView tvUserEmail;
-    TextView tvUserkd;
-    TextView tvUserRounds;
+    TextView tv_userEmail;
+    TextView tv_userKD;
+    TextView tv_userRounds;
     FirebaseDatabase database;
     DatabaseReference root;
-    FirebaseUser curUser;
+    FirebaseUser currUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
-        setPopUp(0.9d, 0.55d);
+        setPopUp(1.0d, 0.55d);
 
         //set up database
         database = FirebaseDatabase.getInstance();
@@ -44,17 +44,17 @@ public class UserInfo extends AppCompatActivity {
 
         //retrieve user info
         mAuth = FirebaseAuth.getInstance();
-        curUser = mAuth.getCurrentUser();
+        currUser = mAuth.getCurrentUser();
 
-        civDpPhoto = (CircleImageView) findViewById(R.id.user_dp);
-        tvUserName = (TextView) findViewById(R.id.user_dn);
-        tvUserEmail = (TextView) findViewById(R.id.user_email);
-        tvUserkd = (TextView) findViewById(R.id.user_kd);
-        tvUserRounds = (TextView) findViewById(R.id.user_rounds_played);
+        civ_userDisplayPhoto = (CircleImageView) findViewById(R.id.civ_userDisplayPhoto);
+        tv_userDisplayName = (TextView) findViewById(R.id.tv_userDisplayName);
+        tv_userEmail = (TextView) findViewById(R.id.user_email);
+        tv_userKD = (TextView) findViewById(R.id.tv_userKD);
+        tv_userRounds = (TextView) findViewById(R.id.tv_userRoundsPlayed);
 
-        Picasso.with(this).load(curUser.getPhotoUrl()).into(civDpPhoto);
-        tvUserName.setText(curUser.getDisplayName());
-        tvUserEmail.setText(curUser.getEmail());
+        Picasso.with(this).load(currUser.getPhotoUrl()).into(civ_userDisplayPhoto);
+        tv_userDisplayName.setText(currUser.getDisplayName());
+        tv_userEmail.setText(currUser.getEmail());
 
         //set user win rate and rounds played
         setWR();
@@ -63,7 +63,7 @@ public class UserInfo extends AppCompatActivity {
 
     public void setWR() {
 
-        DatabaseReference user_info =  root.child("Users").child(curUser.getEmail().replace('.',','));
+        DatabaseReference user_info =  root.child("Users").child(currUser.getEmail().replace('.',','));
 
         user_info.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -74,11 +74,11 @@ public class UserInfo extends AppCompatActivity {
                     int rounds_played = (int) dataSnapshot.child("rounds_played").getValue();
                     double win_rate = (double) rounds_won / (double) rounds_played;
                     win_rate = win_rate * 100;
-                    tvUserkd.setText(win_rate + "%");
-                    tvUserRounds.setText(rounds_played);
+                    tv_userKD.setText(win_rate + "%");
+                    tv_userRounds.setText(rounds_played);
                 }else{
-                    tvUserkd.setText("无");
-                    tvUserRounds.setText("0");
+                    tv_userKD.setText("无");
+                    tv_userRounds.setText("0");
                 }
             }
 

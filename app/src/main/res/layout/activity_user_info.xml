@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_rounded"
     android:orientation="vertical"
+    android:layout_margin="10dp"
     tools:context="com.tuzhan.UserInfo">
 
     <RelativeLayout
@@ -16,7 +17,7 @@
         android:padding="5dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/user_dp"
+            android:id="@+id/civ_userDisplayPhoto"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_centerHorizontal="true"
@@ -26,23 +27,23 @@
             app:civ_border_width="2dp" />
 
         <TextView
-            android:id="@id/user_dn"
+            android:id="@id/tv_userDisplayName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/user_dp"
+            android:layout_below="@+id/civ_userDisplayPhoto"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
-            android:text="dummy text"
+            android:text="user display name"
             android:textColor="@color/colorAccent"
             android:textSize="24sp"
             android:textStyle="bold" />
 
         <TextView
-            android:textColor="@color/colorBlackTranslucentMore"
+            android:textColor="@color/colorWhite"
             android:id="@+id/user_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/user_dn"
+            android:layout_below="@+id/tv_userDisplayName"
             android:layout_centerHorizontal="true"
             android:ellipsize="marquee"
             android:marqueeRepeatLimit="marquee_forever"
@@ -56,13 +57,12 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="30dp"
-        android:layout_marginStart="30dp"
         android:layout_marginTop="20dp"
+        android:layout_gravity="center_horizontal"
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/kd"
+            android:id="@+id/ll_kdContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
@@ -78,7 +78,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/user_kd"
+                android:id="@+id/tv_userKD"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:marqueeRepeatLimit="marquee_forever"
@@ -94,7 +94,7 @@
             android:layout_marginTop="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/kd"
+            android:layout_below="@+id/ll_kdContainer"
             android:layout_centerHorizontal="true"
             android:orientation="vertical">
 
@@ -109,7 +109,7 @@
 
             <TextView
                 android:textAlignment="center"
-                android:id="@+id/user_rounds_played"
+                android:id="@+id/tv_userRoundsPlayed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="marquee"

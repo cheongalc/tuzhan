@@ -30,20 +30,22 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class LoginPage extends AppCompatActivity {
 
-    ImageButton bLogin;
+    ImageButton ib_loginButton;
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
-    private RelativeLayout progress_overlay;
+    private RelativeLayout rl_progressOverlay;
     int RC_SIGN_IN = 666;
-    String TAG = "LoginActivity";
+    String DEBUG_TAG = "LoginActivity";
     DatabaseReference root;
     FirebaseDatabase database;
-    DatabaseReference user_directory;
+    DatabaseReference userDirectory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // enter immersive mode (hide status bar)
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -60,7 +62,7 @@ public class LoginPage extends AppCompatActivity {
         root = database.getReference();
 
         //move to user directory
-        user_directory = root.child("Users");
+        userDirectory = root.child("Users");
 
         //check if this activity is created for the first time
         Intent intent = getIntent();
@@ -74,9 +76,9 @@ public class LoginPage extends AppCompatActivity {
             finish();
         } else {
             //set up onclick listeners for login
-            progress_overlay = (RelativeLayout) findViewById(R.id.progress_overlay);
-            bLogin = (ImageButton) findViewById(R.id.login_button);
-            bLogin.setOnClickListener(new View.OnClickListener() {
+            rl_progressOverlay = (RelativeLayout) findViewById(R.id.rl_progressOverlay);
+            ib_loginButton = (ImageButton) findViewById(R.id.ib_loginButton);
+            ib_loginButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     signIn();
@@ -87,13 +89,13 @@ public class LoginPage extends AppCompatActivity {
 
     //sign in to firebase
     private void signIn() {
-        progress_overlay.setVisibility(View.VISIBLE);
+        rl_progressOverlay.setVisibility(View.VISIBLE);
         //intent to start activity for gmail sign in
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    //receive result from sign in pop up
+    // on receive result from sign in pop up
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -111,13 +113,13 @@ public class LoginPage extends AppCompatActivity {
                 if (e.getStatusCode() != 12501) {
                     Toast.makeText(this, "登陆失败" + e.getStatusCode(), Toast.LENGTH_SHORT).show();
                 }
-                progress_overlay.setVisibility(View.GONE);
+                rl_progressOverlay.setVisibility(View.GONE);
             }
         }
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
+        Log.d(DEBUG_TAG, "firebaseAuthWithGoogle:" + acct.getId());
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
@@ -126,18 +128,18 @@ public class LoginPage extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             //sign in success, retrieved user credentials
-                            Log.d(TAG, "signInWithCredential:success");
+                            Log.d(DEBUG_TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                            DatabaseReference curUserDir = user_directory.child(user.getEmail().replace('.',','));
+                            DatabaseReference currUserDir = userDirectory.child(user.getEmail().replace('.',','));
                             //upload user data to firebase
                             //convert uri to string as uri is not supported by firebase
-                            User curuser = new User(user.getDisplayName(), user.getEmail(), user.getUid(), user.getPhotoUrl().toString());
+                            User currUser = new User(user.getDisplayName(), user.getEmail(), user.getUid(), user.getPhotoUrl().toString());
                             //replace '.' in email address with ',' as firebase paths must not contain '.'
-                            curUserDir.child("displayname").setValue(curuser.displayname);
-                            curUserDir.child("email").setValue(curuser.email);
-                            curUserDir.child("userId").setValue(curuser.userId);
-                            curUserDir.child("dpURL").setValue(curuser.dpURL);
+                            currUserDir.child("displayname").setValue(currUser.displayname);
+                            currUserDir.child("email").setValue(currUser.email);
+                            currUserDir.child("userId").setValue(currUser.userId);
+                            currUserDir.child("dpURL").setValue(currUser.dpURL);
 
                             //move to main activity
                             Intent intent = new Intent(LoginPage.this, MainActivity.class);
@@ -145,9 +147,9 @@ public class LoginPage extends AppCompatActivity {
                             finish();
                         } else {
                             // sign in fails, toast to the user
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            Log.w(DEBUG_TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(LoginPage.this, "登陆失败", Toast.LENGTH_SHORT).show();
-                            progress_overlay.setVisibility(View.GONE);
+                            rl_progressOverlay.setVisibility(View.GONE);
                         }
                     }
                 });

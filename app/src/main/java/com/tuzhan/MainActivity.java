@@ -6,11 +6,9 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -27,13 +25,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity {
 
-    FirebaseUser curUser;
+    FirebaseUser currUser;
     FirebaseAuth mAuth;
     GoogleSignInClient mGoogleSignInClient;
-    CircleImageView civDpPhoto;
-    TextView tvUserName;
-    TextView tvUserKD;
-    TextView tvUserRoundsPlayed;
+    CircleImageView civ_dpPhoto;
+    TextView tv_userDisplayName;
+    TextView tv_userKD;
+    TextView tv_userRoundsPlayed;
     RelativeLayout userInfoButton;
     FirebaseDatabase database;
     DatabaseReference root;
@@ -49,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         //retrieve user info
         mAuth = FirebaseAuth.getInstance();
-        curUser = mAuth.getCurrentUser();
+        currUser = mAuth.getCurrentUser();
 
         //required for signing out the user
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -58,20 +56,20 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        civDpPhoto = (CircleImageView) findViewById(R.id.user_dp);
-        tvUserName = (TextView) findViewById(R.id.user_dn);
-        tvUserKD = (TextView) findViewById(R.id.user_kd);
-        tvUserRoundsPlayed = (TextView) findViewById(R.id.user_rounds_played);
+        civ_dpPhoto = (CircleImageView) findViewById(R.id.civ_userDisplayPhoto);
+        tv_userDisplayName = (TextView) findViewById(R.id.tv_userDisplayName);
+        tv_userKD = (TextView) findViewById(R.id.tv_userKD);
+        tv_userRoundsPlayed = (TextView) findViewById(R.id.tv_userRoundsPlayed);
         userInfoButton = (RelativeLayout) findViewById(R.id.u_info_button);
 
-        Picasso.with(this).load(curUser.getPhotoUrl()).into(civDpPhoto);
-        tvUserName.setText(curUser.getDisplayName());
+        Picasso.with(this).load(currUser.getPhotoUrl()).into(civ_dpPhoto);
+        tv_userDisplayName.setText(currUser.getDisplayName());
 
         userInfoButton.setOnClickListener(userInfoClick);
 
-        root.child("Users").child(curUser.getEmail().replace('.',',')).child("isOnline").setValue(true);
+        root.child("Users").child(currUser.getEmail().replace('.',',')).child("isOnline").setValue(true);
         Intent intent = new Intent(this, ClosingService.class);
-        intent.putExtra("email", curUser.getEmail());
+        intent.putExtra("email", currUser.getEmail());
         startService(intent);
     }
 
@@ -114,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void signout()
     {
-        root.child("Users").child(curUser.getEmail().replace('.',',')).child("isOnline").setValue(false);
+        root.child("Users").child(currUser.getEmail().replace('.',',')).child("isOnline").setValue(false);
         //sign out of firebase
         mAuth.signOut();
         //sign out of google
