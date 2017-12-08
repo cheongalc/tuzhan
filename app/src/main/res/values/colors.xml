@@ -9,7 +9,7 @@
     <color name="colorAccentBlue">#73e8ff</color>
     <color name="colorAccentYellow">#FFCA00</color>
     <color name="colorBlackTranslucentMore">#90000000</color>
-    <color name="colorBlackTranslucentLess">#11000000</color>
+    <color name="colorBlackTranslucentLess">#50000000</color>
     <color name="colorSecondaryBlue">#00EBCC</color>
     <color name="colorSecondaryBlue1">#00EBCC</color>
 </resources>
