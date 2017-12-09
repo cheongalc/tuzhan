@@ -12,6 +12,9 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     public static int DATABASE_VERSION = 2;
     public static String DATABASE_NAME = "Records.db";
 
+    public static final String TABLE_MATCHES = "MATCHES";
+    public static final String TABLE_CARDS = "CARDS";
+
     // Database init
     public static final String CREATE_MATCHES_TABLE = "create table MATCHES(" +
             "id text primary key,"  +

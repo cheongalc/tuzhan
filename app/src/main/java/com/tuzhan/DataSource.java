@@ -96,7 +96,6 @@ public class DataSource extends Application {
         rootRef.child("Cards").child(theme).child(String.valueOf(id)).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-//                Log.d("cardKey", dataSnapshot.child("imageURL").getValue()+"");
                 QuestionCard card = new QuestionCard(dataSnapshot, theme, id);
                 card.updateDB(database);
                 addCard(card);
