@@ -42,6 +42,7 @@ public class MatchRecord extends DB_DataModel {
         this.timeSelf = timeSelf;
         this.entriesSelf = entriesSelf;
         this.scoresSelf = scoresSelf;
+        this.tableName = "MATCHES";
     }
 
     // initialize a match record with partial data immediately when this user completes the match
@@ -58,6 +59,7 @@ public class MatchRecord extends DB_DataModel {
         this.entriesOpp = entriesOpp;
         this.scoresSelf = scoresSelf;
         this.scoresOpp = scoresOpp;
+        this.tableName = "MATCHES";
     }
 
     public MatchRecord(Cursor dbCursor){
@@ -138,7 +140,7 @@ public class MatchRecord extends DB_DataModel {
         values2Update.put("id", id);
         values2Update.put("topic", topic);
         values2Update.put("cardIds", Utils.concatenate(cardIds));
-        values2Update.put("oppEmail", oppEmail);
+        values2Update.put("emailOpp", oppEmail);
         values2Update.put("scoreSelf", scoreSelf);
         values2Update.put("timeSelf", timeSelf);
         values2Update.put("entriesSelf", Utils.concatenate(entriesSelf));
