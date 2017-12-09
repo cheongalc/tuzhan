@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         getPrevMatches();
 
         //set user status to online
-        root.child("OnlineUsers").child(currUser.getEmail().replace('.',',')).setValue(true);
+        root.child("UsersStates").child(currUser.getEmail().replace('.',',')).setValue(true);
 
 
         Intent intent = new Intent(this, ClosingService.class);
