@@ -6,11 +6,91 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/civ_center_count_down"
+        app:civ_border_width="5dp"
+        app:civ_border_color="@color/colorAccentYellow"
+        android:elevation="0.5dp"
+        android:src="@mipmap/tuzhan_vs"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:scaleType="centerCrop"
+        android:layout_centerInParent="true"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_above="@+id/tv_user_name"
+        android:elevation="2dp"
+        android:src="@mipmap/tuzhan_draw"
+        app:civ_border_width="5dp"
+        app:civ_border_color="@color/colorPrimaryDark"
+        android:id="@+id/civ_user_dp"
+        android:layout_width="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_height="100dp"/>
+
+    <TextView
+        android:layout_marginBottom="60dp"
+        android:id="@+id/tv_user_name"
+        android:elevation="2dp"
+        android:layout_above="@+id/civ_center_count_down"
+        android:textColor="@color/colorAccent"
+        android:textAlignment="center"
+        android:text="Dummy text"
+        android:textStyle="bold"
+        android:textSize="25sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:elevation="2dp"
+        app:civ_border_width="5dp"
+        app:civ_border_color="@android:color/holo_red_dark"
+        android:src="@mipmap/tuzhan_lost"
+        android:layout_marginTop="60dp"
+        android:layout_below="@+id/civ_center_count_down"
+        android:id="@+id/civ_opp_dp"
+        android:layout_width="100dp"
         android:layout_centerInParent="true"
-        android:text="Start Match"
-        android:onClick="startGame"/>
+        android:layout_height="100dp"/>
+
+    <TextView
+        android:layout_marginBottom="60dp"
+        android:id="@+id/tv_opp_name"
+        android:elevation="2dp"
+        android:layout_below="@+id/civ_opp_dp"
+        android:textColor="@color/colorAccent"
+        android:textAlignment="center"
+        android:text="Dummy text"
+        android:textStyle="bold"
+        android:textSize="25sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <RelativeLayout
+            android:background="@color/colorPrimary"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <View
+            android:elevation="5dp"
+            android:background="@color/colorAccentYellow"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"/>
+
+        <RelativeLayout
+            android:background="@color/colorAccentRed"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
 
 </RelativeLayout>

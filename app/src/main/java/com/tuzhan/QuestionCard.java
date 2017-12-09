@@ -1,6 +1,8 @@
 package com.tuzhan;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
@@ -15,7 +17,7 @@ import java.util.List;
  * Created by Dhaulagiri on 2/12/2017.
  */
 
-public class QuestionCard extends DB_DataModel {
+public class QuestionCard extends DB_DataModel implements Parcelable {
 
     Integer id;
     String theme;
@@ -30,6 +32,18 @@ public class QuestionCard extends DB_DataModel {
 
     public QuestionCard(DataSnapshot snapshot, String theme, Integer id){
         init(theme, id, snapshot.child("imageURL").getValue().toString(), snapshot.child("answersRaw").getValue().toString(), snapshot.child("credit").getValue().toString());
+    }
+
+    protected QuestionCard(Parcel in) {
+        if (in.readByte() == 0) {
+            id = null;
+        } else {
+            id = in.readInt();
+        }
+        theme = in.readString();
+        answers = in.createStringArrayList();
+        harderAnswers = in.createStringArrayList();
+        credit = in.readString();
     }
 
     private void init(String theme, Integer id, String image_url , String answersRaw, String credit){
@@ -77,4 +91,30 @@ public class QuestionCard extends DB_DataModel {
         this.harderAnswers = Utils.split(harderAnswers);
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(theme);
+        dest.writeString(credit);
+        dest.writeSerializable(image_url);
+        dest.writeList(answers);
+        dest.writeList(harderAnswers);
+    }
+
+    public static final Creator<QuestionCard> CREATOR = new Creator<QuestionCard>() {
+        @Override
+        public QuestionCard createFromParcel(Parcel in) {
+            return new QuestionCard(in);
+        }
+
+        @Override
+        public QuestionCard[] newArray(int size) {
+            return new QuestionCard[size];
+        }
+    };
 }

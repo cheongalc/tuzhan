@@ -40,7 +40,7 @@ public class ClosingService extends Service {
         super.onTaskRemoved(rootIntent);
 
         // Handle application closing
-        root.child("Users").child(email.replace('.',',')).child("isOnline").setValue(false);
+        root.child("OnlineUsers").child(email.replace('.',',')).setValue(null);
 
         // Destroy the service
         stopSelf();

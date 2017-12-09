@@ -91,23 +91,11 @@ public class MainActivity extends AppCompatActivity {
 
         rl_userInfoBtnContainer.setOnClickListener(userInfoClick);
 
-//        getPrevMatches();
+        getPrevMatches();
 
-        MatchRecord dummy = new MatchRecord(
-                "test_match_3",
-                "dummyTopic",
-                new ArrayList<>(),
-                "yiqinw4@gmail,com",
-                10,
-                100.0,
-                new ArrayList<>(),
-                new ArrayList<>());
-
-        DataSource.shared.addMatch(dummy);
         //set user status to online
-        root.child("Users").child(currUser.getEmail().replace('.',',')).child("isOnline").setValue(true);
+        root.child("OnlineUsers").child(currUser.getEmail().replace('.',',')).setValue(true);
 
-        root.child("Users").child(currUser.getEmail().replace('.',',')).child("isOnline").setValue(true);
 
         Intent intent = new Intent(this, ClosingService.class);
         intent.putExtra("email", currUser.getEmail());
