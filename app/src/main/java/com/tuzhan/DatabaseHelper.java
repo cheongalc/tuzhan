@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper{
 
     // Database Meta Info
-    public static int DATABASE_VERSION = 3;
+    public static int DATABASE_VERSION = 5;
     public static String DATABASE_NAME = "Records.db";
 
     // Database init
@@ -18,15 +18,15 @@ public class DatabaseHelper extends SQLiteOpenHelper{
             "topic text,"           +
             "cardIds text,"         +
             "emailOpp text,"        +
-            "winnerEmail text"      +
+            "winnerEmail text,"     +
             "scoreSelf integer,"    +
             "scoreOpp integer,"     +
             "timeSelf double,"      +
             "timeOpp double,"       +
             "entriesSelf text,"     +
             "entriesOpp text,"      +
-            "scoresSelf text,"   +
-            "scoresOpp text"     +
+            "scoresSelf text,"      +
+            "scoresOpp text"        +
             ");";
     public static final String CREATE_CARDS_TABLE = "create table CARDS(" +
             "id integer,"                    +
