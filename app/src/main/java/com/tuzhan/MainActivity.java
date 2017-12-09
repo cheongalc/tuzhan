@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
                     if(!child.getKey().equals(currUser.getEmail().replace('.', ','))){
                         //set opponent info
                         opponent_email = child.getKey();
-                        if(child.hasChild("score")) {
+                        if(child.hasChild("score") && child.getChildrenCount() > 3) {
                             opp_score = Integer.parseInt(child.child("score").getValue() + "");
                             opp_time = (double) child.child("time").getValue();
                             opp_entries = Utils.split(child.child("entries").getValue() + "");
@@ -212,6 +212,10 @@ public class MainActivity extends AppCompatActivity {
                     //create new complete MatchRecord object to update local database
                     MatchRecord matchRecord = new MatchRecord(match_id, topic, cardIds, opponent_email, user_score, opp_score, user_time, opp_time, user_entries, opp_entries, user_scores, opp_scores);
                     matchRecord.updateDB(DataSource.shared.database);
+
+                    //stop listening for updates
+                    match_details_ref.removeEventListener(this);
+
                 }else{
                     //create new unfinished MatchRecord object to update local database
                     MatchRecord matchRecord = new MatchRecord(match_id, topic, cardIds, opponent_email, user_score, user_time, user_entries, user_scores);

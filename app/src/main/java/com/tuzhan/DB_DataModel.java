@@ -14,7 +14,7 @@ public abstract class DB_DataModel implements DB_DataModel_Interface{
     }
 
     public boolean isInDatabase(SQLiteDatabase database, String TABLE_NAME){
-        Cursor cursor = database.rawQuery("SELECT * FROM " + tableName + " WHERE " + this.selector(), null);
+        Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + this.selector(), null);
         if(cursor.getCount() > 0){
             cursor.close();
             return true;
