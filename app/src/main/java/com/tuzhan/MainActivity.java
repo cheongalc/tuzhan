@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -51,8 +52,8 @@ public class MainActivity extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference root;
 
-    List<String> prevMatchIds = new ArrayList<>();
-    List<MatchDetails> prevMatchDetails = new ArrayList<>();
+    private List<String> prevMatchIds = new ArrayList<>();
+    private List<MatchDetails> prevMatchDetails = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,8 +91,6 @@ public class MainActivity extends AppCompatActivity {
 
         rl_userInfoBtnContainer.setOnClickListener(userInfoClick);
 
-<<<<<<< HEAD
-=======
 //        getPrevMatches();
 
         MatchRecord dummy = new MatchRecord(
@@ -105,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
                 new ArrayList<>());
 
         DataSource.shared.addMatch(dummy);
->>>>>>> 7ad5dd337aee29671379db1fceb8aa9c6a1237c8
         //set user status to online
         root.child("Users").child(currUser.getEmail().replace('.',',')).child("isOnline").setValue(true);
 
@@ -229,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
                     MatchRecord matchRecord = new MatchRecord(match_id, topic, cardIds, opponent_email, user_score, opp_score, user_time, opp_time, user_entries, opp_entries, user_scores, opp_scores);
                     matchRecord.updateDB(DataSource.shared.database);
 
-                    //stop listening for updates
+                    //match is complete, stop listening for updates
                     match_details_ref.removeEventListener(this);
 
                 }else{
@@ -238,6 +236,7 @@ public class MainActivity extends AppCompatActivity {
                     matchRecord.updateDB(DataSource.shared.database);
                 }
 
+                //final versions of oppemail and match outcome to pass to second listener
                 final String fin_opponent_email = opponent_email;
                 final String fin_outcome = outcome;
 
@@ -253,13 +252,8 @@ public class MainActivity extends AppCompatActivity {
                         MatchDetails matchDetails = new MatchDetails(match_id, opponent, fin_outcome, topic);
 
                         //check if match id exists
-                        if(prevMatchIds.indexOf(match_id) == -1)
+                        if(prevMatchIds.indexOf(match_id) != -1)
                         {
-                            //adds match id to global list
-                            prevMatchIds.add(match_id);
-                            //add match details into global list
-                            prevMatchDetails.add(matchDetails);
-                        }else{
                             //match id exists, update current match detail
                             for(MatchDetails mMatch : prevMatchDetails){
                                 if(mMatch.match_id.equals(matchDetails.match_id)){
@@ -267,12 +261,23 @@ public class MainActivity extends AppCompatActivity {
                                     break;
                                 }
                             }
-                            prevMatchDetails.add(matchDetails);
+                            prevMatchIds.remove(match_id);
                         }
 
+                        //add match id to global list
+                        prevMatchIds.add(match_id);
+                        //add match details into global list
+                        prevMatchDetails.add(matchDetails);
+
+
                         //all info retrieved, set listview
-                        PrevMatchesAdapter prevMatchesAdapter = new PrevMatchesAdapter(MainActivity.this, prevMatchIds, prevMatchDetails);
-                        lv_prevMatches.setAdapter(prevMatchesAdapter);
+                        if(lv_prevMatches.getAdapter() == null) {
+                            PrevMatchesAdapter prevMatchesAdapter = new PrevMatchesAdapter(MainActivity.this, prevMatchIds, prevMatchDetails);
+                            lv_prevMatches.setAdapter(prevMatchesAdapter);
+                        }else{
+                            ((PrevMatchesAdapter) lv_prevMatches.getAdapter()).notifyDataSetChanged();
+                        }
+
                         setListViewHeightBasedOnChildren(lv_prevMatches);
                     }
 
