@@ -103,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
                 new ArrayList<>());
 
         DataSource.shared.addMatch(dummy);
-
         //set user status to online
         root.child("Users").child(currUser.getEmail().replace('.',',')).child("isOnline").setValue(true);
 
