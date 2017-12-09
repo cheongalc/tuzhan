@@ -13,4 +13,5 @@
     <color name="colorSecondaryBlue">#00EBCC</color>
     <color name="colorSecondaryBlue1">#00EBCC</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorDNFGrey">#8E8E8E</color>
 </resources>

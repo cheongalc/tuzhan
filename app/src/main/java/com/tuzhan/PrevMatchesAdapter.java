@@ -57,9 +57,12 @@ public class PrevMatchesAdapter extends ArrayAdapter<String> {
         }else if(outcome.equals("0")){
             civOutcome.setBorderColor(getContext().getResources().getColor(R.color.colorAccentRed));
             civOutcome.setImageResource(R.mipmap.tuzhan_lost);
-        }else{
+        }else if(outcome.equals("2")){
             civOutcome.setBorderColor(getContext().getResources().getColor(R.color.colorPrimary));
             civOutcome.setImageResource(R.mipmap.tuzhan_draw);
+        }else{
+            civOutcome.setBorderColor(getContext().getResources().getColor(R.color.colorDNFGrey));
+            civOutcome.setImageResource(R.mipmap.tuzhan_dnf);
         }
 
         Picasso.with(getContext()).load(opponent.dpURL).into(civOpponentDp);
