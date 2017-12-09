@@ -9,11 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper{
 
     // Database Meta Info
-    public static int DATABASE_VERSION = 2;
+    public static int DATABASE_VERSION = 3;
     public static String DATABASE_NAME = "Records.db";
-
-    public static final String TABLE_MATCHES = "MATCHES";
-    public static final String TABLE_CARDS = "CARDS";
 
     // Database init
     public static final String CREATE_MATCHES_TABLE = "create table MATCHES(" +
@@ -28,15 +25,15 @@ public class DatabaseHelper extends SQLiteOpenHelper{
             "timeOpp double,"       +
             "entriesSelf text,"     +
             "entriesOpp text,"      +
-            "scoresSelf integer,"   +
-            "scoresOpp integer"     +
+            "scoresSelf text,"   +
+            "scoresOpp text"     +
             ");";
     public static final String CREATE_CARDS_TABLE = "create table CARDS(" +
-            "id integer,"             +
-            "theme text,"             +
-            "imageURL text primary key,"          +
-            "answersRaw text,"        +
-            "credit text"             +
+            "id integer,"                    +
+            "theme text,"                    +
+            "imageURL text primary key,"     +
+            "answersRaw text,"               +
+            "credit text"                    +
             ");";
 
     public static final String DATABASE_DESTROY = "drop table if exists MATCHES;";

@@ -90,6 +90,22 @@ public class MainActivity extends AppCompatActivity {
 
         rl_userInfoBtnContainer.setOnClickListener(userInfoClick);
 
+<<<<<<< HEAD
+=======
+//        getPrevMatches();
+
+        MatchRecord dummy = new MatchRecord(
+                "test_match_3",
+                "dummyTopic",
+                new ArrayList<>(),
+                "yiqinw4@gmail,com",
+                10,
+                100.0,
+                new ArrayList<>(),
+                new ArrayList<>());
+
+        DataSource.shared.addMatch(dummy);
+>>>>>>> 7ad5dd337aee29671379db1fceb8aa9c6a1237c8
         //set user status to online
         root.child("Users").child(currUser.getEmail().replace('.',',')).child("isOnline").setValue(true);
 
