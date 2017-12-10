@@ -21,7 +21,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameplayUI extends AppCompatActivity implements GameFragmentInterface {
+public class GameplayActivity extends AppCompatActivity implements GameFragmentInterface {
 
     private static final String LOG_TAG = "GAMEPLAYUI";
     private NonSwipeableViewPager viewPager;
@@ -135,7 +135,7 @@ public class GameplayUI extends AppCompatActivity implements GameFragmentInterfa
                 if (currentImage < NUM_IMAGES) {
                     handler.postDelayed(this, DELAY);
                 } else {
-                    Intent i = new Intent(GameplayUI.this, GameFinished.class);
+                    Intent i = new Intent(GameplayActivity.this, GameFinishedActivity.class);
                     i.putExtra("playerEntries", playerAnswers);
                     i.putExtra("playerScore", playerScore);
                     startActivity(i);

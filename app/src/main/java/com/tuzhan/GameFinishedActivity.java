@@ -13,7 +13,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameFinished extends AppCompatActivity {
+public class GameFinishedActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = "GAMEFINISHED";
     private List<String> formattedEntries = new ArrayList<>();
@@ -42,7 +42,7 @@ public class GameFinished extends AppCompatActivity {
             RelativeLayout child = (RelativeLayout) inflater.inflate(R.layout.item_word_entry, ll_playerEntries, false);
             TextView content = (TextView) child.findViewById(R.id.tv_playerEntry);
             if (currentEntry.charAt(0) == 'p') {
-                content.setTextColor(ContextCompat.getColor(GameFinished.this, R.color.colorAccentOrange));
+                content.setTextColor(ContextCompat.getColor(GameFinishedActivity.this, R.color.colorAccentOrange));
                 currentEntry = currentEntry.substring(1, currentEntry.length());
             }
             content.setText(currentEntry);

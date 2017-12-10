@@ -5,7 +5,7 @@ import android.content.ContentValues;
 /**
  * Created by chenchangheng on 10/5/17.
  */
-public interface DB_DataModel_Interface{
+public interface DatabaseInterface {
     String selector();
     ContentValues composeUpdateValues();
 }

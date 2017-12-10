@@ -18,16 +18,16 @@
             android:name=".MainActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".FindingMatch"
+            android:name=".FindingMatchActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MatchFound"
+            android:name=".CountdownActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".GameplayUI"
+            android:name=".GameplayActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".GameFinished"
+            android:name=".GameFinishedActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".SplashScreen">
             <intent-filter>
@@ -37,7 +37,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginPage"
+            android:name=".LoginActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".UserInfo"

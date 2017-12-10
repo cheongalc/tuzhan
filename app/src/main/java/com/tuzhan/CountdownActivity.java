@@ -4,17 +4,15 @@ import android.content.Intent;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MatchFound extends AppCompatActivity {
+public class CountdownActivity extends AppCompatActivity {
 
     CircleImageView civ_user_dp, civ_opp_dp;
     CircleImageView civ_center_count_down;
@@ -59,7 +57,7 @@ public class MatchFound extends AppCompatActivity {
             }
 
             public void onFinish() {
-                Intent intent = new Intent(MatchFound.this, GameplayUI.class);
+                Intent intent = new Intent(CountdownActivity.this, GameplayActivity.class);
                 intent.putParcelableArrayListExtra("question_cards", questionCardList);
                 startActivity(intent);
             }

@@ -28,7 +28,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class LoginPage extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     ImageButton ib_loginButton;
     private FirebaseAuth mAuth;
@@ -71,7 +71,7 @@ public class LoginPage extends AppCompatActivity {
         //check if user has already logged in
         if (isFirstStart && mAuth.getCurrentUser() != null) {
             //user has already connected to the app from previous sessions, move to mainactivity
-            Intent intent_main = new Intent(LoginPage.this, MainActivity.class);
+            Intent intent_main = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent_main);
             finish();
         } else {
@@ -142,13 +142,13 @@ public class LoginPage extends AppCompatActivity {
                             currUserDir.child("dpURL").setValue(currUser.dpURL);
 
                             //move to main activity
-                            Intent intent = new Intent(LoginPage.this, MainActivity.class);
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                             finish();
                         } else {
                             // sign in fails, toast to the user
                             Log.w(DEBUG_TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(LoginPage.this, "登陆失败", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "登陆失败", Toast.LENGTH_SHORT).show();
                             rl_progressOverlay.setVisibility(View.GONE);
                         }
                     }

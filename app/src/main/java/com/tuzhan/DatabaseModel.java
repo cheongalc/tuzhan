@@ -2,9 +2,8 @@ package com.tuzhan;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
-public abstract class DB_DataModel implements DB_DataModel_Interface{
+public abstract class DatabaseModel implements DatabaseInterface {
 
     String tableName;
 

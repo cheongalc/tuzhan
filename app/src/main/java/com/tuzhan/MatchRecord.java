@@ -2,24 +2,14 @@ package com.tuzhan;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.util.Log;
-import android.widget.ListView;
-import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
  * Created by chenchangheng on 7/12/17.
  */
 
-public class MatchRecord extends DB_DataModel {
+public class MatchRecord extends DatabaseModel {
 
     private static final String DEBUG_TAG = "MATCHRECORD";
 

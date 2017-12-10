@@ -2,7 +2,6 @@ package com.tuzhan;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -10,12 +9,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -346,7 +343,7 @@ public class MainActivity extends AppCompatActivity {
         mGoogleSignInClient.revokeAccess().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                Intent intent = new Intent(MainActivity.this, LoginPage.class);
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 intent.putExtra("isFirstStart", false);
                 startActivity(intent);
                 finish();
@@ -355,7 +352,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void findMatch(View view) {
-        Intent i = new Intent(MainActivity.this, FindingMatch.class);
+        Intent i = new Intent(MainActivity.this, FindingMatchActivity.class);
         startActivity(i);
     }
 
