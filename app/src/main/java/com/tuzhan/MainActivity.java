@@ -2,6 +2,7 @@ package com.tuzhan;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -72,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         currUser = mAuth.getCurrentUser();
 
+        DatabaseReference user_ref = root.child("UsersStates").child(currUser.getEmail().replace('.',','));
+
         //required for signing out the user
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -93,8 +96,23 @@ public class MainActivity extends AppCompatActivity {
 
         getPrevMatches();
 
-        //set user status to online
-        root.child("UsersStates").child(currUser.getEmail().replace('.',',')).setValue(true);
+        //check for user network status and update accordingly
+        DatabaseReference ConnectionRef = root.child(".info/connected");
+        ConnectionRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                boolean connected = dataSnapshot.getValue(Boolean.class);
+                if(connected){
+                    user_ref.setValue(true);
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        user_ref.onDisconnect().setValue(false);
 
 
         Intent intent = new Intent(this, ClosingService.class);

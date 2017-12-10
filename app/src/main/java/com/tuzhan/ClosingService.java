@@ -25,7 +25,9 @@ public class ClosingService extends Service {
         //set up database
         database = FirebaseDatabase.getInstance();
         root = database.getReference();
+
         this.email = intent.getStringExtra("email");
+
         return super.onStartCommand(intent, flags, startId);
     }
 
