@@ -1,0 +1,14 @@
+{
+  "name": "tuzhan_server",
+  "version": "0.0.1",
+  "description": "Internal match-making server.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "Chen Zerui",
+  "license": "MIT",
+  "dependencies": {
+    "firebase-admin": "^5.5.1"
+  }
+}
