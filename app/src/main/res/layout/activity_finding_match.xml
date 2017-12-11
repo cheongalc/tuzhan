@@ -6,23 +6,64 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary">
 
-    <Button
-        android:id="@+id/btn_matchFound"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Continue"
-        android:onClick="matchFound"/>
-
-    <TextView
-        android:id="@+id/tv_findingMatch"
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/btn_matchFound"
-        android:text="搜索对手..."
-        android:textColor="@color/colorAccent"
-        android:textAlignment="center"
-        android:textSize="@dimen/Heading1"
-        android:textStyle="bold"/>
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/tuzhan_pattern" />
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/darken_background" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical"
+        android:paddingTop="80dp">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/iv_search_icon"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_above="@id/iv_finding_match"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="16dp"
+            android:src="@mipmap/tuzhan_search" />
+
+
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_centerVertical="true"
+            android:id="@+id/iv_finding_match"
+            android:layout_width="250dp"
+            android:layout_height="100dp"
+            android:layout_marginBottom="10dp"
+            android:paddingBottom="10dp"
+            android:src="@mipmap/tuzhan_finding_match" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_below="@id/iv_finding_match"
+            android:layout_centerHorizontal="true"
+            android:padding="0dp">
+
+            <com.wang.avi.AVLoadingIndicatorView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
+                app:indicatorColor="@color/colorAccentOrange"
+                app:indicatorName="BallPulseIndicator" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
 
 </RelativeLayout>

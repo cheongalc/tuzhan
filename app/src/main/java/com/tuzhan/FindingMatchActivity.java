@@ -40,8 +40,7 @@ public class FindingMatchActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         root = database.getReference();
 
-        mAuth = FirebaseAuth.getInstance();
-        currUser = mAuth.getCurrentUser();
+        currUser = FirebaseAuth.getInstance().getCurrentUser();
         findMatch(currUser.getEmail(), Volley.newRequestQueue(this));
     }
 
@@ -110,10 +109,5 @@ public class FindingMatchActivity extends AppCompatActivity {
                 //failed to find match
             }
         });
-    }
-
-    public void matchFound(View view) {
-        Intent i = new Intent(FindingMatchActivity.this, CountdownActivity.class);
-        //startActivity(i);
     }
 }
