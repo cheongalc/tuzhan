@@ -120,12 +120,12 @@ public class DataSource extends Application {
 
     // use this method to fetch a group of cards
     // note for current implementation: elements of returned cards array CAN BE NULL if fetch fails for that card!
-    public void fetchCards(String theme, final int[] ids, final DataFetchedCallback<ArrayList<QuestionCard>> callback){
+    public void fetchCards(String theme, final List<Integer> ids, final DataFetchedCallback<ArrayList<QuestionCard>> callback){
         final ArrayList<QuestionCard> fetched = new ArrayList<>();
-        for(int id:ids){
+        for(Integer id:ids){
             fetchCard(theme, id, data -> {
                 fetched.add(data);
-                if(fetched.size() == ids.length){
+                if(fetched.size() == ids.size()){
                     Collections.sort(fetched, (o1, o2) -> o1.id.compareTo(o2.id));
                     callback.fetched(fetched);
                 }

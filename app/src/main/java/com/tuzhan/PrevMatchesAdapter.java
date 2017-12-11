@@ -3,6 +3,7 @@ package com.tuzhan;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,7 @@ public class PrevMatchesAdapter extends ArrayAdapter<String> {
 
         TextView tvOpponentName = (TextView) convertView.findViewById(R.id.tv_opponent_name);
         TextView tvTopic = (TextView) convertView.findViewById(R.id.tv_topic);
+        CardView cvMatch = (CardView) convertView.findViewById(R.id.cvMatch);
 
         CircleImageView civOpponentDp = (CircleImageView) convertView.findViewById(R.id.civ_opponent);
         CircleImageView civOutcome = (CircleImageView) convertView.findViewById(R.id.civ_outcome);
@@ -59,9 +61,13 @@ public class PrevMatchesAdapter extends ArrayAdapter<String> {
         }else if(outcome.equals("2")){
             civOutcome.setBorderColor(getContext().getResources().getColor(R.color.colorPrimary));
             civOutcome.setImageResource(R.mipmap.tuzhan_draw);
-        }else{
+        }else if(outcome.equals("dnf")){
             civOutcome.setBorderColor(getContext().getResources().getColor(R.color.colorDNFGrey));
             civOutcome.setImageResource(R.mipmap.tuzhan_dnf);
+        }else{
+            cvMatch.setCardBackgroundColor(getContext().getResources().getColor(R.color.colorAccentRed));
+            civOutcome.setBorderColor(getContext().getResources().getColor(R.color.colorAccentYellow));
+            civOutcome.setImageResource(R.mipmap.tuzhan_vs);
         }
 
         Picasso.with(getContext()).load(opponent.dpURL).into(civOpponentDp);

@@ -1,11 +1,13 @@
 package com.tuzhan;
 
 
+import java.io.Serializable;
+
 /**
  * Created by Dhaulagiri on 6/12/2017.
  */
 
-public class User {
+public class User implements Serializable {
 
     String displayname;
     String email;

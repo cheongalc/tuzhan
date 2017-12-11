@@ -4,8 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
+    android:id="@+id/cvMatch"
     app:cardBackgroundColor="@color/colorAccentYellow"
-    app:cardCornerRadius="@dimen/RadiusS">
+    app:cardCornerRadius="15dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
