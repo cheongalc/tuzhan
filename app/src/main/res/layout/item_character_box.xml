@@ -3,7 +3,7 @@
     android:layout_width="64dp"
     android:layout_height="64dp"
     android:layout_gravity="center_horizontal"
-    android:background="@drawable/background_accent_blue"
+    android:background="@drawable/list_title"
     android:padding="@dimen/PaddingS"
     android:layout_marginStart="@dimen/MarginS"
     android:layout_marginEnd="@dimen/MarginS"

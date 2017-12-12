@@ -7,14 +7,24 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="-10dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/tuzhan_pattern" />
+
+
     <android.support.v7.widget.Toolbar
+        android:layout_margin="5dp"
         android:id="@+id/tb_toolbarGameplay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
-        android:background="@color/colorPrimaryDark">
+        android:background="@drawable/list_title">
 
         <TextView
+            android:textStyle="bold"
             android:id="@+id/tv_themeTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -62,7 +72,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_margin="@dimen/MarginS"
-                    android:background="@drawable/background_accent_green"
+                    android:background="@drawable/list_title"
+                    android:backgroundTint="@color/colorAccentYellow"
                     android:padding="@dimen/PaddingS"
                     android:text="Score"
                     android:textColor="@color/colorAccent"
@@ -76,7 +87,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_margin="@dimen/MarginS"
-                    android:background="@drawable/background_accent_orange"
+                    android:background="@drawable/list_title"
+                    android:backgroundTint="@color/colorAccentRed"
                     android:padding="@dimen/PaddingS"
                     android:text="Timer"
                     android:textColor="@color/colorAccent"
@@ -128,11 +140,11 @@
                 android:layout_below="@id/hsv_characterBoxes"
                 android:layout_marginStart="@dimen/MarginML"
                 android:layout_marginEnd="@dimen/MarginML"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/colorAccentYellow"
                 android:textSize="@dimen/Heading1"
                 android:textAlignment="center"
                 android:textCursorDrawable="@null"
-                android:backgroundTint="@color/colorAccent"
+                android:backgroundTint="@color/colorAccentYellow"
                 android:inputType="text"
                 android:maxLines="1"
                 android:imeOptions="actionDone"
