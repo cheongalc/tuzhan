@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     RelativeLayout rl_userInfoBtnContainer;
     FirebaseDatabase database;
     DatabaseReference root;
+    LinearLayout prev_matches, new_matches;
 
     private List<String> prevMatchIds = new ArrayList<>();
     private List<MatchDetails> prevMatchDetails = new ArrayList<>();
@@ -87,6 +89,8 @@ public class MainActivity extends AppCompatActivity {
         rl_userInfoBtnContainer = (RelativeLayout) findViewById(R.id.rl_userInfoBtnContainer);
         lv_prevMatches = (ListView) findViewById(R.id.lv_prev_matches);
         lv_newMatches = (ListView) findViewById(R.id.lv_new_matches);
+        prev_matches = (LinearLayout) findViewById(R.id.linear_new_matches);
+        new_matches = (LinearLayout) findViewById(R.id.linear_prev_matches);
 
         Picasso.with(this).load(currUser.getPhotoUrl()).into(civ_displayPhoto);
         tv_displayName.setText(currUser.getDisplayName());
@@ -149,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
                 prevMatchDetails.removeAll(matches_to_remove);
 
                 //refresh list
-                updateMatchesList(lv_prevMatches, prevMatchIds, prevMatchDetails);
+                updateMatchesList(lv_prevMatches, prevMatchIds, prevMatchDetails, prev_matches);
             }
 
             @Override
@@ -278,14 +282,14 @@ public class MainActivity extends AppCompatActivity {
                             prevMatchIds.add(match_id);
                             prevMatchDetails.add(matchDetails);
 
-                            updateMatchesList(lv_prevMatches, prevMatchIds, prevMatchDetails);
+                            updateMatchesList(lv_prevMatches, prevMatchIds, prevMatchDetails, prev_matches);
 
                         }else{
                             //match is new challenge
                             newMatchDetails.add(matchDetails);
                             newMatchIds.add(match_id);
 
-                            updateMatchesList(lv_newMatches, newMatchIds, newMatchDetails);
+                            updateMatchesList(lv_newMatches, newMatchIds, newMatchDetails, new_matches);
                         }
                     }
 
@@ -303,7 +307,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void updateMatchesList(ListView lv, List<String> matchIds, List<MatchDetails> matchDetailsList){
+    public void updateMatchesList(ListView lv, List<String> matchIds, List<MatchDetails> matchDetailsList, LinearLayout container){
+
+        if(matchDetailsList.size() == 0) container.setVisibility(View.GONE);
+        else container.setVisibility(View.VISIBLE);
 
         //all info retrieved, set listview
         if (lv.getAdapter() == null) {

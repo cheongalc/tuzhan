@@ -58,24 +58,24 @@
     </android.support.v7.widget.CardView>
 
     <ScrollView
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
         android:id="@+id/main_scroll_view"
-        android:overScrollMode="never"
-        android:scrollbars="none"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/user_info">
+        android:layout_below="@+id/user_info"
+        android:layout_marginEnd="5dp"
+        android:layout_marginStart="5dp"
+        android:overScrollMode="never"
+        android:scrollbars="none">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <ImageButton
-                android:layout_centerHorizontal="true"
                 android:id="@+id/bStartGame"
                 android:layout_width="420dp"
                 android:layout_height="200dp"
+                android:layout_centerHorizontal="true"
                 android:backgroundTint="@android:color/transparent"
                 android:onClick="findMatch"
                 android:scaleType="fitCenter"
@@ -83,36 +83,102 @@
 
             <LinearLayout
                 android:id="@+id/linear_new_matches"
-                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/bStartGame"
                 android:layout_centerHorizontal="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/list_title"
+                    android:elevation="2dp">
+
+                    <ImageView
+                        android:layout_margin="5dp"
+                        android:src="@drawable/tuzhan_horn"
+                        android:layout_alignParentStart="true"
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent" />
+
+                    <ImageView
+                        android:layout_centerInParent="true"
+                        android:src="@mipmap/tuzhan_challenge"
+                        android:layout_width="120dp"
+                        android:layout_height="match_parent" />
+
+                    <ImageView
+                        android:scaleX="-1"
+                        android:layout_margin="5dp"
+                        android:src="@drawable/tuzhan_horn"
+                        android:layout_alignParentEnd="true"
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent" />
+
+                </RelativeLayout>
 
                 <ListView
-                    android:scrollbars="none"
-                    android:divider="@android:color/transparent"
                     android:id="@+id/lv_new_matches"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:dividerHeight="10dp" />
+                    android:layout_margin="10dp"
+                    android:divider="@android:color/transparent"
+                    android:dividerHeight="10dp"
+                    android:scrollbars="none" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_margin="10dp"
+                android:id="@+id/linear_prev_matches"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/linear_new_matches"
                 android:layout_centerHorizontal="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/list_title"
+                    android:elevation="2dp">
+
+                    <ImageView
+                        android:layout_alignParentStart="true"
+                        android:layout_margin="10dp"
+                        android:src="@mipmap/tuzhan_scroll"
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent" />
+
+                    <ImageView
+                        android:layout_centerInParent="true"
+                        android:src="@mipmap/tuzhan_record"
+                        android:layout_width="120dp"
+                        android:layout_height="match_parent" />
+
+                    <ImageView
+                        android:scaleX="-1"
+                        android:layout_alignParentEnd="true"
+                        android:layout_margin="10dp"
+                        android:src="@mipmap/tuzhan_scroll"
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent" />
+
+
+                </RelativeLayout>
 
                 <ListView
-                    android:scrollbars="none"
-                    android:divider="@android:color/transparent"
                     android:id="@+id/lv_prev_matches"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:dividerHeight="10dp" />
+                    android:layout_margin="10dp"
+                    android:divider="@android:color/transparent"
+                    android:dividerHeight="10dp"
+                    android:scrollbars="none" />
 
             </LinearLayout>
 
