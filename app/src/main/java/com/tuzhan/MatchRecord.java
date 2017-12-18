@@ -35,7 +35,7 @@ public class MatchRecord extends DatabaseModel {
         this.tableName = "MATCHES";
     }
 
-    // initialize a match record with partial data immediately when this user completes the match
+    // initialize a match record with complete data when both users finishes the game
     public MatchRecord(String id, String topic, List<Integer> cardIds, String oppEmail, Integer scoreSelf, Integer scoreOpp, Double timeSelf, Double timeOpp, List<String> entriesSelf, List<String> entriesOpp, List<Integer> scoresSelf,  List<Integer> scoresOpp){
         this.id = id;
         this.topic = topic;

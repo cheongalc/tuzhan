@@ -135,9 +135,12 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
                 if (currentImage < NUM_IMAGES) {
                     handler.postDelayed(this, DELAY);
                 } else {
+                    //TODO pass everything needed to make a partial MatchRecord object,
+                    // TODO pass these, String matchId,  String topic, List<Integer> cardIds, String oppEmail, Integer scoreSelf, Double timeSelf, List<String> entriesSelf, List<Integer> scoresSelf
                     Intent i = new Intent(GameplayActivity.this, GameFinishedActivity.class);
                     i.putExtra("playerEntries", playerAnswers);
                     i.putExtra("playerScore", playerScore);
+                    i.putExtra("isMatchFinished", false);
                     startActivity(i);
                 }
             }

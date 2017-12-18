@@ -1,179 +1,209 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary">
 
-    <android.support.v7.widget.Toolbar
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="-10dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/tuzhan_pattern" />
+
+    <LinearLayout
         android:id="@+id/tb_toolbarGameFinished"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="?attr/actionBarSize"
-        android:background="@color/colorPrimaryDark">
-
-        <TextView
-            android:id="@+id/tv_gameFinishedTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="终"
-            android:textColor="@color/colorAccent"
-            android:textSize="@dimen/Heading1" />
-
-    </android.support.v7.widget.Toolbar>
-
-    <LinearLayout
-        android:id="@+id/ll_gameFinalScores"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:background="@color/colorBlueGloom"
+        android:elevation="5dp"
         android:orientation="horizontal"
-        android:layout_below="@id/tb_toolbarGameFinished"
-        android:layout_margin="@dimen/MarginM">
-
-        <TextView
-            android:id="@+id/tv_playerFinalScore"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="@dimen/MarginS"
-            android:background="@drawable/background_accent_green"
-            android:padding="@dimen/PaddingS"
-            android:text="Your Score"
-            android:textColor="@color/colorAccent"
-            android:textStyle="bold"
-            android:textSize="@dimen/Heading2"
-            android:textAlignment="center"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.05"
-            android:layout_gravity="center_vertical"
-            android:text=":"
-            android:textColor="@color/colorAccent"
-            android:textSize="@dimen/Heading1"
-            android:textStyle="bold"
-            android:textAlignment="center" />
-
-        <TextView
-            android:id="@+id/tv_opponentScore"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="@dimen/MarginS"
-            android:background="@drawable/background_accent_red"
-            android:padding="@dimen/PaddingS"
-            android:text="30"
-            android:textColor="@color/colorAccent"
-            android:textStyle="bold"
-            android:textSize="@dimen/Heading2"
-            android:textAlignment="center"/>
-
-    </LinearLayout>
-
-    <ScrollView
-        android:id="@+id/sv_gameFinishUI"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ll_gameFinalScores">
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:padding="5dp">
 
-            <RelativeLayout
-                android:id="@+id/rl_entriesContainer"
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/civ_user_dp"
+                android:layout_width="95dp"
+                android:layout_height="95dp"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/tuzhan_vs"
+                app:civ_border_color="@color/colorAccentYellow"
+                app:civ_border_width="5dp" />
+
+            <TextView
+                android:id="@+id/tv_userScore"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/background_white"
-                android:layout_marginStart="@dimen/MarginML"
-                android:layout_marginEnd="@dimen/MarginML"
-                android:layout_marginTop="@dimen/MarginM"
-                android:layout_marginBottom="@dimen/MarginM">
-
-                <LinearLayout
-                    android:id="@+id/ll_entriesWrapper"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:id="@+id/ll_playerEntries"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_gravity="center_vertical"
-                        android:orientation="vertical"
-                        android:padding="@dimen/PaddingS" />
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0.05"
-                        android:background="@color/colorPrimary"
-                        android:layout_gravity="center_vertical"/>
-
-                    <LinearLayout
-                        android:id="@+id/ll_opponentEntries"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_gravity="center_vertical"
-                        android:orientation="vertical"
-                        android:padding="@dimen/PaddingS">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="老师"
-                            android:textColor="@color/colorAccentRed"
-                            android:textStyle="bold"
-                            android:textAlignment="center"
-                            android:textSize="@dimen/Heading2"/>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="红苹"
-                            android:textColor="@color/colorAccentOrange"
-                            android:textStyle="bold"
-                            android:textAlignment="center"
-                            android:textSize="@dimen/Heading2"/>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="书本"
-                            android:textColor="@color/colorAccentRed"
-                            android:textStyle="bold"
-                            android:textAlignment="center"
-                            android:textSize="@dimen/Heading2"/>
-
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </RelativeLayout>
-
-            <Button
-                android:id="@+id/btn_returnHome"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/rl_entriesContainer"
-                android:layout_marginStart="@dimen/MarginML"
-                android:layout_marginEnd="@dimen/MarginML"
-                android:layout_marginTop="@dimen/MarginM"
-                android:layout_marginBottom="@dimen/MarginM"
-                android:background="@drawable/background_accent_red"
-                android:padding="@dimen/PaddingS"
-                android:text="返回"
-                android:textStyle="bold"
-                android:textColor="@color/colorAccent"
-                android:textSize="@dimen/Heading1"/>
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/civ_user_dp"
+                android:text="20"
+                android:textAlignment="center"
+                android:textColor="@color/colorAccentYellow"
+                android:textSize="35sp"
+                android:textStyle="bold" />
 
         </RelativeLayout>
 
-    </ScrollView>
+
+        <RelativeLayout
+            android:layout_width="20dp"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="-"
+                android:textAlignment="center"
+                android:textColor="@color/colorAccentYellow"
+                android:textSize="45sp" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="5dp"
+            android:layout_weight="1"
+            android:padding="5dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/civ_opp_dp"
+                android:layout_width="95dp"
+                android:layout_height="95dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/tuzhan_vs"
+                app:civ_border_color="@color/colorAccentYellow"
+                app:civ_border_width="5dp" />
+
+
+            <TextView
+                android:id="@+id/tv_oppScore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@id/civ_opp_dp"
+                android:text="20"
+                android:textAlignment="center"
+                android:textColor="@color/colorAccentYellow"
+                android:textSize="35sp"
+                android:textStyle="bold" />
+
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottom_controls"
+        android:layout_below="@+id/tb_toolbarGameFinished"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/background_rounded"
+            android:elevation="5dp">
+
+            <ListView
+                android:id="@+id/lv_user_entries"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:scrollbars="none" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/background_rounded"
+            android:elevation="5dp">
+
+            <ListView
+                android:id="@+id/lv_opp_entries"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:scrollbars="none" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:id="@+id/bottom_controls"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"
+            android:id="@+id/btn_returnHome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/background_rounded"
+            android:backgroundTint="@color/colorAccentYellow"
+            android:elevation="5dp"
+            android:padding="10dp"
+            android:src="@drawable/ic_arrow_back_black_24dp"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/Heading1"
+            android:textStyle="bold"
+            android:tint="@color/colorAccent" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"/>
+
+        <ImageButton
+            android:layout_marginStart="5dp"
+            android:layout_weight="1"
+            android:id="@+id/btn_flip_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/background_rounded"
+            android:backgroundTint="@color/colorAccentYellow"
+            android:elevation="5dp"
+            android:padding="10dp"
+            android:src="@drawable/ic_flip_card"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/Heading1"
+            android:textStyle="bold"
+            android:tint="@color/colorAccent" />
+
+    </LinearLayout>
 
 </RelativeLayout>
