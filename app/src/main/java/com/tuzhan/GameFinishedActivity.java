@@ -72,7 +72,7 @@ public class GameFinishedActivity extends AppCompatActivity {
         //boolean value to determine whether the user is accessing this page immediately after match or from mainactivity list
         Boolean isMatchFinished = intent.getBooleanExtra("isMatchFinished", false);
 
-        //user is accessing match from mainactivity, retrieve cached match record
+        //user is accessing match from MainActivity, retrieve cached match record
         if(matchId != null && isMatchFinished){
             //TODO get matchrecords
 
