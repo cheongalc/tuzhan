@@ -172,7 +172,8 @@ public class GameFinishedActivity extends AppCompatActivity {
             tv_userScore.setText("DNF");
         }else tv_userScore.setText(userScore + "");
 
-        //TODO make new adapter and set list for both use and opponent
+        PlayerEntriesAdapter userEntriesAdapter = new PlayerEntriesAdapter(this, userEntries, userScores);
+        lv_userEntries.setAdapter(userEntriesAdapter);
 
         Picasso.with(this).load(curUser.getPhotoUrl()).into(civ_user);
 
@@ -182,6 +183,9 @@ public class GameFinishedActivity extends AppCompatActivity {
         if(oppScore > 0){
             tv_oppScore.setText("DNF");
         }else tv_oppScore.setText(oppScore + "");
+
+        PlayerEntriesAdapter oppEntriesAdapter = new PlayerEntriesAdapter(this, oppEntries, oppScores);
+        lv_userEntries.setAdapter(oppEntriesAdapter);
     }
 
     private void getOppStuff(String email){

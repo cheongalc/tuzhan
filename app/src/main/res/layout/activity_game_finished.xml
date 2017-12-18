@@ -111,7 +111,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/bottom_controls"
-        android:layout_below="@+id/tb_toolbarGameFinished"
+        android:layout_below="@+id/separator"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -156,6 +156,13 @@
 
     </LinearLayout>
 
+    <View
+        android:id="@+id/separator"
+        android:elevation="5dp"
+        android:layout_below="@id/tb_toolbarGameFinished"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@color/colorAccentYellow"/>
 
     <LinearLayout
         android:layout_alignParentBottom="true"
@@ -172,7 +179,7 @@
             android:layout_marginBottom="10dp"
             android:layout_marginStart="10dp"
             android:background="@drawable/background_rounded"
-            android:backgroundTint="@color/colorAccentYellow"
+            android:backgroundTint="@color/colorAccentRed"
             android:elevation="5dp"
             android:padding="10dp"
             android:src="@drawable/ic_arrow_back_black_24dp"
