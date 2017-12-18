@@ -74,8 +74,16 @@ public class GameFinishedActivity extends AppCompatActivity {
 
         //user is accessing match from MainActivity, retrieve cached match record
         if(matchId != null && isMatchFinished){
-            //TODO get matchrecords
+            MatchRecord matchRecord = null;
 
+            for(MatchRecord match : DataSource.shared.matches){
+                if(match.id.equals(matchId)){
+                    matchRecord = match;
+                    break;
+                }
+            }
+
+            assert matchRecord != null;
             userScore = matchRecord.scoreSelf;
             oppScore = matchRecord.scoreOpp;
 
@@ -204,18 +212,4 @@ public class GameFinishedActivity extends AppCompatActivity {
         });
     }
 
-    private List<String> formatEntries(String unformattedEntries) {
-        List<String> output = new ArrayList<>();
-        String currentStack = "";
-        for (int i = 0; i < unformattedEntries.length(); i++) {
-            char currentChar = unformattedEntries.charAt(i);
-            if (currentChar == '-') {
-                output.add(currentStack);
-                currentStack = "";
-            } else {
-                currentStack += currentChar;
-            }
-        }
-        return output;
-    }
 }
