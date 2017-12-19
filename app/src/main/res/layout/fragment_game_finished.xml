@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="-10dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/tuzhan_pattern" />
+
+    <LinearLayout
+        android:id="@+id/tb_toolbarGameFinished"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorBlueGloom"
+        android:elevation="5dp"
+        android:orientation="horizontal"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/civ_user_dp"
+                android:layout_width="95dp"
+                android:layout_height="95dp"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/tuzhan_vs"
+                app:civ_border_color="@color/colorAccentYellow"
+                app:civ_border_width="5dp" />
+
+            <TextView
+                android:id="@+id/tv_userScore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/civ_user_dp"
+                android:text="20"
+                android:textAlignment="center"
+                android:textColor="@color/colorAccentYellow"
+                android:textSize="35sp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="20dp"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="-"
+                android:textAlignment="center"
+                android:textColor="@color/colorAccentYellow"
+                android:textSize="45sp" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="5dp"
+            android:layout_weight="1"
+            android:padding="5dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/civ_opp_dp"
+                android:layout_width="95dp"
+                android:layout_height="95dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/tuzhan_vs"
+                app:civ_border_color="@color/colorAccentYellow"
+                app:civ_border_width="5dp" />
+
+
+            <TextView
+                android:id="@+id/tv_oppScore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@id/civ_opp_dp"
+                android:text="20"
+                android:textAlignment="center"
+                android:textColor="@color/colorAccentYellow"
+                android:textSize="35sp"
+                android:textStyle="bold" />
+
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottom_controls"
+        android:layout_below="@+id/separator"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/background_rounded"
+            android:elevation="5dp">
+
+            <ListView
+                android:divider="@android:color/transparent"
+                android:id="@+id/lv_user_entries"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:scrollbars="none" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/background_rounded"
+            android:elevation="5dp">
+
+            <ListView
+                android:divider="@android:color/transparent"
+                android:id="@+id/lv_opp_entries"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:scrollbars="none" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/separator"
+        android:elevation="5dp"
+        android:layout_below="@id/tb_toolbarGameFinished"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@color/colorAccentYellow"/>
+
+</RelativeLayout>

@@ -1,18 +1,46 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:context="com.tuzhan.FragmentFlashCards"
     android:background="@color/colorPrimary">
 
-    <RelativeLayout
-        android:layout_alignParentTop="true"
-        android:layout_above="@+id/bottom_controls"
-        android:id="@+id/fragment_container"
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </RelativeLayout>
+        android:layout_height="match_parent"
+        android:elevation="-10dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/tuzhan_pattern" />
+
+
+    <LinearLayout
+        android:padding="10dp"
+        android:id="@+id/tb_toolbarFlashCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorBlueGloom"
+        android:elevation="5dp"
+        android:orientation="horizontal"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp">
+
+        <android.support.v4.widget.ContentLoadingProgressBar
+            android:id="@+id/pb_flash_card_progress"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:progressDrawable="@drawable/flash_card_progress_bar"
+            android:progress="25"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
+    </LinearLayout>
+
+    <com.tuzhan.NonSwipeableViewPager
+        android:id="@+id/vp_flash_cards"
+        android:layout_above="@id/bottom_controls"
+        android:layout_below="@+id/tb_toolbarFlashCard"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </com.tuzhan.NonSwipeableViewPager>
 
     <LinearLayout
         android:paddingTop="10dp"
@@ -24,7 +52,7 @@
         <ImageButton
             android:layout_marginEnd="5dp"
             android:layout_weight="1"
-            android:id="@+id/btn_returnHome"
+            android:id="@+id/bCross"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -33,36 +61,31 @@
             android:backgroundTint="@color/colorAccentRed"
             android:elevation="5dp"
             android:padding="10dp"
-            android:src="@drawable/ic_arrow_back_black_24dp"
+            android:src="@drawable/ic_clear_black_24dp"
             android:textColor="@color/colorAccent"
             android:textSize="@dimen/Heading1"
             android:textStyle="bold"
             android:tint="@color/colorAccent" />
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"/>
 
         <ImageButton
             android:layout_marginStart="5dp"
             android:layout_weight="1"
-            android:id="@+id/btn_flip_card"
+            android:id="@+id/bTick"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:layout_marginEnd="10dp"
             android:background="@drawable/background_rounded"
-            android:backgroundTint="@color/colorAccentYellow"
+            android:backgroundTint="@color/colorAccentGreen"
             android:elevation="5dp"
             android:padding="10dp"
-            android:src="@drawable/ic_flip_card"
+            android:src="@drawable/ic_done_black_24dp"
             android:textColor="@color/colorAccent"
             android:textSize="@dimen/Heading1"
             android:textStyle="bold"
             android:tint="@color/colorAccent" />
 
     </LinearLayout>
-
 
 </RelativeLayout>

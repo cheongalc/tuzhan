@@ -47,10 +47,10 @@ public class PlayerEntriesAdapter extends ArrayAdapter<String> {
         tvScore.setText("+" + score);
 
 
-        if(score == 0) cvScore.setBackgroundColor(getContext().getResources().getColor(R.color.colorAccentRed));
-        else if(score == 1) cvScore.setBackgroundColor(getContext().getResources().getColor(R.color.colorAccentGreen));
-        else if(score == 2) cvScore.setBackgroundColor(getContext().getResources().getColor(R.color.colorAccentBlue));
-        else cvScore.setBackgroundColor(getContext().getResources().getColor(R.color.colorAccentYellow));
+        if(score == 0) cvScore.setCardBackgroundColor(getContext().getResources().getColor(R.color.colorAccentRed));
+        else if(score == 1) cvScore.setCardBackgroundColor(getContext().getResources().getColor(R.color.colorAccentGreen));
+        else if(score == 2) cvScore.setCardBackgroundColor(getContext().getResources().getColor(R.color.colorPrimary));
+        else cvScore.setCardBackgroundColor(getContext().getResources().getColor(R.color.colorAccentYellow));
 
         return convertView;
     }

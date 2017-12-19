@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -126,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
         //update lv_prev_matches
         getPrevMatches();
+
     }
 
     //listener to check individual match id under match object of user

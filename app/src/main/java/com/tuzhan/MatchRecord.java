@@ -135,13 +135,13 @@ public class MatchRecord extends DatabaseModel {
         values2Update.put("timeSelf", timeSelf);
         values2Update.put("entriesSelf", Utils.concatenate(entriesSelf));
         values2Update.put("scoresSelf", Utils.concatenate(scoresSelf));
-//        if(scoreOpp != null){
-//            values2Update.put("scoreOpp", scoreOpp);
-//            values2Update.put("entriesOpp", Utils.concatenate(entriesOpp));
-//            values2Update.put("timeOpp", timeOpp);
-//            values2Update.put("scoresOpp", Utils.concatenate(scoresOpp));
-//            values2Update.put("winnerEmail", winnerEmail);
-//        }
+        if(scoreOpp != null){
+            values2Update.put("scoreOpp", scoreOpp);
+            values2Update.put("entriesOpp", Utils.concatenate(entriesOpp));
+            values2Update.put("timeOpp", timeOpp);
+            values2Update.put("scoresOpp", Utils.concatenate(scoresOpp));
+            values2Update.put("winnerEmail", winnerEmail);
+        }
         return values2Update;
     }
 }

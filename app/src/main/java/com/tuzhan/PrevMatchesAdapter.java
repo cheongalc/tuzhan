@@ -1,6 +1,7 @@
 package com.tuzhan;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
@@ -52,23 +53,36 @@ public class PrevMatchesAdapter extends ArrayAdapter<String> {
         CircleImageView civOpponentDp = (CircleImageView) convertView.findViewById(R.id.civ_opponent);
         CircleImageView civOutcome = (CircleImageView) convertView.findViewById(R.id.civ_outcome);
 
-        if(outcome.equals("1")){
-            civOutcome.setBorderColor(getContext().getResources().getColor(R.color.colorAccentGreen));
-            civOutcome.setImageResource(R.mipmap.tuzhan_win);
-        }else if(outcome.equals("0")){
-            civOutcome.setBorderColor(getContext().getResources().getColor(R.color.colorAccentRed));
-            civOutcome.setImageResource(R.mipmap.tuzhan_lost);
-        }else if(outcome.equals("2")){
-            civOutcome.setBorderColor(getContext().getResources().getColor(R.color.colorPrimary));
-            civOutcome.setImageResource(R.mipmap.tuzhan_draw);
-        }else if(outcome.equals("dnf")){
-            civOutcome.setBorderColor(getContext().getResources().getColor(R.color.colorDNFGrey));
-            civOutcome.setImageResource(R.mipmap.tuzhan_dnf);
-        }else{
-            cvMatch.setCardBackgroundColor(getContext().getResources().getColor(R.color.colorAccentRed));
-            civOutcome.setBorderColor(getContext().getResources().getColor(R.color.colorAccentYellow));
-            civOutcome.setImageResource(R.mipmap.tuzhan_vs);
+        switch (outcome) {
+            case "1":
+                civOutcome.setBorderColor(getContext().getResources().getColor(R.color.colorAccentGreen));
+                civOutcome.setImageResource(R.mipmap.tuzhan_win);
+                break;
+            case "0":
+                civOutcome.setBorderColor(getContext().getResources().getColor(R.color.colorAccentRed));
+                civOutcome.setImageResource(R.mipmap.tuzhan_lost);
+                break;
+            case "2":
+                civOutcome.setBorderColor(getContext().getResources().getColor(R.color.colorPrimary));
+                civOutcome.setImageResource(R.mipmap.tuzhan_draw);
+                break;
+            case "dnf":
+                civOutcome.setBorderColor(getContext().getResources().getColor(R.color.colorDNFGrey));
+                civOutcome.setImageResource(R.mipmap.tuzhan_dnf);
+                break;
+            default:
+                cvMatch.setCardBackgroundColor(getContext().getResources().getColor(R.color.colorAccentRed));
+                civOutcome.setBorderColor(getContext().getResources().getColor(R.color.colorAccentYellow));
+                civOutcome.setImageResource(R.mipmap.tuzhan_vs);
+                break;
         }
+
+        convertView.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), GameFinishedActivity.class);
+            intent.putExtra("matchId", matchDetails.match_id);
+            intent.putExtra("isMatchFinished", true);
+            getContext().startActivity(intent);
+        });
 
         Picasso.with(getContext()).load(opponent.dpURL).into(civOpponentDp);
 
