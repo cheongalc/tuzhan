@@ -8,11 +8,18 @@
 
     <RelativeLayout
         android:layout_alignParentTop="true"
-        android:layout_above="@+id/bottom_controls"
+        android:layout_above="@+id/divider"
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     </RelativeLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_above="@id/bottom_controls"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@color/colorAccentYellow"/>
 
     <LinearLayout
         android:paddingTop="10dp"
@@ -20,6 +27,7 @@
         android:id="@+id/bottom_controls"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
 
         <ImageButton
             android:layout_marginEnd="5dp"
@@ -30,7 +38,7 @@
             android:layout_marginBottom="10dp"
             android:layout_marginStart="10dp"
             android:background="@drawable/background_rounded"
-            android:backgroundTint="@color/colorAccentRed"
+            android:backgroundTint="@color/colorAccentYellow"
             android:elevation="5dp"
             android:padding="10dp"
             android:src="@drawable/ic_arrow_back_black_24dp"

@@ -8,6 +8,7 @@
     android:padding="5dp">
 
     <TextView
+        android:textColor="@color/colorAccent"
         android:textAlignment="center"
         android:text="Dummy Answer"
         android:layout_centerVertical="true"

@@ -10,9 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -98,21 +103,20 @@ public class PrevMatchesAdapter extends ArrayAdapter<String> {
                 intent.putExtra("theme", topic);
                 intent.putExtra("user", user);
 
-                MatchRecord matchRecord = null;
-
-                //retrieve match record to obtain card ids
-                for(MatchRecord match : DataSource.shared.matches){
-                    if(match.id == matchDetails.match_id){
-                        matchRecord = match;
+                //retrieve cardIds
+                FirebaseDatabase.getInstance().getReference().child("Matches").child(matchDetails.match_id).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String cardIds = dataSnapshot.child("cardIds").getValue()+"";
+                        intent.putExtra("cardIds", cardIds);
+                        getContext().startActivity(intent);
                     }
-                }
 
-                assert matchRecord != null;
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
-                //convert card ids list to string
-                String cardIds = Utils.concatenate(matchRecord.cardIds);
-                intent.putExtra("cardIds", cardIds);
-                getContext().startActivity(intent);
+                    }
+                });
 
             }
         });

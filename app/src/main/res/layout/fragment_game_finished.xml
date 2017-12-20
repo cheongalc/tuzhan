@@ -17,7 +17,7 @@
         android:id="@+id/tb_toolbarGameFinished"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorBlueGloom"
+            android:background="@color/colorPrimary"
         android:elevation="5dp"
         android:orientation="horizontal"
         android:paddingStart="5dp"
@@ -111,7 +111,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bottom_controls"
         android:layout_below="@+id/separator"
         android:orientation="horizontal">
 
@@ -123,11 +122,12 @@
             android:layout_marginBottom="10dp"
             android:layout_marginEnd="5dp"
             android:layout_weight="1"
-            android:background="@drawable/background_rounded"
+            android:background="@drawable/background_yellow_border_red"
             android:elevation="5dp">
 
             <ListView
-                android:divider="@android:color/transparent"
+                android:dividerHeight="1dp"
+                android:divider="@drawable/list_view_divider"
                 android:id="@+id/lv_user_entries"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -144,11 +144,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/background_rounded"
+            android:background="@drawable/background_yellow_border_red"
             android:elevation="5dp">
 
             <ListView
-                android:divider="@android:color/transparent"
+                android:divider="@drawable/list_view_divider"
+                android:dividerHeight="1dp"
                 android:id="@+id/lv_opp_entries"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
