@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -86,6 +88,32 @@ public class PrevMatchesAdapter extends ArrayAdapter<String> {
                 intent.putExtra("isMatchFinished", true);
                 intent.putExtra("opp_dpURL", opponent.dpURL);
                 getContext().startActivity(intent);
+            }else{
+                //retrieve user info
+                FirebaseUser curuser = FirebaseAuth.getInstance().getCurrentUser();
+                User user = new User(curuser.getDisplayName(), curuser.getEmail(), curuser.getUid(), curuser.getPhotoUrl().toString());
+
+                Intent intent = new Intent(getContext(), CountdownActivity.class);
+                intent.putExtra("opp", opponent);
+                intent.putExtra("theme", topic);
+                intent.putExtra("user", user);
+
+                MatchRecord matchRecord = null;
+
+                //retrieve match record to obtain card ids
+                for(MatchRecord match : DataSource.shared.matches){
+                    if(match.id == matchDetails.match_id){
+                        matchRecord = match;
+                    }
+                }
+
+                assert matchRecord != null;
+
+                //convert card ids list to string
+                String cardIds = Utils.concatenate(matchRecord.cardIds);
+                intent.putExtra("cardIds", cardIds);
+                getContext().startActivity(intent);
+
             }
         });
 
