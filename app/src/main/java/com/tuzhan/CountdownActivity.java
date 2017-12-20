@@ -27,6 +27,10 @@ public class CountdownActivity extends AppCompatActivity {
 
     User user, opp;
 
+    CountDownTimer countDownTimer;
+
+    int[] count_down_numbers = {R.mipmap.tuzhan_1, R.mipmap.tuzhan_2, R.mipmap.tuzhan_3, R.mipmap.tuzhan_4, R.mipmap.tuzhan_5};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +57,21 @@ public class CountdownActivity extends AppCompatActivity {
         Picasso.with(this).load(user.dpURL).into(civ_user_dp);
         Picasso.with(this).load(opp.dpURL).into(civ_opp_dp);
 
+        countDownTimer = new CountDownTimer(4000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                int seconds_remaining = (int) millisUntilFinished/1000;
+                civ_center_count_down.setImageResource(count_down_numbers[seconds_remaining-1]);
+            }
+
+            public void onFinish() {
+                Intent intent = new Intent(CountdownActivity.this, GameplayActivity.class);
+                intent.putParcelableArrayListExtra("question_cards", questionCardList);
+                intent.putExtra("opp_dpURL", opp.dpURL);
+                startActivity(intent);
+            }
+        };
+
         retrieveMaterials();
     }
 
@@ -70,24 +89,12 @@ public class CountdownActivity extends AppCompatActivity {
     }
 
     private void beginCountDown(){
-
-        int[] count_down_numbers = {R.mipmap.tuzhan_1, R.mipmap.tuzhan_2, R.mipmap.tuzhan_3, R.mipmap.tuzhan_4, R.mipmap.tuzhan_5};
-
-        new CountDownTimer(4000, 1000) {
-
-            public void onTick(long millisUntilFinished) {
-               int seconds_remaining = (int) millisUntilFinished/1000;
-               civ_center_count_down.setImageResource(count_down_numbers[seconds_remaining-1]);
-            }
-
-            public void onFinish() {
-                Intent intent = new Intent(CountdownActivity.this, GameplayActivity.class);
-                intent.putParcelableArrayListExtra("question_cards", questionCardList);
-                intent.putExtra("opp_dpURL", opp.dpURL);
-                startActivity(intent);
-            }
-        }.start();
-
+        countDownTimer.start();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        countDownTimer.cancel();
+    }
 }
