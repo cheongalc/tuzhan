@@ -25,12 +25,14 @@ public class PrevMatchesAdapter extends ArrayAdapter<String> {
 
     List<String> match_ids;
     List<MatchDetails> matchDetailsList;
+    Boolean isNewMacth = false;
 
-    public PrevMatchesAdapter(@NonNull Context context, List<String> match_ids, List<MatchDetails> matchDetailsList) {
+    public PrevMatchesAdapter(@NonNull Context context, List<String> match_ids, List<MatchDetails> matchDetailsList, Boolean isNewMatch) {
         super(context, 0, match_ids);
 
         this.match_ids = match_ids;
         this.matchDetailsList = matchDetailsList;
+        this.isNewMacth = isNewMatch;
     }
 
     @NonNull
@@ -48,7 +50,7 @@ public class PrevMatchesAdapter extends ArrayAdapter<String> {
 
         TextView tvOpponentName = (TextView) convertView.findViewById(R.id.tv_opponent_name);
         TextView tvTopic = (TextView) convertView.findViewById(R.id.tv_topic);
-        CardView cvMatch = (CardView) convertView.findViewById(R.id.cvMatch);
+//        CardView cvMatch = (CardView) convertView.findViewById(R.id.cvMatch);
 
         CircleImageView civOpponentDp = (CircleImageView) convertView.findViewById(R.id.civ_opponent);
         CircleImageView civOutcome = (CircleImageView) convertView.findViewById(R.id.civ_outcome);
@@ -71,17 +73,20 @@ public class PrevMatchesAdapter extends ArrayAdapter<String> {
                 civOutcome.setImageResource(R.mipmap.tuzhan_dnf);
                 break;
             default:
-                cvMatch.setCardBackgroundColor(getContext().getResources().getColor(R.color.colorAccentRed));
+//                cvMatch.setBackground(getContext().getResources().getDrawable(R.drawable.challenge_list_background));
                 civOutcome.setBorderColor(getContext().getResources().getColor(R.color.colorAccentYellow));
                 civOutcome.setImageResource(R.mipmap.tuzhan_vs);
                 break;
         }
 
         convertView.setOnClickListener(v -> {
-            Intent intent = new Intent(getContext(), GameFinishedActivity.class);
-            intent.putExtra("matchId", matchDetails.match_id);
-            intent.putExtra("isMatchFinished", true);
-            getContext().startActivity(intent);
+            if(!isNewMacth) {
+                Intent intent = new Intent(getContext(), GameFinishedActivity.class);
+                intent.putExtra("matchId", matchDetails.match_id);
+                intent.putExtra("isMatchFinished", true);
+                intent.putExtra("opp_dpURL", opponent.dpURL);
+                getContext().startActivity(intent);
+            }
         });
 
         Picasso.with(getContext()).load(opponent.dpURL).into(civOpponentDp);

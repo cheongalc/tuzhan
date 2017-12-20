@@ -42,6 +42,8 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
 
     ImageButton btn_back, btn_flip;
 
+    String opp_dpURL;
+
     int userScore = -1, oppScore = -1;
     double userTime = 0.0, oppTime = 0.0;
     List<Integer> userScores = new ArrayList<>(), oppScores = new ArrayList<>();
@@ -74,6 +76,7 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
 
         Intent intent = getActivity().getIntent();
         String matchId = intent.getStringExtra("matchId");
+        opp_dpURL = intent.getStringExtra("opp_dpURL");
         //boolean value to determine whether the user is accessing this page immediately after match or from mainactivity list
         Boolean isMatchFinished = intent.getBooleanExtra("isMatchFinished", false);
 
@@ -108,7 +111,6 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
                 //set opponent info
                 setOppStuff();
             }
-            getOppStuff(oppEmail);
 
         }else{
             String topic = intent.getStringExtra("topic");
@@ -177,8 +179,6 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
 
                 }
             });
-
-            getOppStuff(oppEmail);
         }
 
         // display score
@@ -190,6 +190,7 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
         lv_userEntries.setAdapter(userEntriesAdapter);
 
         Picasso.with(getActivity()).load(curUser.getPhotoUrl()).into(civ_user);
+        Picasso.with(getActivity()).load(opp_dpURL).into(civ_opp);
 
         return rootview;
     }
@@ -201,22 +202,6 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
 
         PlayerEntriesAdapter oppEntriesAdapter = new PlayerEntriesAdapter(getActivity(), oppEntries, oppScores);
         lv_oppEntries.setAdapter(oppEntriesAdapter);
-    }
-
-    private void getOppStuff(String email){
-        DatabaseReference userRef = rootRef.child("Users").child(email);
-        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String dpPhotoUrl = dataSnapshot.child("dpURL").getValue()+"";
-                Picasso.with(getActivity()).load(dpPhotoUrl).into(civ_opp);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
 }

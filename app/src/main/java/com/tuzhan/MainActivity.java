@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
                 prevMatchDetails.removeAll(matches_to_remove);
 
                 //refresh list
-                updateMatchesList(lv_prevMatches, prevMatchIds, prevMatchDetails, prev_matches);
+                updateMatchesList(lv_prevMatches, prevMatchIds, prevMatchDetails, prev_matches, false);
             }
 
             @Override
@@ -284,14 +284,14 @@ public class MainActivity extends AppCompatActivity {
                             prevMatchIds.add(match_id);
                             prevMatchDetails.add(matchDetails);
 
-                            updateMatchesList(lv_prevMatches, prevMatchIds, prevMatchDetails, prev_matches);
+                            updateMatchesList(lv_prevMatches, prevMatchIds, prevMatchDetails, prev_matches, false);
 
                         }else{
                             //match is new challenge
                             newMatchDetails.add(matchDetails);
                             newMatchIds.add(match_id);
 
-                            updateMatchesList(lv_newMatches, newMatchIds, newMatchDetails, new_matches);
+                            updateMatchesList(lv_newMatches, newMatchIds, newMatchDetails, new_matches, true);
                         }
                     }
 
@@ -309,14 +309,14 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void updateMatchesList(ListView lv, List<String> matchIds, List<MatchDetails> matchDetailsList, LinearLayout container){
+    public void updateMatchesList(ListView lv, List<String> matchIds, List<MatchDetails> matchDetailsList, LinearLayout container, boolean isNewMatch){
 
         if(matchDetailsList.size() == 0) container.setVisibility(View.GONE);
         else container.setVisibility(View.VISIBLE);
 
         //all info retrieved, set listview
         if (lv.getAdapter() == null) {
-            PrevMatchesAdapter prevMatchesAdapter = new PrevMatchesAdapter(MainActivity.this, matchIds, matchDetailsList);
+            PrevMatchesAdapter prevMatchesAdapter = new PrevMatchesAdapter(MainActivity.this, matchIds, matchDetailsList, isNewMatch);
             lv.setAdapter(prevMatchesAdapter);
         } else {
             ((PrevMatchesAdapter) lv.getAdapter()).notifyDataSetChanged();
