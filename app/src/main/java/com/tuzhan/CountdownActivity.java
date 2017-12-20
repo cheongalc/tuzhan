@@ -25,6 +25,8 @@ public class CountdownActivity extends AppCompatActivity {
 
     ArrayList<QuestionCard> questionCardList = new ArrayList<>();
 
+    User user, opp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,8 +35,8 @@ public class CountdownActivity extends AppCompatActivity {
         Intent pastIntent = getIntent();
 
         //retrieve player info from finding match
-        User user = (User) pastIntent.getSerializableExtra("user");
-        User opp = (User) pastIntent.getSerializableExtra("opp");
+        user = (User) pastIntent.getSerializableExtra("user");
+        opp = (User) pastIntent.getSerializableExtra("opp");
         cardIdsString = pastIntent.getStringExtra("cardIds");
         theme = pastIntent.getStringExtra("theme");
 
@@ -81,6 +83,7 @@ public class CountdownActivity extends AppCompatActivity {
             public void onFinish() {
                 Intent intent = new Intent(CountdownActivity.this, GameplayActivity.class);
                 intent.putParcelableArrayListExtra("question_cards", questionCardList);
+                intent.putExtra("opp_dpURL", opp.dpURL);
                 startActivity(intent);
             }
         }.start();

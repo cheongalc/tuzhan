@@ -136,7 +136,7 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
                     handler.postDelayed(this, DELAY);
                 } else {
                     //TODO pass everything needed to make a partial MatchRecord object,
-                    // TODO pass these, String matchId,  String topic, List<Integer> cardIds, String oppEmail, Integer scoreSelf, Double timeSelf, List<String> entriesSelf, List<Integer> scoresSelf
+                    // TODO pass these, String matchId,  String topic, List<Integer> cardIds, String oppEmail, Integer scoreSelf, Double timeSelf, List<String> entriesSelf, List<Integer> scoresSelf, also pass opp_dpURL (parsed from count down activity)
                     Intent i = new Intent(GameplayActivity.this, GameFinishedActivity.class);
                     i.putExtra("playerEntries", playerAnswers);
                     i.putExtra("playerScore", playerScore);
