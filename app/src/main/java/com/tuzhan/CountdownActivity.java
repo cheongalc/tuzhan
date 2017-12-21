@@ -75,7 +75,6 @@ public class CountdownActivity extends AppCompatActivity {
         retrieveMaterials();
     }
 
-    //TODO retrieve relevant stuff (eg. card ids) from local db or firebase
     private void retrieveMaterials() {
         //populate questionCardList...
         List<Integer> cardIdsList = Utils.splitToInts(cardIdsString);

@@ -1,5 +1,7 @@
 package com.tuzhan;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -31,6 +33,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,12 +55,15 @@ public class MainActivity extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference root;
     LinearLayout prev_matches, new_matches;
+    RelativeLayout prev_matches_title, new_challenges_title;
 
     private List<String> prevMatchIds = new ArrayList<>();
     private List<MatchDetails> prevMatchDetails = new ArrayList<>();
 
     private List<String> newMatchIds = new ArrayList<>();
     private List<MatchDetails> newMatchDetails = new ArrayList<>();
+
+    AVLoadingIndicatorView list_view_load;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +98,9 @@ public class MainActivity extends AppCompatActivity {
         lv_newMatches = (ListView) findViewById(R.id.lv_new_matches);
         prev_matches = (LinearLayout) findViewById(R.id.linear_new_matches);
         new_matches = (LinearLayout) findViewById(R.id.linear_prev_matches);
+        prev_matches_title = (RelativeLayout) findViewById(R.id.tuzhan_matches_title);
+        new_challenges_title = (RelativeLayout) findViewById(R.id.tuzhan_challenge_title);
+        list_view_load = (AVLoadingIndicatorView) findViewById(R.id.list_view_load_indicator);
 
         Picasso.with(this).load(currUser.getPhotoUrl()).into(civ_displayPhoto);
         tv_displayName.setText(currUser.getDisplayName());
@@ -124,6 +133,24 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ClosingService.class);
         intent.putExtra("email", currUser.getEmail());
         startService(intent);
+
+        prev_matches_title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(lv_prevMatches.getVisibility() == View.VISIBLE) {
+                    collapse(lv_prevMatches);
+                }else expand(lv_prevMatches);
+            }
+        });
+
+        new_challenges_title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(lv_newMatches.getVisibility() == View.VISIBLE){
+                    collapse(lv_newMatches);
+                }else expand(lv_newMatches);
+            }
+        });
 
         //update lv_prev_matches
         getPrevMatches();
@@ -322,6 +349,7 @@ public class MainActivity extends AppCompatActivity {
             ((PrevMatchesAdapter) lv.getAdapter()).notifyDataSetChanged();
         }
         setListViewHeightBasedOnChildren(lv);
+        list_view_load.setVisibility(View.GONE);
     }
 
     View.OnClickListener userInfoClick = new View.OnClickListener() {
@@ -401,5 +429,78 @@ public class MainActivity extends AppCompatActivity {
             listView.setLayoutParams(params);
         }
     }
+
+    public static int getListViewHeight(ListView listView){
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter != null) {
+            int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+            int totalHeight = 10;
+            View view = null;
+            for (int i = 0; i < listAdapter.getCount(); i++) {
+                view = listAdapter.getView(i, view, listView);
+                if (i == 0) {
+                    view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, -2));
+                }
+                view.measure(desiredWidth, 0);
+                totalHeight += view.getMeasuredHeight();
+            }
+            return (listView.getDividerHeight() * (listAdapter.getCount() - 1)) + totalHeight;
+        }else return 0;
+    }
+
+    private void expand(ListView lv) {
+        //set Visible
+        lv.setVisibility(View.VISIBLE);
+        int finalHeight = getListViewHeight(lv);
+
+        ValueAnimator mAnimator = slideAnimator(0, finalHeight, lv);
+        mAnimator.start();
+    }
+
+    private void collapse(ListView lv) {
+        int finalHeight = getListViewHeight(lv);
+
+        ValueAnimator mAnimator = slideAnimator(finalHeight, 0, lv);
+        mAnimator.start();
+
+        mAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                lv.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        mAnimator.start();
+    }
+
+    private ValueAnimator slideAnimator(int start, int end, ListView lv) {
+
+        ValueAnimator animator = ValueAnimator.ofInt(start, end);
+
+        animator.addUpdateListener(valueAnimator -> {
+            //Update Height
+            int value = (Integer) valueAnimator.getAnimatedValue();
+            ViewGroup.LayoutParams layoutParams = lv.getLayoutParams();
+            layoutParams.height = value;
+            lv.setLayoutParams(layoutParams);
+
+        });
+        return animator;
+    }
+
 
 }
