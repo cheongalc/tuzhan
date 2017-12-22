@@ -4,13 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,11 +28,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PrevMatchesAdapter extends ArrayAdapter<String> {
 
-    List<String> match_ids;
-    List<MatchDetails> matchDetailsList;
-    Boolean isNewMacth = false;
+    private List<String> match_ids;
+    private List<MatchDetails> matchDetailsList;
+    private Boolean isNewMacth = false;
 
-    public PrevMatchesAdapter(@NonNull Context context, List<String> match_ids, List<MatchDetails> matchDetailsList, Boolean isNewMatch) {
+    PrevMatchesAdapter(@NonNull Context context, List<String> match_ids, List<MatchDetails> matchDetailsList, Boolean isNewMatch) {
         super(context, 0, match_ids);
 
         this.match_ids = match_ids;

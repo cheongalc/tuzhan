@@ -1,7 +1,6 @@
 package com.tuzhan;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,11 +16,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
@@ -78,12 +75,7 @@ public class LoginActivity extends AppCompatActivity {
             //set up onclick listeners for login
             rl_progressOverlay = (RelativeLayout) findViewById(R.id.rl_progressOverlay);
             ib_loginButton = (ImageButton) findViewById(R.id.ib_loginButton);
-            ib_loginButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    signIn();
-                }
-            });
+            ib_loginButton.setOnClickListener(view -> signIn());
         }
     }
 
@@ -123,34 +115,31 @@ public class LoginActivity extends AppCompatActivity {
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            //sign in success, retrieved user credentials
-                            Log.d(DEBUG_TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        //sign in success, retrieved user credentials
+                        Log.d(DEBUG_TAG, "signInWithCredential:success");
+                        FirebaseUser user = mAuth.getCurrentUser();
 
-                            DatabaseReference currUserDir = userDirectory.child(user.getEmail().replace('.',','));
-                            //upload user data to firebase
-                            //convert uri to string as uri is not supported by firebase
-                            User currUser = new User(user.getDisplayName(), user.getEmail(), user.getUid(), user.getPhotoUrl().toString());
-                            //replace '.' in email address with ',' as firebase paths must not contain '.'
-                            currUserDir.child("displayname").setValue(currUser.displayname);
-                            currUserDir.child("email").setValue(currUser.email);
-                            currUserDir.child("userId").setValue(currUser.userId);
-                            currUserDir.child("dpURL").setValue(currUser.dpURL);
+                        DatabaseReference currUserDir = userDirectory.child(user.getEmail().replace('.',','));
+                        //upload user data to firebase
+                        //convert uri to string as uri is not supported by firebase
+                        User currUser = new User(user.getDisplayName(), user.getEmail(), user.getUid(), user.getPhotoUrl().toString());
+                        //replace '.' in email address with ',' as firebase paths must not contain '.'
+                        currUserDir.child("displayname").setValue(currUser.displayname);
+                        currUserDir.child("email").setValue(currUser.email);
+                        currUserDir.child("userId").setValue(currUser.userId);
+                        currUserDir.child("dpURL").setValue(currUser.dpURL);
 
-                            //move to main activity
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                        } else {
-                            // sign in fails, toast to the user
-                            Log.w(DEBUG_TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "登陆失败", Toast.LENGTH_SHORT).show();
-                            rl_progressOverlay.setVisibility(View.GONE);
-                        }
+                        //move to main activity
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        // sign in fails, toast to the user
+                        Log.w(DEBUG_TAG, "signInWithCredential:failure", task.getException());
+                        Toast.makeText(LoginActivity.this, "登陆失败", Toast.LENGTH_SHORT).show();
+                        rl_progressOverlay.setVisibility(View.GONE);
                     }
                 });
     }

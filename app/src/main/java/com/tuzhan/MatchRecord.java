@@ -70,52 +70,6 @@ public class MatchRecord extends DatabaseModel {
         }
     }
 
-//    // TODO: incomplete implementation
-//    private void uploadToFB(){
-//        Log.d(DEBUG_TAG, "test");
-//        DataSource.shared.rootRef.child("Matches").child(id).child(Utils.getUserEmail().replace('.',',')).setValue(new HashMap<String, Object>() {{
-//            put("score", scoreSelf);
-//            put("time", timeSelf);
-//            put("entries", Utils.concatenate(entriesSelf));
-//            put("scores", Utils.concatenate(scoresSelf));
-//        }});
-//        // will not be using above implementation, instead send get request to node.js server for update
-//        // after request completes, call startListening() to begin listening for match updates
-//    }
-
-//    // TODO: incomplete implementation
-//    private void startListening(){
-//        DataSource.shared.rootRef.child("Matches").child(id).child("players").child(oppEmail).addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                // update local db match info & detach listener if opp info is uploaded to firebase
-//                if(dataSnapshot.exists()){
-//                    scoreOpp = (int) (long) dataSnapshot.child("score").getValue();
-//                    updateDB(DataSource.shared.database);
-//                    // update local db match info here then detach listener(s)
-//                    DataSource.shared.rootRef.child("Matches").child(id).child(oppEmail).removeEventListener(this);
-//                    ArrayList<MatchRecord> arrayList = (ArrayList<MatchRecord>) DataSource.shared.matches;
-//                    List<String> matchIDs = new ArrayList<>();
-//                    List<MatchDetails> matchDetails = new ArrayList<>();
-//                    for (MatchRecord m : arrayList) {
-//                        matchIDs.add(m.id);
-//                        User opponent = new User("dummy123", oppEmail, "dummyID", "https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png");
-//                        matchDetails.add(new MatchDetails(m.id, opponent, "1", topic));
-//                    }
-//                    PrevMatchesAdapter adapter = new PrevMatchesAdapter(MainActivity.shared, matchIDs, matchDetails);
-//                    MainActivity.shared.lv_prevMatches.setAdapter(adapter);
-//                    MainActivity.shared.lv_prevMatches.invalidateViews();
-//                    MainActivity.setListViewHeightBasedOnChildren(MainActivity.shared.lv_prevMatches);
-//                }
-//                // else do nothing
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                // do nothing on failure
-//            }
-//        });
-//    }
 
 
     @Override

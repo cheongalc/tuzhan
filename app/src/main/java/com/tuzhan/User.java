@@ -14,7 +14,9 @@ public class User implements Serializable {
     String dpURL;
     String userId;
 
-    public User(){}
+    public User(){
+        //required empty constructor
+    }
 
     public User(String displayname, String email, String userId, String dpURL){
 

@@ -17,14 +17,11 @@ public class SplashScreen extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
 
         Handler splash_delay = new Handler();
-        splash_delay.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(SplashScreen.this, LoginActivity.class);
-                intent.putExtra("isFirstStart", true);
-                startActivity(intent);
-                finish();
-            }
+        splash_delay.postDelayed(() -> {
+            Intent intent = new Intent(SplashScreen.this, LoginActivity.class);
+            intent.putExtra("isFirstStart", true);
+            startActivity(intent);
+            finish();
         }, 2500);
     }
 }

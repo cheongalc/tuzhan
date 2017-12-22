@@ -21,7 +21,7 @@ public class PlayerEntriesAdapter extends ArrayAdapter<String> {
     private List<String> entires;
     private List<Integer> scores;
 
-    public PlayerEntriesAdapter(@NonNull Context context, List<String> entries, List<Integer> scores) {
+    PlayerEntriesAdapter(@NonNull Context context, List<String> entries, List<Integer> scores) {
         super(context, 0, entries);
         this.entires = entries;
         this.scores = scores;
