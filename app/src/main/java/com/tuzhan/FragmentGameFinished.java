@@ -56,7 +56,7 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
 
         View rootview = inflater.inflate(R.layout.fragment_game_finished, container, false);
 
-        //get user info
+        //get userSelf info
         curUser = FirebaseAuth.getInstance().getCurrentUser();
 
         //set up fdb
@@ -75,10 +75,10 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
         Intent intent = getActivity().getIntent();
         String matchId = intent.getStringExtra("matchId");
         opp_dpURL = intent.getStringExtra("opp_dpURL");
-        //boolean value to determine whether the user is accessing this page immediately after match or from mainactivity list
+        //boolean value to determine whether the userSelf is accessing this page immediately after match or from mainactivity list
         Boolean isMatchFinished = intent.getBooleanExtra("isMatchFinished", false);
 
-        //user is accessing match from MainActivity, retrieve cached match record
+        //userSelf is accessing match from MainActivity, retrieve cached match record
         if(matchId != null && isMatchFinished){
             MatchRecord matchRecord = null;
 
@@ -127,7 +127,7 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
             DatabaseReference matchRef = rootRef.child("Matches").child(matchId);
             DatabaseReference userInfoRef = matchRef.child("players").child(curUser.getEmail().replace('.',','));
 
-            //upload user match data
+            //upload userSelf match data
             userInfoRef.child("entries").setValue(formattedUserEntries);
             userInfoRef.child("scores").setValue(formattedUserScores);
             userInfoRef.child("score").setValue(userScore);

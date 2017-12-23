@@ -23,7 +23,7 @@ public class CountdownActivity extends AppCompatActivity {
 
     ArrayList<QuestionCard> questionCardList = new ArrayList<>();
 
-    User user, opp;
+    User userSelf, userOpponent;
 
     CountDownTimer countDownTimer;
 
@@ -37,11 +37,11 @@ public class CountdownActivity extends AppCompatActivity {
         Intent pastIntent = getIntent();
 
         //retrieve player info from finding match
-        user = (User) pastIntent.getSerializableExtra("user");
-        opp = (User) pastIntent.getSerializableExtra("opp");
-        cardIdsString = pastIntent.getStringExtra("cardIds");
-        theme = pastIntent.getStringExtra("theme");
-        matchID = pastIntent.getStringExtra("matchID");
+        userSelf = (User) pastIntent.getSerializableExtra(Constants.C_USER_SELF);
+        userOpponent = (User) pastIntent.getSerializableExtra(Constants.C_USER_OPPONENT);
+        cardIdsString = pastIntent.getStringExtra(Constants.C_CARD_IDS_STRING);
+        theme = pastIntent.getStringExtra(Constants.C_THEME);
+        matchID = pastIntent.getStringExtra(Constants.C_MATCH_ID);
 
         tv_user_name = (TextView) findViewById(R.id.tv_user_name);
         tv_opp_name = (TextView) findViewById(R.id.tv_opp_name);
@@ -50,11 +50,11 @@ public class CountdownActivity extends AppCompatActivity {
         civ_user_dp = (CircleImageView) findViewById(R.id.civ_user_dp);
         civ_center_count_down = (CircleImageView) findViewById(R.id.civ_center_count_down);
 
-        tv_user_name.setText(user.displayname);
-        tv_opp_name.setText(opp.displayname);
+        tv_user_name.setText(userSelf.displayname);
+        tv_opp_name.setText(userOpponent.displayname);
 
-        Picasso.with(this).load(user.dpURL).into(civ_user_dp);
-        Picasso.with(this).load(opp.dpURL).into(civ_opp_dp);
+        Picasso.with(this).load(userSelf.dpURL).into(civ_user_dp);
+        Picasso.with(this).load(userOpponent.dpURL).into(civ_opp_dp);
 
         countDownTimer = new CountDownTimer(4000, 1000) {
 
@@ -65,10 +65,12 @@ public class CountdownActivity extends AppCompatActivity {
 
             public void onFinish() {
                 Intent intent = new Intent(CountdownActivity.this, GameplayActivity.class);
-                intent.putParcelableArrayListExtra("question_cards", questionCardList);
-                intent.putExtra("card_IDs_string", cardIdsString);
-                intent.putExtra("matchID", matchID);
-                intent.putExtra("opp_dpURL", opp.dpURL);
+                intent.putParcelableArrayListExtra(Constants.C_QN_CARD_LIST, questionCardList);
+                intent.putExtra(Constants.C_CARD_IDS_STRING, cardIdsString);
+                intent.putExtra(Constants.C_MATCH_ID, matchID);
+                intent.putExtra(Constants.C_THEME, theme);
+                intent.putExtra(Constants.C_EMAIL_OPPONENT, userOpponent.email);
+                intent.putExtra(Constants.C_DPURL_OPPONENT, userOpponent.dpURL);
                 startActivity(intent);
             }
         };

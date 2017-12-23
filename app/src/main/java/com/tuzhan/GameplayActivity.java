@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -31,13 +30,13 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
 
     private List<QuestionCard> currQuestionCards; // represents the list of Question Card, passed over from CountdownActivity
     private QuestionCard currQuestionCard; // represents current Question Card
-    private List<String> cardIDs;
-    private String matchID;
+    private List<String> cardIDsList;
+    private String matchID, theme, emailOpponent;
 
     private static final int NUM_IMAGES = 4;
     private static final int DELAY = 12000;
     private static final int TOOLTIP_SHOW_ANS_ID = 123;
-    private int playerScore = 0, currImageIndex = 0; // currImage represents the current position in ViewPager
+    private int scoreSelf = 0, currImageIndex = 0; // currImage represents the current position in ViewPager
     private List<String> formattedAnswers = new ArrayList<>(); // global list to store the answers
     private List<String> formattedHarderAnswers = new ArrayList<>(); // global list to store harder answers
     private List< Pair<String, Integer> > possibleMatches = new ArrayList<>();
@@ -65,8 +64,10 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
         currQuestionCards = (List<QuestionCard>) pastExtras.get("question_cards");
 
         // Setup the intent extras
-        cardIDs = Utils.split(pastExtras.getString("card_IDs_string"));
-        matchID = pastExtras.getString("matchID");
+        cardIDsList = Utils.split(pastExtras.getString(Constants.C_CARD_IDS_STRING));
+        matchID = pastExtras.getString(Constants.C_MATCH_ID);
+        theme = pastExtras.getString(Constants.C_THEME);
+        emailOpponent = pastExtras.getString(Constants.C_EMAIL_OPPONENT);
 
 
         // Setup the viewpager and its fragment manager
@@ -117,7 +118,7 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
         // Setup the score text view
 
         TextView tv_playerScore = (TextView) findViewById(R.id.tv_playerScore);
-        tv_playerScore.setText(String.valueOf(playerScore));
+        tv_playerScore.setText(String.valueOf(scoreSelf));
 
         final Handler handler = new Handler();
         final Runnable mainRunnable = new Runnable() {
@@ -137,7 +138,7 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
                 currImageIndex++;
 
                 if (currImageIndex < NUM_IMAGES) {
-                    handler.postDelayed(this, DELAY); // 15 seconds delay is to make sure that user can see the full countdown
+                    handler.postDelayed(this, DELAY); // 15 seconds delay is to make sure that userSelf can see the full countdown
                 }
             }
         };
@@ -152,12 +153,18 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
                     handler.postDelayed(this, DELAY);
                 } else {
                     //TODO pass everything needed to make a partial MatchRecord object,
-                    //TODO pass these, String matchId,  String topic, List<Integer> cardIds, String oppEmail, Integer scoreSelf, Double timeSelf, List<String> entriesSelf, List<Integer> scoresSelf, also pass opp_dpURL (parsed from count down activity)
+                    //TODO pass these,  List<Integer> cardIds, String oppEmail, Integer scoreSelf, Double timeSelf, List<String> entriesSelf, List<Integer> scoresSelf, also pass opp_dpURL (parsed from count down activity)
                     Intent i = new Intent(GameplayActivity.this, GameFinishedActivity.class);
-                    i.putExtra("cardIDs", (Serializable) cardIDs);
-                    i.putExtra("playerEntries", playerEntries);
-                    i.putExtra("playerScore", playerScore);
-                    i.putExtra("isMatchFinished", false);
+                    i.putExtra(Constants.C_MATCH_ID, matchID);
+                    i.putExtra(Constants.C_THEME, theme);
+                    i.putExtra(Constants.C_CARD_IDS_LIST, (Serializable) cardIDsList);
+                    i.putExtra(Constants.C_EMAIL_OPPONENT, emailOpponent);
+                    i.putExtra(Constants.C_DPURL_OPPONENT, dpURLOpponent);
+                    i.putExtra(Constants.C_SCORE_SELF, scoreSelf);
+                    i.putExtra(Constants.C_TIME_SELF, timeSelf);
+                    i.putExtra(Constants.C_ENTRIES_SELF, (Serializable) Utils.split(playerEntries));
+                    i.putExtra(Constants.C_SCORES_SELF, (Serializable) scoresSelf);
+                    i.putExtra(Constants.C_IS_MATCH_FINISHED, false); // this is an indicator if GameFinishedActivity is opened from MainActivity or GameplayActivity
                     startActivity(i);
                 }
             }
@@ -178,9 +185,9 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
     }
 
     private void awardScore(int numFilledBoxes) {
-        playerScore += numFilledBoxes * 5;
+        scoreSelf += numFilledBoxes * 5;
         TextView tv_playerScore = (TextView) findViewById(R.id.tv_playerScore);
-        tv_playerScore.setText(String.valueOf(playerScore));
+        tv_playerScore.setText(String.valueOf(scoreSelf));
     }
 
     private int countFilledBoxes() {
