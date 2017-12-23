@@ -86,6 +86,7 @@ public class FindingMatchActivity extends AppCompatActivity {
                         i.putExtra("theme", theme_fin);
                         i.putExtra("user", user);
                         i.putExtra("opp", opp);
+                        i.putExtra("matchID", matchId);
                         startActivity(i);
                     }
 

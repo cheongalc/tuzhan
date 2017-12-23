@@ -20,7 +20,7 @@ public class QuestionCard extends DatabaseModel implements Parcelable {
 
     Integer id;
     String theme;
-    URL image_url;
+    URL imageURL;
     List<String> answers = new ArrayList<>();
     List<String> harderAnswers = new ArrayList<>();
     String credit;
@@ -45,13 +45,13 @@ public class QuestionCard extends DatabaseModel implements Parcelable {
         credit = in.readString();
     }
 
-    private void init(String theme, Integer id, String image_url , String answersRaw, String credit){
+    private void init(String theme, Integer id, String imageURL, String answersRaw, String credit){
         this.tableName = "CARDS";
         String[] anss = answersRaw.split(";");
         this.id = id;
         this.theme = theme;
         try {
-            this.image_url = new URL(image_url);
+            this.imageURL = new URL(imageURL);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -72,7 +72,7 @@ public class QuestionCard extends DatabaseModel implements Parcelable {
         ContentValues values2Update = new ContentValues();
         values2Update.put("id", id);
         values2Update.put("theme", theme);
-        values2Update.put("imageURL", image_url.toString());
+        values2Update.put("imageURL", imageURL.toString());
         values2Update.put("answersRaw", Utils.concatenate(answers)+";"+Utils.concatenate(harderAnswers));
         values2Update.put("credit", credit);
         return values2Update;
@@ -81,10 +81,11 @@ public class QuestionCard extends DatabaseModel implements Parcelable {
 
     // (debug only) will be deprecated
     // if using this constructor, remember to add card to themeToCards in DataSource.shared
-    public QuestionCard(Integer id, String theme, URL image_url , String answers, String harderAnswers, String credit){
+    @Deprecated
+    public QuestionCard(Integer id, String theme, URL imageURL, String answers, String harderAnswers, String credit){
         this.id = id;
         this.theme = theme;
-        this.image_url = image_url;
+        this.imageURL = imageURL;
         this.credit = credit;
         this.answers = Utils.split(answers);
         this.harderAnswers = Utils.split(harderAnswers);
@@ -100,7 +101,7 @@ public class QuestionCard extends DatabaseModel implements Parcelable {
         dest.writeInt(id);
         dest.writeString(theme);
         dest.writeString(credit);
-        dest.writeSerializable(image_url);
+        dest.writeSerializable(imageURL);
         dest.writeList(answers);
         dest.writeList(harderAnswers);
     }

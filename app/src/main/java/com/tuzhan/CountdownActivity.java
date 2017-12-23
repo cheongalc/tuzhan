@@ -19,7 +19,7 @@ public class CountdownActivity extends AppCompatActivity {
     CircleImageView civ_center_count_down;
 
     TextView tv_user_name, tv_opp_name;
-    String cardIdsString, theme;
+    String cardIdsString, theme, matchID;
 
     ArrayList<QuestionCard> questionCardList = new ArrayList<>();
 
@@ -41,6 +41,7 @@ public class CountdownActivity extends AppCompatActivity {
         opp = (User) pastIntent.getSerializableExtra("opp");
         cardIdsString = pastIntent.getStringExtra("cardIds");
         theme = pastIntent.getStringExtra("theme");
+        matchID = pastIntent.getStringExtra("matchID");
 
         tv_user_name = (TextView) findViewById(R.id.tv_user_name);
         tv_opp_name = (TextView) findViewById(R.id.tv_opp_name);
@@ -65,6 +66,8 @@ public class CountdownActivity extends AppCompatActivity {
             public void onFinish() {
                 Intent intent = new Intent(CountdownActivity.this, GameplayActivity.class);
                 intent.putParcelableArrayListExtra("question_cards", questionCardList);
+                intent.putExtra("card_IDs_string", cardIdsString);
+                intent.putExtra("matchID", matchID);
                 intent.putExtra("opp_dpURL", opp.dpURL);
                 startActivity(intent);
             }
