@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,20 +29,29 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
     private RelativeLayout rootLayout;
     private List<RelativeLayout> currImageRelativeLayouts = new ArrayList<>(); // Because ViewPager generates 1 page more than the current one, keep array to prevent overriding
 
+    private List<QuestionCard> currQuestionCards; // represents the list of Question Card, passed over from CountdownActivity
+    private QuestionCard currQuestionCard; // represents current Question Card
+    private List<String> cardIDs;
+    private String matchID;
 
     private static final int NUM_IMAGES = 4;
     private static final int DELAY = 12000;
     private static final int TOOLTIP_SHOW_ANS_ID = 123;
-    private int playerScore = 0, currentImage = 0; // currImage represents the current position in ViewPager
+    private int playerScore = 0, currImageIndex = 0; // currImage represents the current position in ViewPager
     private List<String> formattedAnswers = new ArrayList<>(); // global list to store the answers
+    private List<String> formattedHarderAnswers = new ArrayList<>(); // global list to store harder answers
     private List< Pair<String, Integer> > possibleMatches = new ArrayList<>();
 
-    private String playerAnswers = "";
+    private String playerEntries = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gameplay_ui);
+
+        Intent pastIntent = getIntent();
+        Bundle pastExtras = pastIntent.getExtras();
 
         // Set toolbar title to nothing so that the theme prevails
         Toolbar toolbar = (Toolbar) findViewById(R.id.tb_toolbarGameplay);
@@ -51,9 +61,17 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
         // Save instance of the root layout to use for modification during submitting words
         rootLayout = (RelativeLayout) findViewById(R.id.rl_gameplayUI);
 
+        // Setup the QuestionCards
+        currQuestionCards = (List<QuestionCard>) pastExtras.get("question_cards");
+
+        // Setup the intent extras
+        cardIDs = Utils.split(pastExtras.getString("card_IDs_string"));
+        matchID = pastExtras.getString("matchID");
+
+
         // Setup the viewpager and its fragment manager
         viewPager = (NonSwipeableViewPager) findViewById(R.id.vp_imagePager);
-        final GamePagerAdapter adapter = new GamePagerAdapter(getSupportFragmentManager(), NUM_IMAGES); // change to 20 later on
+        final GamePagerAdapter adapter = new GamePagerAdapter(getSupportFragmentManager(), NUM_IMAGES, currQuestionCards);
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(0);
         startGame();
@@ -85,18 +103,15 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
 
         // Set up IME Options Handler for the Edit Text so that we don't waste time
         final EditText et_wordEntry = (EditText) findViewById(R.id.et_wordEntry);
-        et_wordEntry.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView view, int actionID, KeyEvent keyEvent) {
-                boolean handled = false;
-                if (actionID == EditorInfo.IME_ACTION_DONE) {
-                    String word = String.valueOf(view.getText());
-                    if (word.length() > 0) submitWord(word);
-                    et_wordEntry.setText(""); // set text to nothing
-                    handled = true;
-                }
-                return handled;
+        et_wordEntry.setOnEditorActionListener((view, actionID, keyEvent) -> {
+            boolean handled = false;
+            if (actionID == EditorInfo.IME_ACTION_DONE) {
+                String word = String.valueOf(view.getText());
+                if (word.length() > 0) submitWord(word);
+                et_wordEntry.setText(""); // set text to nothing
+                handled = true;
             }
+            return handled;
         });
 
         // Setup the score text view
@@ -108,19 +123,20 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
         final Runnable mainRunnable = new Runnable() {
             @Override
             public void run() {
+                currQuestionCard = currQuestionCards.get(currImageIndex);
                 possibleMatches.clear();
                 LinearLayout ll_characterBoxWrapper = (LinearLayout) findViewById(R.id.ll_characterBoxWrapper);
                 ll_characterBoxWrapper.removeAllViews(); // remove all the light blue boxes for re-initialization
                 startTimer(); // start countdown timer
-                if (currentImage < NUM_IMAGES) viewPager.setCurrentItem(currentImage, true);
+                if (currImageIndex < NUM_IMAGES) viewPager.setCurrentItem(currImageIndex, true);
 
-                ImageView iv_gameplayImage = (ImageView) currImageRelativeLayouts.get(currentImage).findViewById(R.id.iv_gameplayImage);
-                String unformattedAnswers = (String) iv_gameplayImage.getTag(); // remember the unformatted answers were passed on through the image tag?
-                formattedAnswers = formatAnswers(unformattedAnswers);
+                ImageView iv_gameplayImage = (ImageView) currImageRelativeLayouts.get(currImageIndex).findViewById(R.id.iv_gameplayImage);
+                formattedAnswers = currQuestionCard.answers;
+                formattedHarderAnswers = currQuestionCard.harderAnswers;
                 fillBlueBoxes(formattedAnswers.get(0).length()); // okay to take the first element, all answers will always have the same number of chars
-                currentImage++;
+                currImageIndex++;
 
-                if (currentImage < NUM_IMAGES) {
+                if (currImageIndex < NUM_IMAGES) {
                     handler.postDelayed(this, DELAY); // 15 seconds delay is to make sure that user can see the full countdown
                 }
             }
@@ -132,13 +148,14 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
                 int numFilledBoxes = countFilledBoxes();
                 awardScore(numFilledBoxes);
                 showAnswers(numFilledBoxes);
-                if (currentImage < NUM_IMAGES) {
+                if (currImageIndex < NUM_IMAGES) {
                     handler.postDelayed(this, DELAY);
                 } else {
                     //TODO pass everything needed to make a partial MatchRecord object,
-                    // TODO pass these, String matchId,  String topic, List<Integer> cardIds, String oppEmail, Integer scoreSelf, Double timeSelf, List<String> entriesSelf, List<Integer> scoresSelf, also pass opp_dpURL (parsed from count down activity)
+                    //TODO pass these, String matchId,  String topic, List<Integer> cardIds, String oppEmail, Integer scoreSelf, Double timeSelf, List<String> entriesSelf, List<Integer> scoresSelf, also pass opp_dpURL (parsed from count down activity)
                     Intent i = new Intent(GameplayActivity.this, GameFinishedActivity.class);
-                    i.putExtra("playerEntries", playerAnswers);
+                    i.putExtra("cardIDs", (Serializable) cardIDs);
+                    i.putExtra("playerEntries", playerEntries);
                     i.putExtra("playerScore", playerScore);
                     i.putExtra("isMatchFinished", false);
                     startActivity(i);
@@ -180,9 +197,9 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
         }
         if (stack.length() < formattedAnswers.get(0).length()) {
             // this means it is partial
-            playerAnswers += "p";
+            playerEntries += "p";
         }
-        playerAnswers = playerAnswers + stack + "-";
+        playerEntries = playerEntries + stack + "-";
         return result;
     }
 

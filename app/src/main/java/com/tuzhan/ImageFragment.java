@@ -2,6 +2,7 @@ package com.tuzhan;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,12 +15,17 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 /**
  * Created by Al Cheong on 13/11/2017.
@@ -31,6 +37,7 @@ public class ImageFragment extends Fragment {
     public RelativeLayout rootLayout;
 
     private int imageIndex;
+    private QuestionCard questionCard;
 
     private static final String LOG_TAG = "IMAGEFRAGMENT";
 
@@ -38,6 +45,7 @@ public class ImageFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         imageIndex = getArguments().getInt("imageIndex");
+        questionCard = (QuestionCard) getArguments().getSerializable("questionCard");
     }
 
     @Nullable
@@ -55,28 +63,23 @@ public class ImageFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        // Pull data from JSON
-        String jsonOutput = pullJSONData(getContext());
-        // Parse the data from JSON String
+        //Parse the current Question Card
+
+        URL imageURL = questionCard.imageURL;
+        Uri imageUri;
+        String credit = questionCard.credit;
+
+        ImageView iv_gameplayImage = (ImageView) rootLayout.findViewById(R.id.iv_gameplayImage);
+        TextView tv_imageCredits = (TextView) rootLayout.findViewById(R.id.tv_imageCredits);
+
         try {
-            JSONObject jsonObject = new JSONObject(jsonOutput);
-
-            String imageUri = jsonObject.getString("image_uri"); // uri to pull the image from @drawable
-            String imageCredit = jsonObject.getString("credit"); // text to fill in the image credits
-            String unformattedAnswers = jsonObject.getString("answers"); // the image will be tagged with this string.
-
-            ImageView iv_gameplayImage = (ImageView) rootLayout.findViewById(R.id.iv_gameplayImage);
-            TextView tv_imageCredits = (TextView) rootLayout.findViewById(R.id.tv_imageCredits);
-
-            Drawable finalImage = pullImage(imageUri, getContext());
-            if (finalImage != null) {
-                iv_gameplayImage.setImageDrawable(finalImage);
-                iv_gameplayImage.setTag(unformattedAnswers);
-                tv_imageCredits.setText(imageCredit);
-            }
-        } catch (JSONException e) {
-            Log.e(LOG_TAG, e.toString());
+            imageUri = Uri.parse(imageURL.toURI().toString());
+            Picasso.with(getContext()).load(imageUri).into(iv_gameplayImage);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
         }
+
+        tv_imageCredits.setText(credit);
 
         try {
             GameFragmentInterface gfi = (GameFragmentInterface) getActivity();
@@ -86,40 +89,11 @@ public class ImageFragment extends Fragment {
         }
     }
 
-    private Drawable pullImage(String imageUri, Context context) {
-        Uri uri = Uri.parse(imageUri);
-        Drawable output = null;
-        try {
-            InputStream inputStream = context.getContentResolver().openInputStream(uri);
-            output = Drawable.createFromStream(inputStream, uri.toString());
-        } catch (FileNotFoundException e) {
-            Log.e(LOG_TAG, e.toString());
-        }
-        return output;
-    }
-
-    private String pullJSONData(Context context) {
-        String jsonFileName = "card" + String.valueOf(imageIndex) + ".json";
-        String jsonOutput = null;
-        try {
-            InputStream inputStream = context.getAssets().open("data/" + jsonFileName);
-            int size = inputStream.available();
-            byte[] buffer = new byte[size];
-            inputStream.read(buffer);
-            inputStream.close();
-            jsonOutput = new String(buffer, "UTF-8");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Log.d(LOG_TAG, jsonOutput);
-        return jsonOutput;
-    }
-
-    public static ImageFragment newInstance(int imageIndex) {
+    public static ImageFragment newInstance(int imageIndex, QuestionCard questionCard) {
 
         Bundle args = new Bundle();
         args.putInt("imageIndex", imageIndex + 1);
+        args.putSerializable("questionCard", (Serializable) questionCard);
 
         ImageFragment fragment = new ImageFragment();
         fragment.setArguments(args);
