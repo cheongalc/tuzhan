@@ -32,7 +32,6 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
     ListView lv_oppEntries, lv_userEntries;
     TextView tv_userScore, tv_oppScore;
     CircleImageView civ_user, civ_opp;
-    MatchRecord matchRecord;
     FirebaseUser curUser;
     FirebaseDatabase database;
     DatabaseReference rootRef;
@@ -47,6 +46,8 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
     List<Integer> userScores = new ArrayList<>(), oppScores = new ArrayList<>();
     List<String> userEntries = new ArrayList<>(), oppEntries = new ArrayList<>();
 
+    MatchRecord matchRecord;
+
     public FragmentGameFinished() {
         // Required empty public constructor
     }
@@ -56,7 +57,7 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
 
         View rootview = inflater.inflate(R.layout.fragment_game_finished, container, false);
 
-        //get userSelf info
+        //get user info
         curUser = FirebaseAuth.getInstance().getCurrentUser();
 
         //set up fdb
@@ -75,12 +76,11 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
         Intent intent = getActivity().getIntent();
         String matchId = intent.getStringExtra("matchId");
         opp_dpURL = intent.getStringExtra("opp_dpURL");
-        //boolean value to determine whether the userSelf is accessing this page immediately after match or from mainactivity list
+        //boolean value to determine whether the user is accessing this page immediately after match or from mainactivity list
         Boolean isMatchFinished = intent.getBooleanExtra("isMatchFinished", false);
 
-        //userSelf is accessing match from MainActivity, retrieve cached match record
+        //user is accessing match from MainActivity, retrieve cached match record
         if(matchId != null && isMatchFinished){
-            MatchRecord matchRecord = null;
 
             for(MatchRecord match : DataSource.shared.matches){
                 if(match.id.equals(matchId)){
@@ -88,8 +88,12 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
                     break;
                 }
             }
-
+            GameFinishedActivity.matchRecord = matchRecord;
             assert matchRecord != null;
+
+            GameFinishedActivity.cardIds = Utils.concatenate(matchRecord.cardIds);
+            GameFinishedActivity.theme = matchRecord.topic;
+
             userScore = matchRecord.scoreSelf;
             oppScore = matchRecord.scoreOpp;
 
@@ -119,6 +123,9 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
             userScores = intent.getIntegerArrayListExtra("scoresSelf");
             List<Integer> cardIds = intent.getIntegerArrayListExtra("cardIds");
 
+            GameFinishedActivity.cardIds = Utils.concatenate(cardIds);
+            GameFinishedActivity.theme = topic;
+
             //format stuff for uploading to fdb
             String formattedUserEntries = Utils.concatenate(userEntries);
             String formattedUserScores = Utils.concatenate(userScores);
@@ -127,7 +134,7 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
             DatabaseReference matchRef = rootRef.child("Matches").child(matchId);
             DatabaseReference userInfoRef = matchRef.child("players").child(curUser.getEmail().replace('.',','));
 
-            //upload userSelf match data
+            //upload user match data
             userInfoRef.child("entries").setValue(formattedUserEntries);
             userInfoRef.child("scores").setValue(formattedUserScores);
             userInfoRef.child("score").setValue(userScore);
@@ -138,6 +145,7 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
             matchRef.child("players").child(oppEmail.replace('.',',')).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+
                     if(dataSnapshot.child("state").getValue().toString().equals("fin")){
                         //opponent has finished the match, retrieve *HIS* data
                         isOppInfoPresent = true;
@@ -147,28 +155,58 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
                         oppTime = (double) dataSnapshot.child("time").getValue();
 
                         //create complete MatchRecord object
-                        MatchRecord matchRecord = new MatchRecord(
+                        matchRecord = new MatchRecord(
                                 matchId, topic, cardIds,
                                 oppEmail, userScore, oppScore,
                                 userTime, oppTime, userEntries,
                                 oppEntries, userScores, oppScores);
                         //update local db
                         matchRecord.updateDB(DataSource.shared.database);
+                        GameFinishedActivity.matchRecord = matchRecord;
 
                         //update opponent list
                         setOppStuff();
+
+                        //determine winner
+                        String winner = "";
+                        if(oppScore > userScore){
+                            winner = oppEmail;
+                        }else if(userScore > oppScore){
+                            winner = curUser.getEmail();
+                        }
+
+                        //game is finished, update both players' info
+                        updateInfo(dataSnapshot, oppEmail, winner);
+
+                        final String winner_ = winner;
+
+                        rootRef.child("players").child(curUser.getEmail().replace('.',',')).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                updateInfo(dataSnapshot, curUser.getEmail(), winner_);
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+
+
                     }else{
                         //opponent did not finish the match
                         isOppInfoPresent = false;
 
                         //create partial MacthRecord object
-                        MatchRecord matchRecord = new MatchRecord(
+                        matchRecord = new MatchRecord(
                                 matchId, topic,
                                 cardIds, oppEmail,
                                 userScore, userTime,
                                 userEntries, userScores);
                         //update local db
                         matchRecord.updateDB(DataSource.shared.database);
+                        GameFinishedActivity.matchRecord = matchRecord;
                     }
                 }
 
@@ -179,7 +217,7 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
             });
         }
 
-        // display score
+        // display scores
         if(userScore < 0){
             tv_userScore.setText("DNF");
         }else tv_userScore.setText(userScore + "");
@@ -190,7 +228,26 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
         Picasso.with(getActivity()).load(curUser.getPhotoUrl()).into(civ_user);
         Picasso.with(getActivity()).load(opp_dpURL).into(civ_opp);
 
+
         return rootview;
+    }
+
+    private void updateInfo(DataSnapshot dataSnapshot, String email, String winner){
+        if(dataSnapshot.hasChild("rounds_played")){
+            int opp_rounds_played = (int) dataSnapshot.child("rounds_played").getValue();
+            rootRef.child("players").child(email.replace('.',',')).child("rounds_played").setValue(opp_rounds_played + 1);
+
+            if(winner.equals(email) || winner.equals("")){
+                int opp_rounds_won = (int) dataSnapshot.child("rounds_won").getValue();
+                rootRef.child("players").child(email.replace('.',',')).child("rounds_won").setValue(opp_rounds_won+ 1);
+            }
+
+        }else{
+            rootRef.child("players").child(email.replace('.',',')).child("rounds_played").setValue(1);
+            if(winner.equals(email) || winner.equals("")){
+                rootRef.child("players").child(email.replace('.',',')).child("rounds_won").setValue(1);
+            }
+        }
     }
 
     private void setOppStuff(){

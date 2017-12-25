@@ -35,12 +35,114 @@
     </LinearLayout>
 
     <com.tuzhan.NonSwipeableViewPager
+        android:layout_margin="20dp"
         android:id="@+id/vp_flash_cards"
         android:layout_above="@id/bottom_controls"
         android:layout_below="@+id/tb_toolbarFlashCard"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </com.tuzhan.NonSwipeableViewPager>
+
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/rl_finished_page"
+        android:layout_above="@id/bottom_controls"
+        android:layout_below="@+id/tb_toolbarFlashCard"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_centerHorizontal="true"
+            android:layout_above="@id/center_dot"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@mipmap/tuzhan_end"/>
+
+        <View
+            android:layout_margin="20dp"
+            android:layout_centerInParent="true"
+            android:layout_width="1dp"
+            android:layout_height="1dp"
+            android:id="@id/center_dot"/>
+
+        <ImageButton
+            android:id="@+id/bRestart"
+            android:scaleType="fitCenter"
+            android:tint="@color/colorAccentYellow"
+            android:backgroundTint="@android:color/transparent"
+            android:src="@mipmap/tuzhan_restart"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/center_dot"
+            android:layout_width="80dp"
+            android:layout_height="80dp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/rl_ans_reveal"
+        android:backgroundTint="@color/colorBlackTranslucentMore"
+        android:layout_margin="20dp"
+        android:background="@drawable/background_rounded"
+        android:padding="20dp"
+        android:layout_above="@id/bottom_controls"
+        android:layout_below="@+id/tb_toolbarFlashCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:textColor="@color/colorAccent"
+            android:textStyle="bold"
+            android:layout_above="@+id/tv_correct_ans"
+            android:text="正确答案"
+            android:textSize="35dp"
+            android:textAlignment="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:textColor="@color/colorAccentYellow"
+            android:textStyle="bold"
+            android:text="答案"
+            android:layout_marginTop="20dp"
+            android:id="@+id/tv_correct_ans"
+            android:layout_above="@id/center_dot"
+            android:textSize="35dp"
+            android:textAlignment="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <View
+            android:layout_margin="30dp"
+            android:id="@+id/center_dot"
+            android:layout_centerInParent="true"
+            android:layout_width="1dp"
+            android:layout_height="1dp"/>
+
+        <TextView
+            android:textColor="@color/colorAccent"
+            android:textStyle="bold"
+            android:id="@+id/tvDummy"
+            android:layout_marginBottom="20dp"
+            android:text="你的答案"
+            android:layout_below="@+id/center_dot"
+            android:textSize="35dp"
+            android:textAlignment="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:textColor="@color/colorAccentYellow"
+            android:textStyle="bold"
+            android:text="答案"
+            android:layout_below="@id/tvDummy"
+            android:id="@+id/tv_user_ans"
+            android:textSize="35dp"
+            android:textAlignment="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
 
     <LinearLayout
         android:paddingTop="10dp"

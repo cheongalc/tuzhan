@@ -16,6 +16,10 @@ public class GameFinishedActivity extends AppCompatActivity {
     String TAG_FLASH = "flash_cards_frag";
     String currentFrag = "game_finished";
 
+    static String cardIds;
+    static String theme;
+    static MatchRecord matchRecord;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,9 +43,8 @@ public class GameFinishedActivity extends AppCompatActivity {
             if(currentFrag.equals("game_finished")) {
                 currentFrag = "flash_cards";
                 //current page is game finished frag, set page to flash card fragment
-                FragmentFlashCards fragmentFlashCards = (FragmentFlashCards) fragmentManager.findFragmentByTag(TAG_FLASH);
-                if(fragmentFlashCards != null) transaction.replace(R.id.fragment_container, fragmentFlashCards);
-                else  transaction.replace(R.id.fragment_container, new FragmentFlashCards());
+                FragmentFlashCards fragmentFlashCards = new FragmentFlashCards();
+                transaction.replace(R.id.fragment_container, fragmentFlashCards);
                 transaction.addToBackStack(null);
                 transaction.commit();
             }else{

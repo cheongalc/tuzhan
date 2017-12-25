@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -60,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
 
     AVLoadingIndicatorView list_view_load;
 
+    ImageView background;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,13 +75,13 @@ public class MainActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         root = database.getReference();
 
-        //retrieve userSelf info
+        //retrieve user info
         mAuth = FirebaseAuth.getInstance();
         currUser = mAuth.getCurrentUser();
 
         DatabaseReference user_ref = root.child("UsersStates").child(currUser.getEmail().replace('.',','));
 
-        //required for signing out the userSelf
+        //required for signing out the user
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -96,9 +100,12 @@ public class MainActivity extends AppCompatActivity {
         prev_matches_title = (RelativeLayout) findViewById(R.id.tuzhan_matches_title);
         new_challenges_title = (RelativeLayout) findViewById(R.id.tuzhan_challenge_title);
         list_view_load = (AVLoadingIndicatorView) findViewById(R.id.list_view_load_indicator);
+        background = (ImageView) findViewById(R.id.pattern_back);
+        ImageButton bStartGame = (ImageButton) findViewById(R.id.bStartGame);
 
         Picasso.with(this).load(currUser.getPhotoUrl()).into(civ_displayPhoto);
         tv_displayName.setText(currUser.getDisplayName());
+        Picasso.with(this).load(R.mipmap.tuzhan_pattern).into(background);
 
         rl_userInfoBtnContainer.setOnClickListener(userInfoClick);
 
@@ -106,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         OverScrollDecoratorHelper.setUpOverScroll(scrollView);
 
 
-        //check for userSelf network status and update accordingly
+        //check for user network status and update accordingly
         DatabaseReference ConnectionRef = root.child(".info/connected");
         ConnectionRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -146,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //listener to check individual match id under match object of userSelf
+    //listener to check individual match id under match object of user
     private void getPrevMatches() {
         DatabaseReference user_matches_ref = root.child("Users").child(currUser.getEmail().replace('.',',')).child("matches");
 
@@ -238,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
 
                     }else{
                         if(!child.child("state").getValue().toString().equals("dns")) {
-                            //set userSelf info
+                            //set user info
                             user_score = Integer.parseInt(child.child("score").getValue() + "");
                             user_time = (double) child.child("time").getValue();
                             user_entries = Utils.split(child.child("entries").getValue() + "");
@@ -251,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
                 //figure out match outcome
                 if(opp_score >= 0 && !outcome.equals("dns")) {
                     //match finished
-                    //set match outcome, "0" means userSelf lost, "1" means userSelf won and "2" means draw
+                    //set match outcome, "0" means user lost, "1" means user won and "2" means draw
                     if (user_score > opp_score) outcome = "1";
                     else if (user_score < opp_score) outcome = "0";
                     else outcome = "2";
@@ -366,7 +373,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void signOut() {
-        //change userSelf status
+        //change user status
         root.child("Users").child(currUser.getEmail().replace('.',',')).child("isOnline").setValue(false);
         //sign out of firebase
         mAuth.signOut();

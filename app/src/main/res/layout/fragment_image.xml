@@ -9,9 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/ll_gameplayInfo"
-        android:background="@drawable/background_white"
-        android:layout_marginStart="@dimen/MarginML"
-        android:layout_marginEnd="@dimen/MarginML">
+        android:background="@drawable/background_white">
 
         <ImageView
             android:id="@+id/iv_gameplayImage"
@@ -22,8 +20,7 @@
             android:background="@drawable/background_image"
             android:maxHeight="300dp"
             android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            android:src="@drawable/teacher_with_blackboard"/>
+            android:scaleType="fitCenter" />
 
         <TextView
             android:id="@+id/tv_imageCredits"

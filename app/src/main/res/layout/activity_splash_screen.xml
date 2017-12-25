@@ -30,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="170dp"
             android:layout_marginBottom="16dp"
-            android:src="@drawable/tuzhan_horn"
+            android:src="@mipmap/tuzhan_horn"
            />
 
         <android.support.v7.widget.AppCompatImageView

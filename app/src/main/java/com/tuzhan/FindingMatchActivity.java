@@ -17,10 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
 public class FindingMatchActivity extends AppCompatActivity {
 
     FirebaseUser currUser;
@@ -79,17 +76,17 @@ public class FindingMatchActivity extends AppCompatActivity {
                         String dpURL = dataSnapshot.child("dpURL").getValue()+"";
                         String userId = dataSnapshot.child("userId").getValue()+"";
 
-                        //make userOpponent userSelf object
+                        //make opp user object
                         User opp = new User(displayername, opp_email_fin.replace(',','.'), userId, dpURL);
-                        //make curruser userSelf object
-                        User self = new User(currUser.getDisplayName(), currUser.getEmail(), currUser.getUid(), currUser.getPhotoUrl().toString());
+                        //make curruser user object
+                        User user = new User(currUser.getDisplayName(), currUser.getEmail(), currUser.getUid(), currUser.getPhotoUrl().toString());
 
                         Intent i = new Intent(FindingMatchActivity.this, CountdownActivity.class);
-                        i.putExtra(Constants.C_CARD_IDS_STRING, cardIds_fin);
-                        i.putExtra(Constants.C_THEME, theme_fin);
-                        i.putExtra(Constants.C_USER_SELF, self);
-                        i.putExtra(Constants.C_USER_OPPONENT, opp);
-                        i.putExtra(Constants.C_MATCH_ID, matchId);
+                        i.putExtra("cardIds", cardIds_fin);
+                        i.putExtra("theme", theme_fin);
+                        i.putExtra("user", user);
+                        i.putExtra("opp", opp);
+                        i.putExtra("matchID", matchId);
                         startActivity(i);
                     }
 

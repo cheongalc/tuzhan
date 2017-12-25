@@ -58,16 +58,16 @@ public class LoginActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         root = database.getReference();
 
-        //move to userSelf directory
+        //move to user directory
         userDirectory = root.child("Users");
 
         //check if this activity is created for the first time
         Intent intent = getIntent();
         boolean isFirstStart = intent.getBooleanExtra("isFirstStart", true);
 
-        //check if userSelf has already logged in
+        //check if user has already logged in
         if (isFirstStart && mAuth.getCurrentUser() != null) {
-            //userSelf has already connected to the app from previous sessions, move to mainactivity
+            //user has already connected to the app from previous sessions, move to mainactivity
             Intent intent_main = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent_main);
             finish();
@@ -100,8 +100,8 @@ public class LoginActivity extends AppCompatActivity {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
-                //google sign in failed, toast to the userSelf
-                //status code 12501 is returned when userSelf cancels the login
+                //google sign in failed, toast to the user
+                //status code 12501 is returned when user cancels the login
                 if (e.getStatusCode() != 12501) {
                     Toast.makeText(this, "登陆失败" + e.getStatusCode(), Toast.LENGTH_SHORT).show();
                 }
@@ -115,7 +115,6 @@ public class LoginActivity extends AppCompatActivity {
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
-<<<<<<< Updated upstream
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         //sign in success, retrieved user credentials
@@ -141,36 +140,6 @@ public class LoginActivity extends AppCompatActivity {
                         Log.w(DEBUG_TAG, "signInWithCredential:failure", task.getException());
                         Toast.makeText(LoginActivity.this, "登陆失败", Toast.LENGTH_SHORT).show();
                         rl_progressOverlay.setVisibility(View.GONE);
-=======
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            //sign in success, retrieved userSelf credentials
-                            Log.d(DEBUG_TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-
-                            DatabaseReference currUserDir = userDirectory.child(user.getEmail().replace('.',','));
-                            //upload userSelf data to firebase
-                            //convert uri to string as uri is not supported by firebase
-                            User currUser = new User(user.getDisplayName(), user.getEmail(), user.getUid(), user.getPhotoUrl().toString());
-                            //replace '.' in email address with ',' as firebase paths must not contain '.'
-                            currUserDir.child("displayname").setValue(currUser.displayname);
-                            currUserDir.child("email").setValue(currUser.email);
-                            currUserDir.child("userId").setValue(currUser.userId);
-                            currUserDir.child("dpURL").setValue(currUser.dpURL);
-
-                            //move to main activity
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                        } else {
-                            // sign in fails, toast to the userSelf
-                            Log.w(DEBUG_TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "登陆失败", Toast.LENGTH_SHORT).show();
-                            rl_progressOverlay.setVisibility(View.GONE);
-                        }
->>>>>>> Stashed changes
                     }
                 });
     }

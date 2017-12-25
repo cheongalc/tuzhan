@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -45,7 +47,8 @@ public class ImageFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         imageIndex = getArguments().getInt("imageIndex");
-        questionCard = (QuestionCard) getArguments().getSerializable("questionCard");
+        questionCard = getArguments().getParcelable("questionCard");
+
     }
 
     @Nullable
@@ -64,21 +67,14 @@ public class ImageFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         //Parse the current Question Card
-
         URL imageURL = questionCard.imageURL;
-        Uri imageUri;
         String credit = questionCard.credit;
 
         ImageView iv_gameplayImage = (ImageView) rootLayout.findViewById(R.id.iv_gameplayImage);
         TextView tv_imageCredits = (TextView) rootLayout.findViewById(R.id.tv_imageCredits);
 
-        try {
-            imageUri = Uri.parse(imageURL.toURI().toString());
-            Picasso.with(getContext()).load(imageUri).into(iv_gameplayImage);
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
 
+        Picasso.with(getContext()).load(imageURL+"").into(iv_gameplayImage);
         tv_imageCredits.setText(credit);
 
         try {
@@ -93,7 +89,8 @@ public class ImageFragment extends Fragment {
 
         Bundle args = new Bundle();
         args.putInt("imageIndex", imageIndex + 1);
-        args.putSerializable("questionCard", (Serializable) questionCard);
+        args.putParcelable("questionCard", questionCard);
+
 
         ImageFragment fragment = new ImageFragment();
         fragment.setArguments(args);

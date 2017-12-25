@@ -5,6 +5,7 @@ import android.os.Build;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
@@ -22,7 +23,12 @@ public class Utils {
     }
 
     static List<String> split(String formattedStr){
-        return Arrays.asList(formattedStr.split("-"));
+        String[] arr = formattedStr.split("-");
+        List<String> list = new ArrayList<>();
+
+        list.addAll(Arrays.asList(arr));
+
+        return list;
     }
 
     static List<Integer> splitToInts(String formattedStr){

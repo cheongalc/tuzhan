@@ -92,14 +92,14 @@ public class PrevMatchesAdapter extends ArrayAdapter<String> {
                 intent.putExtra("opp_dpURL", opponent.dpURL);
                 getContext().startActivity(intent);
             }else{
-                //retrieve userSelf info
+                //retrieve user info
                 FirebaseUser curuser = FirebaseAuth.getInstance().getCurrentUser();
                 User user = new User(curuser.getDisplayName(), curuser.getEmail(), curuser.getUid(), curuser.getPhotoUrl().toString());
 
                 Intent intent = new Intent(getContext(), CountdownActivity.class);
-                intent.putExtra("userOpponent", opponent);
+                intent.putExtra("opp", opponent);
                 intent.putExtra("theme", topic);
-                intent.putExtra("userSelf", user);
+                intent.putExtra("user", user);
 
                 //retrieve cardIds
                 FirebaseDatabase.getInstance().getReference().child("Matches").child(matchDetails.match_id).addListenerForSingleValueEvent(new ValueEventListener() {

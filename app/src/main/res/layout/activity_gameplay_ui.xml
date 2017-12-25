@@ -15,39 +15,87 @@
         android:src="@mipmap/tuzhan_pattern" />
 
 
-    <android.support.v7.widget.Toolbar
-        android:layout_margin="5dp"
+    <LinearLayout
         android:id="@+id/tb_toolbarGameplay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="?attr/actionBarSize"
-        android:background="@drawable/list_title">
+        android:background="@color/colorPrimary"
+        android:orientation="vertical">
 
-        <TextView
-            android:textStyle="bold"
-            android:id="@+id/tv_themeTitle"
-            android:layout_width="wrap_content"
+        <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="教育"
-            android:textColor="@color/colorAccent"
-            android:textSize="@dimen/Heading1" />
+            android:layout_margin="5dp"
+            android:background="@drawable/list_title"
+            android:minHeight="?attr/actionBarSize">
 
-        <!--When this image button is clicked, show the tooltip-->
+            <TextView
+                android:id="@+id/tv_themeTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="教育"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/Heading1"
+                android:textStyle="bold" />
 
-        <ImageButton
-            android:id="@+id/ib_showTooltip"
-            android:layout_width="wrap_content"
+            <!--When this image button is clicked, show the tooltip-->
+
+            <ImageButton
+                android:id="@+id/ib_showTooltip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:background="@null"
+                android:onClick="showTooltip"
+                android:paddingRight="@dimen/PaddingS"
+                android:src="@drawable/ic_help_outline_white_32dp" />
+
+
+        </android.support.v7.widget.Toolbar>
+
+        <LinearLayout
+            android:id="@+id/ll_gameplayInfo"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:paddingRight="@dimen/PaddingS"
-            android:src="@drawable/ic_help_outline_white_32dp"
-            android:background="@null"
-            android:onClick="showTooltip"/>
+            android:layout_margin="@dimen/MarginM"
+            android:orientation="horizontal">
 
-    </android.support.v7.widget.Toolbar>
+            <TextView
+                android:id="@+id/tv_playerScore"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/MarginS"
+                android:layout_weight="1"
+                android:background="@drawable/list_title"
+                android:backgroundTint="@color/colorAccentYellow"
+                android:padding="@dimen/PaddingS"
+                android:text="Score"
+                android:textAlignment="center"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/Heading2"
+                android:textStyle="bold" />
 
-    <ScrollView
+            <TextView
+                android:id="@+id/tv_playerTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/MarginS"
+                android:layout_weight="1"
+                android:background="@drawable/list_title"
+                android:backgroundTint="@color/colorAccentRed"
+                android:padding="@dimen/PaddingS"
+                android:text="Timer"
+                android:textAlignment="center"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/Heading2"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
         android:id="@+id/sv_gameplayUI"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -56,68 +104,30 @@
         <RelativeLayout
             android:id="@+id/rl_gameplayWrapper"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:id="@+id/ll_gameplayInfo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_margin="@dimen/MarginM">
-
-                <TextView
-                    android:id="@+id/tv_playerScore"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_margin="@dimen/MarginS"
-                    android:background="@drawable/list_title"
-                    android:backgroundTint="@color/colorAccentYellow"
-                    android:padding="@dimen/PaddingS"
-                    android:text="Score"
-                    android:textColor="@color/colorAccent"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/Heading2"
-                    android:textAlignment="center"/>
-
-                <TextView
-                    android:id="@+id/tv_playerTime"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_margin="@dimen/MarginS"
-                    android:background="@drawable/list_title"
-                    android:backgroundTint="@color/colorAccentRed"
-                    android:padding="@dimen/PaddingS"
-                    android:text="Timer"
-                    android:textColor="@color/colorAccent"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/Heading2"
-                    android:textAlignment="center"/>
-
-            </LinearLayout>
 
             <com.tuzhan.NonSwipeableViewPager
                 android:id="@+id/vp_imagePager"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:layout_below="@id/ll_gameplayInfo" />
+                android:layout_height="wrap_content"
+                android:layout_above="@id/hsv_characterBoxes"
+                android:layout_margin="20dp" />
 
             <HorizontalScrollView
                 android:id="@+id/hsv_characterBoxes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/vp_imagePager"
-                android:layout_margin="@dimen/MarginML"
-                android:layout_centerHorizontal="true">
+                android:layout_above="@id/bottomet"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="@dimen/MarginML">
 
                 <LinearLayout
                     android:id="@+id/ll_characterBoxWrapper"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_gravity="center">
+                    android:layout_gravity="center"
+                    android:orientation="horizontal">
 
                     <include layout="@layout/item_character_box" />
 
@@ -128,31 +138,39 @@
             <!--Dummy View to prevent annoying focusing of the edit text-->
             <View
                 android:id="@+id/v_focusDummy"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
                 android:layout_width="0px"
-                android:layout_height="0px" />
+                android:layout_height="0px"
+                android:focusable="true"
+                android:focusableInTouchMode="true" />
 
-            <EditText
-                android:id="@+id/et_wordEntry"
+            <LinearLayout
+                android:background="@color/colorPrimary"
+                android:layout_alignParentBottom="true"
+                android:id="@+id/bottomet"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/hsv_characterBoxes"
-                android:layout_marginStart="@dimen/MarginML"
-                android:layout_marginEnd="@dimen/MarginML"
-                android:textColor="@color/colorAccentYellow"
-                android:textSize="@dimen/Heading1"
-                android:textAlignment="center"
-                android:textCursorDrawable="@null"
-                android:backgroundTint="@color/colorAccentYellow"
-                android:inputType="text"
-                android:maxLines="1"
-                android:imeOptions="actionDone"
-                android:nextFocusUp="@id/et_wordEntry"
-                android:nextFocusLeft="@id/et_wordEntry"/>
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/et_wordEntry"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/MarginML"
+                    android:layout_marginStart="@dimen/MarginML"
+                    android:backgroundTint="@color/colorAccentYellow"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:nextFocusLeft="@id/et_wordEntry"
+                    android:nextFocusUp="@id/et_wordEntry"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorAccentYellow"
+                    android:textCursorDrawable="@null"
+                    android:textSize="@dimen/Heading1" />
+
+            </LinearLayout>
 
         </RelativeLayout>
 
-    </ScrollView>
+    </RelativeLayout>
 
 </RelativeLayout>
