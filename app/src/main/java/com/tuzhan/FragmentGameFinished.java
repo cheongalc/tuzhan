@@ -37,8 +37,6 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
     DatabaseReference rootRef;
     Boolean isOppInfoPresent = false;
 
-    ImageButton btn_back, btn_flip;
-
     String opp_dpURL;
 
     int userScore = -1, oppScore = -1;

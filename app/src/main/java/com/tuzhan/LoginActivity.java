@@ -1,6 +1,8 @@
 package com.tuzhan;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,8 +24,11 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -68,6 +73,7 @@ public class LoginActivity extends AppCompatActivity {
         //check if user has already logged in
         if (isFirstStart && mAuth.getCurrentUser() != null) {
             //user has already connected to the app from previous sessions, move to mainactivity
+            updateUserInfo();
             Intent intent_main = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent_main);
             finish();
@@ -131,6 +137,8 @@ public class LoginActivity extends AppCompatActivity {
                         currUserDir.child("userId").setValue(currUser.userId);
                         currUserDir.child("dpURL").setValue(currUser.dpURL);
 
+                        updateUserInfo();
+
                         //move to main activity
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
@@ -142,6 +150,44 @@ public class LoginActivity extends AppCompatActivity {
                         rl_progressOverlay.setVisibility(View.GONE);
                     }
                 });
+    }
+
+    //update logged in user info
+    private void updateUserInfo(){
+
+        root.child("players").child(mAuth.getCurrentUser().getEmail().replace('.',',')).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int rounds_won = 0, rounds_played = 0;
+                if(dataSnapshot.hasChild("rounds_won")){
+                    rounds_won = (int) dataSnapshot.child("rounds_won").getValue();
+                }
+                if(dataSnapshot.hasChild("rounds_played")){
+                    rounds_played = (int) dataSnapshot.child("rounds_played").getValue();
+                }
+
+                //store to shared preferences
+
+                SharedPreferences sharedPref = LoginActivity.this.getSharedPreferences(
+                        "userInfoPref", Context.MODE_PRIVATE);
+
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString("displayname", mAuth.getCurrentUser().getDisplayName());
+                editor.putString("email", mAuth.getCurrentUser().getEmail());
+                editor.putString("dpURL", mAuth.getCurrentUser().getPhotoUrl()+"");
+                editor.putString("userId", mAuth.getCurrentUser().getUid());
+                editor.putInt("rounds_played", rounds_played);
+                editor.putInt("rounds_won", rounds_won);
+                editor.apply();
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
 }

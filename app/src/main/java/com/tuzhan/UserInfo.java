@@ -1,6 +1,10 @@
 package com.tuzhan;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -57,7 +61,22 @@ public class UserInfo extends AppCompatActivity {
         tv_userEmail.setText(currUser.getEmail());
 
         //set user win rate and rounds played
-        setWR();
+        if(MainActivity.isConnectedInternet(this)) {
+            setWR();
+        }else{
+            SharedPreferences sharedPreferences = this.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+            int rounds_won = sharedPreferences.getInt("rounds_won", 0);
+            int rounds_played = sharedPreferences.getInt("rounds_played", 0);
+            if(rounds_won > 0 && rounds_played > 0) {
+                double win_rate = (double) rounds_won / (double) rounds_played;
+                win_rate = win_rate * 100;
+                tv_userKD.setText(win_rate + "%");
+                tv_userRounds.setText(rounds_played);
+            }else{
+                tv_userKD.setText("无");
+                tv_userRounds.setText("0");
+            }
+        }
 
     }
 
@@ -100,4 +119,5 @@ public class UserInfo extends AppCompatActivity {
         getWindow().setLayout((int) (((double) width) * widthD), (int) (((double) height) * heightD));
         getWindow().setBackgroundDrawable(new ColorDrawable(0));
     }
+
 }

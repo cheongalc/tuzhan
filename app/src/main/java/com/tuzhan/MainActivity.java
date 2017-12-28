@@ -2,7 +2,10 @@ package com.tuzhan;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +20,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -148,8 +152,16 @@ public class MainActivity extends AppCompatActivity {
             }else expand(lv_newMatches);
         });
 
-        //update lv_prev_matches
+        //update matches list
         getPrevMatches();
+
+        //get match data from local db
+        List<MatchRecord> matchRecords = DataSource.shared.matches;
+        List<MatchDetails> prevmatchDetailsList = new ArrayList<>();
+
+        for(MatchRecord matchRecord : matchRecords){
+            //TODO convert match records to match details, (requires opponent info from match records)
+        }
 
     }
 
@@ -387,8 +399,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void findMatch(View view) {
-        Intent i = new Intent(MainActivity.this, FindingMatchActivity.class);
-        startActivity(i);
+        if(isConnectedInternet(this)) {
+            Intent i = new Intent(MainActivity.this, FindingMatchActivity.class);
+            startActivity(i);
+        }else Toast.makeText(this, "无网络", Toast.LENGTH_SHORT).show();
+    }
+
+    static public boolean isConnectedInternet(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        boolean isconnected = false;
+        NetworkInfo networkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        if(networkInfo.isConnected()) isconnected = true;
+        networkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        if(networkInfo.isConnected()) isconnected = true;
+        return isconnected;
     }
 
     public static void setListViewHeightBasedOnChildren(ListView listView) {
