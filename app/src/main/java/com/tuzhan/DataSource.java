@@ -77,7 +77,7 @@ public class DataSource extends Application {
                 cards.add(new QuestionCard(cursor));
             } while(cursor.moveToNext());
         }
-
+        cursor.close();
         return cards;
     }
 
@@ -144,7 +144,7 @@ public class DataSource extends Application {
                 matches.add(new MatchRecord(cursor));
             } while(cursor.moveToNext());
         }
-
+        cursor.close();
         return matches;
     }
 
@@ -165,6 +165,7 @@ public class DataSource extends Application {
             } while(cursor.moveToNext());
         }
 
+        cursor.close();
         return users;
     }
 

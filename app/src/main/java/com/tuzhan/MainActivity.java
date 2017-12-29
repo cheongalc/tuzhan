@@ -38,6 +38,7 @@ import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
@@ -158,10 +159,27 @@ public class MainActivity extends AppCompatActivity {
         //get match data from local db
         List<MatchRecord> matchRecords = DataSource.shared.matches;
         List<MatchDetails> prevmatchDetailsList = new ArrayList<>();
+        List<String> prevmatchId = new ArrayList<>();
 
         for(MatchRecord matchRecord : matchRecords){
             //TODO convert match records to match details, (requires opponent info from match records)
+            User opponent = DataSource.shared.userForEmail(matchRecord.oppEmail);
+            if(opponent != null){
+                prevmatchId.add(matchRecord.id);
+
+                String outcome = "dnf";
+
+                if(matchRecord.scoreOpp != null) {
+                    if (matchRecord.scoreOpp < matchRecord.scoreSelf) outcome = "1";
+                    else if (matchRecord.scoreOpp > matchRecord.scoreSelf) outcome = "0";
+                    else if (Objects.equals(matchRecord.scoreOpp, matchRecord.scoreSelf))
+                        outcome = "2";
+                }
+                prevmatchDetailsList.add(new MatchDetails(matchRecord.id, opponent, outcome, matchRecord.topic));
+            }
         }
+
+        updateMatchesList(lv_newMatches, prevmatchId, prevmatchDetailsList, prev_matches, false);
 
     }
 

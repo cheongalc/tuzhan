@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper{
 
     // Database Meta Info
-    public static int DATABASE_VERSION = 11;
+    public static int DATABASE_VERSION = 13;
     public static String DATABASE_NAME = "Records.db";
 
     // Database init
