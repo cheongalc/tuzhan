@@ -34,7 +34,9 @@ public class DataSource extends Application {
     public SQLiteDatabase database;
     private DatabaseHelper dbHelper;
 
-    private void open() throws SQLException{database = dbHelper.getWritableDatabase();}
+    private void open() throws SQLException{
+        database = dbHelper.getWritableDatabase();
+    }
 
     // singleton database object to be used
     static DataSource shared;
@@ -42,7 +44,7 @@ public class DataSource extends Application {
     public DatabaseReference rootRef = fireDatabase.getReference();
     public Map<String, ArrayList<QuestionCard>> themeToCards = new HashMap<>();
     public List<MatchRecord> matches;
-    private List<User> encounteredUsers;
+    public List<User> encounteredUsers;
 
     // init function to be called at the start of MainActivity
     static void init(Context context){
@@ -63,7 +65,7 @@ public class DataSource extends Application {
     private void addCard(QuestionCard card){
         card.updateDB(database);
         if(!themeToCards.containsKey(card.theme)){
-            themeToCards.put(card.theme, new ArrayList<QuestionCard>());
+            themeToCards.put(card.theme, new ArrayList<>());
         }
         themeToCards.get(card.theme).add(card);
     }
@@ -170,9 +172,9 @@ public class DataSource extends Application {
     }
 
     // retrieves user by email from local array, returns null if user with the specified email is not found
-    public User userForEmail(String userId){
+    public User userForEmail(String userEmail){
         for(User user: encounteredUsers){
-            if(user.userId.equals(userId)) return user;
+            if(user.email.equals(userEmail)) return user;
         }
         return null;
     }
@@ -191,6 +193,8 @@ public class DataSource extends Application {
         user = new User(dpName, email, userId, dpURL);
         encounteredUsers.add(user);
         user.updateDB(database);
+
+        Log.d("encountered", encounteredUsers.size()+"");
 
         return user;
     }

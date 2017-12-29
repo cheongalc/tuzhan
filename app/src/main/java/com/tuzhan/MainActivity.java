@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         currUser = mAuth.getCurrentUser();
 
-        DatabaseReference user_ref = root.child("UsersStates").child(currUser.getEmail().replace('.',','));
+        DatabaseReference user_ref = root.child("UsersStates").child(currUser.getEmail().replace('.', ','));
 
         //required for signing out the user
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -124,10 +124,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 boolean connected = dataSnapshot.getValue(Boolean.class);
-                if(connected){
+                if (connected) {
                     user_ref.setValue(true);
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
@@ -142,34 +143,30 @@ public class MainActivity extends AppCompatActivity {
         startService(intent);
 
         prev_matches_title.setOnClickListener(v -> {
-            if(lv_prevMatches.getVisibility() == View.VISIBLE) {
+            if (lv_prevMatches.getVisibility() == View.VISIBLE) {
                 collapse(lv_prevMatches);
-            }else expand(lv_prevMatches);
+            } else expand(lv_prevMatches);
         });
 
         new_challenges_title.setOnClickListener(v -> {
-            if(lv_newMatches.getVisibility() == View.VISIBLE){
+            if (lv_newMatches.getVisibility() == View.VISIBLE) {
                 collapse(lv_newMatches);
-            }else expand(lv_newMatches);
+            } else expand(lv_newMatches);
         });
-
-        //update matches list
-        getPrevMatches();
 
         //get match data from local db
         List<MatchRecord> matchRecords = DataSource.shared.matches;
         List<MatchDetails> prevmatchDetailsList = new ArrayList<>();
         List<String> prevmatchId = new ArrayList<>();
 
-        for(MatchRecord matchRecord : matchRecords){
-            //TODO convert match records to match details, (requires opponent info from match records)
-            User opponent = DataSource.shared.userForEmail(matchRecord.oppEmail);
-            if(opponent != null){
+        for (MatchRecord matchRecord : matchRecords) {
+            User opponent = DataSource.shared.userForEmail(matchRecord.oppEmail.replace('.',','));
+            if (opponent != null) {
                 prevmatchId.add(matchRecord.id);
 
                 String outcome = "dnf";
 
-                if(matchRecord.scoreOpp != null) {
+                if (matchRecord.scoreOpp != null) {
                     if (matchRecord.scoreOpp < matchRecord.scoreSelf) outcome = "1";
                     else if (matchRecord.scoreOpp > matchRecord.scoreSelf) outcome = "0";
                     else if (Objects.equals(matchRecord.scoreOpp, matchRecord.scoreSelf))
@@ -178,14 +175,15 @@ public class MainActivity extends AppCompatActivity {
                 prevmatchDetailsList.add(new MatchDetails(matchRecord.id, opponent, outcome, matchRecord.topic));
             }
         }
+        updateMatchesList(lv_prevMatches, prevmatchId, prevmatchDetailsList, prev_matches, false);
 
-        updateMatchesList(lv_newMatches, prevmatchId, prevmatchDetailsList, prev_matches, false);
-
+        //update matches list
+        getPrevMatches();
     }
 
     //listener to check individual match id under match object of user
     private void getPrevMatches() {
-        DatabaseReference user_matches_ref = root.child("Users").child(currUser.getEmail().replace('.',',')).child("matches");
+        DatabaseReference user_matches_ref = root.child("Users").child(currUser.getEmail().replace('.', ',')).child("matches");
 
         user_matches_ref.addChildEventListener(new ChildEventListener() {
             @Override
@@ -200,8 +198,8 @@ public class MainActivity extends AppCompatActivity {
                 //new matches cannot be removed
                 prevMatchIds.remove(dataSnapshot.getKey());
                 List<MatchDetails> matches_to_remove = new ArrayList<>();
-                for(MatchDetails matchDetails : prevMatchDetails){
-                    if(matchDetails.match_id.equals(dataSnapshot.getKey())){
+                for (MatchDetails matchDetails : prevMatchDetails) {
+                    if (matchDetails.match_id.equals(dataSnapshot.getKey())) {
                         matches_to_remove.add(matchDetails);
                     }
                 }
@@ -260,33 +258,32 @@ public class MainActivity extends AppCompatActivity {
                 String outcome = "dnf";
 
                 //get scores, time and entries for respective players and retrieve opponent email
-                for(DataSnapshot child : dataSnapshot.child("players").getChildren())
-                {
-                    if(!child.getKey().equals(currUser.getEmail().replace('.', ','))){
+                for (DataSnapshot child : dataSnapshot.child("players").getChildren()) {
+                    if (!child.getKey().equals(currUser.getEmail().replace('.', ','))) {
                         //set opponent info
                         opponent_email = child.getKey();
-                        if(child.child("state").getValue().toString().equals("fin")) {
+                        if (child.child("state").getValue().toString().equals("fin")) {
                             opp_score = Integer.parseInt(child.child("score").getValue() + "");
                             opp_time = (double) child.child("time").getValue();
                             opp_entries = Utils.split(child.child("entries").getValue() + "");
-                            opp_scores = Utils.splitToInts(child.child("scores").getValue()+"");
-                        }else opp_score = -1;
+                            opp_scores = Utils.splitToInts(child.child("scores").getValue() + "");
+                        } else opp_score = -1;
                         //opp_score of -1 means opponent info has not been uploaded
 
-                    }else{
-                        if(!child.child("state").getValue().toString().equals("dns")) {
+                    } else {
+                        if (!child.child("state").getValue().toString().equals("dns")) {
                             //set user info
                             user_score = Integer.parseInt(child.child("score").getValue() + "");
                             user_time = (double) child.child("time").getValue();
                             user_entries = Utils.split(child.child("entries").getValue() + "");
                             user_scores = Utils.splitToInts(child.child("scores").getValue() + "");
-                        }else outcome = "dns";
+                        } else outcome = "dns";
                     }
                 }
 
 
                 //figure out match outcome
-                if(opp_score >= 0 && !outcome.equals("dns")) {
+                if (opp_score >= 0 && !outcome.equals("dns")) {
                     //match finished
                     //set match outcome, "0" means user lost, "1" means user won and "2" means draw
                     if (user_score > opp_score) outcome = "1";
@@ -300,7 +297,7 @@ public class MainActivity extends AppCompatActivity {
                     //match is complete, stop listening for updates
                     match_details_ref.removeEventListener(this);
 
-                }else if(!outcome.equals("dns")){
+                } else if (!outcome.equals("dns")) {
                     //match did not finish, create new unfinished MatchRecord object to update local database
                     MatchRecord matchRecord = new MatchRecord(match_id, topic, cardIds, opponent_email, user_score, user_time, user_entries, user_scores);
                     matchRecord.updateDB(DataSource.shared.database);
@@ -314,14 +311,14 @@ public class MainActivity extends AppCompatActivity {
                 root.child("Users").child(fin_opponent_email.replace('.', ',')).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        String display_name = dataSnapshot.child("displayname").getValue()+"";
-                        String dpURL = dataSnapshot.child("dpURL").getValue()+"";
-                        String userId = dataSnapshot.child("userId").getValue()+"";
+                        String display_name = dataSnapshot.child("displayname").getValue() + "";
+                        String dpURL = dataSnapshot.child("dpURL").getValue() + "";
+                        String userId = dataSnapshot.child("userId").getValue() + "";
 
                         User opponent = DataSource.shared.userWithParameters(userId, dpURL, display_name, fin_opponent_email);
                         MatchDetails matchDetails = new MatchDetails(match_id, opponent, fin_outcome, topic);
 
-                        if(!fin_outcome.equals("dns")) {
+                        if (!fin_outcome.equals("dns")) {
                             //match is not new challenge, check if match id exists
                             if (prevMatchIds.indexOf(match_id) != -1) {
                                 //match id exists, update current match detail
@@ -339,7 +336,7 @@ public class MainActivity extends AppCompatActivity {
 
                             updateMatchesList(lv_prevMatches, prevMatchIds, prevMatchDetails, prev_matches, false);
 
-                        }else{
+                        } else {
                             //match is new challenge
                             newMatchDetails.add(matchDetails);
                             newMatchIds.add(match_id);
@@ -362,9 +359,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void updateMatchesList(ListView lv, List<String> matchIds, List<MatchDetails> matchDetailsList, LinearLayout container, boolean isNewMatch){
+    public void updateMatchesList(ListView lv, List<String> matchIds, List<MatchDetails> matchDetailsList, LinearLayout container, boolean isNewMatch) {
 
-        if(matchDetailsList.size() == 0) container.setVisibility(View.GONE);
+        if (matchDetailsList.size() == 0) container.setVisibility(View.GONE);
         else container.setVisibility(View.VISIBLE);
 
         //all info retrieved, set listview
@@ -389,7 +386,7 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog.Builder logout_diaog_builder = new AlertDialog.Builder(MainActivity.this);
         logout_diaog_builder.setCancelable(true)
                 .setMessage("你确定这样的行为是正确的吗? " + ("\u26a0") + ("\u26a0") + ("\u26a0") + ("\u26a0"))
-                .setNegativeButton("取消",null)
+                .setNegativeButton("取消", null)
                 .setPositiveButton("确定", (dialog, which) -> signOut())
                 .setCancelable(true);
 
@@ -404,7 +401,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void signOut() {
         //change user status
-        root.child("Users").child(currUser.getEmail().replace('.',',')).child("isOnline").setValue(false);
+        root.child("Users").child(currUser.getEmail().replace('.', ',')).child("isOnline").setValue(false);
         //sign out of firebase
         mAuth.signOut();
         //sign out of google
@@ -417,19 +414,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void findMatch(View view) {
-        if(isConnectedInternet(this)) {
+        if (isConnectedInternet(this)) {
             Intent i = new Intent(MainActivity.this, FindingMatchActivity.class);
             startActivity(i);
-        }else Toast.makeText(this, "无网络", Toast.LENGTH_SHORT).show();
+        } else Toast.makeText(this, "无网络", Toast.LENGTH_SHORT).show();
     }
 
     static public boolean isConnectedInternet(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         boolean isconnected = false;
         NetworkInfo networkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        if(networkInfo.isConnected()) isconnected = true;
+        if (networkInfo.isConnected()) isconnected = true;
         networkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-        if(networkInfo.isConnected()) isconnected = true;
+        if (networkInfo.isConnected()) isconnected = true;
         return isconnected;
     }
 
@@ -453,7 +450,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public static int getListViewHeight(ListView listView){
+    public static int getListViewHeight(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
         if (listAdapter != null) {
             int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
@@ -468,7 +465,7 @@ public class MainActivity extends AppCompatActivity {
                 totalHeight += view.getMeasuredHeight();
             }
             return (listView.getDividerHeight() * (listAdapter.getCount() - 1)) + totalHeight;
-        }else return 0;
+        } else return 0;
     }
 
     private void expand(ListView lv) {
@@ -488,7 +485,8 @@ public class MainActivity extends AppCompatActivity {
 
         mAnimator.addListener(new Animator.AnimatorListener() {
             @Override
-            public void onAnimationStart(Animator animation) {}
+            public void onAnimationStart(Animator animation) {
+            }
 
             @Override
             public void onAnimationEnd(Animator animator) {
@@ -496,10 +494,12 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onAnimationCancel(Animator animation) {}
+            public void onAnimationCancel(Animator animation) {
+            }
 
             @Override
-            public void onAnimationRepeat(Animator animation) {}
+            public void onAnimationRepeat(Animator animation) {
+            }
         });
         mAnimator.start();
     }

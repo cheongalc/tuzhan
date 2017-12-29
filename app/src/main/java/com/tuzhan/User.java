@@ -26,6 +26,7 @@ public class User extends DatabaseModel implements Serializable {
     //constructor for any arbitrary user
     public User(String displayname, String email, String userId, String dpURL){
 
+        this.tableName = "USERS";
         this.displayname = displayname;
         this.email = email;
         this.userId = userId;
@@ -36,6 +37,7 @@ public class User extends DatabaseModel implements Serializable {
     //special constructor for current user
     public User(String displayname, String email, String userId, String dpURL, int won_rounds, int played_rounds){
 
+        this.tableName = "USERS";
         this.displayname = displayname;
         this.email = email;
         this.userId = userId;
