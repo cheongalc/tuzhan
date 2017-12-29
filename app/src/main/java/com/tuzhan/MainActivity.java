@@ -300,7 +300,7 @@ public class MainActivity extends AppCompatActivity {
                         String dpURL = dataSnapshot.child("dpURL").getValue()+"";
                         String userId = dataSnapshot.child("userId").getValue()+"";
 
-                        User opponent = new User(display_name, fin_opponent_email, userId, dpURL);
+                        User opponent = DataSource.shared.userWithParameters(userId, dpURL, display_name, fin_opponent_email);
                         MatchDetails matchDetails = new MatchDetails(match_id, opponent, fin_outcome, topic);
 
                         if(!fin_outcome.equals("dns")) {

@@ -42,6 +42,7 @@ public class DataSource extends Application {
     public DatabaseReference rootRef = fireDatabase.getReference();
     public Map<String, ArrayList<QuestionCard>> themeToCards = new HashMap<>();
     public List<MatchRecord> matches;
+    private List<User> encounteredUsers;
 
     // init function to be called at the start of MainActivity
     static void init(Context context){
@@ -51,6 +52,7 @@ public class DataSource extends Application {
             shared.addCard(card);
         }
         shared.matches = shared.fetchAllMatches();
+        shared.encounteredUsers = shared.fetchAllEncounteredUsers();
     }
 
     public DataSource(Context context){
@@ -151,5 +153,46 @@ public class DataSource extends Application {
         match.updateDB(database);
         matches.add(match);
     }
+
+    // fetch all encountered users from database
+    private List<User> fetchAllEncounteredUsers(){
+        Cursor cursor = database.rawQuery("SELECT * FROM USERS", null);
+        ArrayList<User> users = new ArrayList<>();
+
+        if (cursor.moveToFirst()) {
+            do{
+                users.add(new User(cursor));
+            } while(cursor.moveToNext());
+        }
+
+        return users;
+    }
+
+    // retrieves user by email from local array, returns null if user with the specified email is not found
+    public User userForEmail(String userId){
+        for(User user: encounteredUsers){
+            if(user.userId.equals(userId)) return user;
+        }
+        return null;
+    }
+
+
+    // call this method instead of the 'arbitrary user' constructor of the User class
+    // checks if user object with same email already exists
+    // if not, create new User object with given parameters and store it in local array & database
+    // if yes, returns the found user object
+    public User userWithParameters(String userId, String dpURL, String dpName, String email){
+
+        User user = userForEmail(email);
+        if(user != null) return user;
+
+        // create user & add it to local array and database
+        user = new User(dpName, email, userId, dpURL);
+        encounteredUsers.add(user);
+        user.updateDB(database);
+
+        return user;
+    }
+
 
 }

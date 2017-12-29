@@ -1,13 +1,16 @@
 package com.tuzhan;
 
 
+import android.content.ContentValues;
+import android.database.Cursor;
+
 import java.io.Serializable;
 
 /**
  * Created by Dhaulagiri on 6/12/2017.
  */
 
-public class User implements Serializable {
+public class User extends DatabaseModel implements Serializable {
 
     String displayname;
     String email;
@@ -40,6 +43,30 @@ public class User implements Serializable {
         this.won_rounds = won_rounds;
         this.played_rounds = played_rounds;
 
+    }
+
+    // initialize arbitrary user object from database cursor
+    public User(Cursor cursor){
+        this.userId = cursor.getString(0);
+        this.dpURL = cursor.getString(1);
+        this.displayname = cursor.getString(2);
+        this.email = cursor.getString(3);
+    }
+
+    // overrides for superclass DatabaseModel
+    @Override
+    public String selector() {
+        return "id='" + userId + "'";
+    }
+
+    @Override
+    public ContentValues composeUpdateValues() {
+        ContentValues values2Update = new ContentValues();
+        values2Update.put("id", userId);
+        values2Update.put("dpURL", dpURL);
+        values2Update.put("dpName", displayname);
+        values2Update.put("email", email);
+        return values2Update;
     }
 
 }

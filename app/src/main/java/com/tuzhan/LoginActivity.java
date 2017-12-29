@@ -130,7 +130,7 @@ public class LoginActivity extends AppCompatActivity {
                         DatabaseReference currUserDir = userDirectory.child(user.getEmail().replace('.',','));
                         //upload user data to firebase
                         //convert uri to string as uri is not supported by firebase
-                        User currUser = new User(user.getDisplayName(), user.getEmail(), user.getUid(), user.getPhotoUrl().toString());
+                        User currUser = DataSource.shared.userWithParameters(user.getUid(), user.getPhotoUrl().toString(), user.getDisplayName(), user.getEmail());
                         //replace '.' in email address with ',' as firebase paths must not contain '.'
                         currUserDir.child("displayname").setValue(currUser.displayname);
                         currUserDir.child("email").setValue(currUser.email);

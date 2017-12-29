@@ -94,7 +94,7 @@ public class PrevMatchesAdapter extends ArrayAdapter<String> {
             }else{
                 //retrieve user info
                 FirebaseUser curuser = FirebaseAuth.getInstance().getCurrentUser();
-                User user = new User(curuser.getDisplayName(), curuser.getEmail(), curuser.getUid(), curuser.getPhotoUrl().toString());
+                User user = DataSource.shared.userWithParameters(curuser.getUid(), curuser.getPhotoUrl().toString(), curuser.getDisplayName(), curuser.getEmail());
 
                 Intent intent = new Intent(getContext(), CountdownActivity.class);
                 intent.putExtra("opp", opponent);

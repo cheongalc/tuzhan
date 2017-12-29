@@ -77,9 +77,9 @@ public class FindingMatchActivity extends AppCompatActivity {
                         String userId = dataSnapshot.child("userId").getValue()+"";
 
                         //make opp user object
-                        User opp = new User(displayername, opp_email_fin.replace(',','.'), userId, dpURL);
+                        User opp = DataSource.shared.userWithParameters(currUser.getUid(), currUser.getPhotoUrl().toString(), currUser.getDisplayName(), currUser.getEmail());
                         //make curruser user object
-                        User user = new User(currUser.getDisplayName(), currUser.getEmail(), currUser.getUid(), currUser.getPhotoUrl().toString());
+                        User user = DataSource.shared.userWithParameters(currUser.getUid(), currUser.getPhotoUrl().toString(), currUser.getDisplayName(), currUser.getEmail());
 
                         Intent i = new Intent(FindingMatchActivity.this, CountdownActivity.class);
                         i.putExtra("cardIds", cardIds_fin);
