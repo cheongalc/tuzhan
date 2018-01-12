@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
 
         Picasso.with(this).load(currUser.getPhotoUrl()).into(civ_displayPhoto);
         tv_displayName.setText(currUser.getDisplayName());
-        Picasso.with(this).load(R.mipmap.tuzhan_pattern).into(background);
+        //Picasso.with(this).load(R.mipmap.tuzhan_pattern).into(background);
 
         rl_userInfoBtnContainer.setOnClickListener(userInfoClick);
 
