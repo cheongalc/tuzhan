@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/darken_background" />
+        android:src="@mipmap/darken_background" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
