@@ -54,9 +54,7 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
         Bundle pastExtras = pastIntent.getExtras();
 
         // Set toolbar title to nothing so that the theme prevails
-        Toolbar toolbar = (Toolbar) findViewById(R.id.tb_toolbarGameplay);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("");
+        LinearLayout toolbar = (LinearLayout) findViewById(R.id.tb_toolbarGameplay);
 
         // Save instance of the root layout to use for modification during submitting words
         rootLayout = (RelativeLayout) findViewById(R.id.rl_gameplayUI);
@@ -185,14 +183,14 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
 
     private int countFilledBoxes() {
         int result = 0;
-        String stack = "";
+        StringBuilder stack = new StringBuilder();
         for (int i = 0; i < formattedAnswers.get(0).length(); i++) {
             TextView tv_characterBox = (TextView) rootLayout.findViewWithTag(i);
             String content = String.valueOf(tv_characterBox.getText());
             if (!content.equals("")) {
                 // it is filled
                 result++;
-                stack += content;
+                stack.append(content);
             }
         }
         if (stack.length() < formattedAnswers.get(0).length()) {
@@ -297,6 +295,7 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
         LinearLayout ll_characterBoxWrapper = (LinearLayout) findViewById(R.id.ll_characterBoxWrapper);
         for (int i = 0; i < numberOfCharacters; i++) {
             LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            assert inflater != null;
             View child = inflater.inflate(R.layout.item_character_box, ll_characterBoxWrapper, false);
             child.setTag(i); // so that the position of each character is tracked
             ll_characterBoxWrapper.removeView(child);
@@ -306,14 +305,14 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
 
     private List<String> formatAnswers(String unformattedAnswers) {
         List<String> output = new ArrayList<>();
-        String currentStack = "";
+        StringBuilder currentStack = new StringBuilder();
         for (int i = 0; i < unformattedAnswers.length(); i++) {
             char currentChar = unformattedAnswers.charAt(i);
             if (currentChar == '-') {
-                output.add(currentStack);
-                currentStack = "";
+                output.add(currentStack.toString());
+                currentStack = new StringBuilder();
             } else {
-                currentStack += currentChar;
+                currentStack.append(currentChar);
             }
         }
         return output;
