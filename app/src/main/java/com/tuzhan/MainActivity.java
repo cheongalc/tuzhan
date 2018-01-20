@@ -385,7 +385,7 @@ public class MainActivity extends AppCompatActivity {
         //set up dialog builder for log out dialog
         AlertDialog.Builder logout_diaog_builder = new AlertDialog.Builder(MainActivity.this);
         logout_diaog_builder.setCancelable(true)
-                .setMessage("你确定这样的行为是正确的吗? " + ("\u26a0") + ("\u26a0") + ("\u26a0") + ("\u26a0"))
+                .setMessage("你确定这样的行为是正确的吗?" + ("\u26a0") + ("\u26a0") + ("\u26a0") + ("\u26a0"))
                 .setNegativeButton("取消", null)
                 .setPositiveButton("确定", (dialog, which) -> signOut())
                 .setCancelable(true);

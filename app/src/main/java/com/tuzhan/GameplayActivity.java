@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
     private RelativeLayout rootLayout;
     private List<RelativeLayout> currImageRelativeLayouts = new ArrayList<>(); // Because ViewPager generates 1 page more than the current one, keep array to prevent overriding
 
-    private List<QuestionCard> currQuestionCards; // represents the list of Question Card, passed over from CountdownActivity
+    private ArrayList<QuestionCard> currQuestionCards; // represents the list of Question Card, passed over from CountdownActivity
     private QuestionCard currQuestionCard; // represents current Question Card
     private List<String> cardIDs;
     private String matchID;
@@ -51,7 +52,6 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
         setContentView(R.layout.activity_gameplay_ui);
 
         Intent pastIntent = getIntent();
-        Bundle pastExtras = pastIntent.getExtras();
 
         // Set toolbar title to nothing so that the theme prevails
         LinearLayout toolbar = (LinearLayout) findViewById(R.id.tb_toolbarGameplay);
@@ -60,12 +60,11 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
         rootLayout = (RelativeLayout) findViewById(R.id.rl_gameplayUI);
 
         // Setup the QuestionCards
-        currQuestionCards = (List<QuestionCard>) pastExtras.get("question_cards");
+        currQuestionCards = pastIntent.getParcelableArrayListExtra("question_cards");
 
         // Setup the intent extras
-        cardIDs = Utils.split(pastExtras.getString("card_IDs_string"));
-        matchID = pastExtras.getString("matchID");
-
+        cardIDs = Utils.split(pastIntent.getStringExtra("card_IDs_string"));
+        matchID = pastIntent.getStringExtra("matchID");
 
         // Setup the viewpager and its fragment manager
         viewPager = (NonSwipeableViewPager) findViewById(R.id.vp_imagePager);

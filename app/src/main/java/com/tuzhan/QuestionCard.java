@@ -6,6 +6,7 @@ import android.os.Parcelable;
 
 import com.google.firebase.database.DataSnapshot;
 
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ public class QuestionCard extends DatabaseModel implements Parcelable {
         init(theme, id, snapshot.child("imageURL").getValue().toString(), snapshot.child("answersRaw").getValue().toString(), snapshot.child("credit").getValue().toString());
     }
 
+
     protected QuestionCard(Parcel in) {
         if (in.readByte() == 0) {
             id = null;
@@ -44,6 +46,18 @@ public class QuestionCard extends DatabaseModel implements Parcelable {
         harderAnswers = in.createStringArrayList();
         credit = in.readString();
     }
+
+    public static final Creator<QuestionCard> CREATOR = new Creator<QuestionCard>() {
+        @Override
+        public QuestionCard createFromParcel(Parcel in) {
+            return new QuestionCard(in);
+        }
+
+        @Override
+        public QuestionCard[] newArray(int size) {
+            return new QuestionCard[size];
+        }
+    };
 
     private void init(String theme, Integer id, String imageURL, String answersRaw, String credit){
         this.tableName = "CARDS";
@@ -91,6 +105,7 @@ public class QuestionCard extends DatabaseModel implements Parcelable {
         this.harderAnswers = Utils.split(harderAnswers);
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -98,23 +113,15 @@ public class QuestionCard extends DatabaseModel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
+        if (id == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(id);
+        }
         dest.writeString(theme);
+        dest.writeStringList(answers);
+        dest.writeStringList(harderAnswers);
         dest.writeString(credit);
-        dest.writeSerializable(imageURL);
-        dest.writeList(answers);
-        dest.writeList(harderAnswers);
     }
-
-    public static final Creator<QuestionCard> CREATOR = new Creator<QuestionCard>() {
-        @Override
-        public QuestionCard createFromParcel(Parcel in) {
-            return new QuestionCard(in);
-        }
-
-        @Override
-        public QuestionCard[] newArray(int size) {
-            return new QuestionCard[size];
-        }
-    };
 }

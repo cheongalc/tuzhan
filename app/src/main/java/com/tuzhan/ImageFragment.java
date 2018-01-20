@@ -91,7 +91,6 @@ public class ImageFragment extends Fragment {
         args.putInt("imageIndex", imageIndex + 1);
         args.putParcelable("questionCard", questionCard);
 
-
         ImageFragment fragment = new ImageFragment();
         fragment.setArguments(args);
         return fragment;
