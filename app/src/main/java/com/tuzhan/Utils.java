@@ -18,6 +18,8 @@ import java.util.stream.Collectors;
 @TargetApi(Build.VERSION_CODES.N)
 public class Utils {
 
+    static ArrayList<QuestionCard> QuestionCardTemp;
+
     static String concatenate(List<?> objects){
         return objects.stream().map(Object::toString).collect(Collectors.joining("-"));
     }

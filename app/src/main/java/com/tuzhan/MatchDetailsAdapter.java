@@ -26,18 +26,18 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by Dhaulagiri on 7/12/2017.
  */
 
-public class PrevMatchesAdapter extends ArrayAdapter<String> {
+public class MatchDetailsAdapter extends ArrayAdapter<String> {
 
     private List<String> match_ids;
     private List<MatchDetails> matchDetailsList;
-    private Boolean isNewMacth = false;
+    private Boolean isNewMatch = false;
 
-    PrevMatchesAdapter(@NonNull Context context, List<String> match_ids, List<MatchDetails> matchDetailsList, Boolean isNewMatch) {
+    MatchDetailsAdapter(@NonNull Context context, List<String> match_ids, List<MatchDetails> matchDetailsList, Boolean isNewMatch) {
         super(context, 0, match_ids);
 
         this.match_ids = match_ids;
         this.matchDetailsList = matchDetailsList;
-        this.isNewMacth = isNewMatch;
+        this.isNewMatch = isNewMatch;
     }
 
     @NonNull
@@ -55,7 +55,6 @@ public class PrevMatchesAdapter extends ArrayAdapter<String> {
 
         TextView tvOpponentName = (TextView) convertView.findViewById(R.id.tv_opponent_name);
         TextView tvTopic = (TextView) convertView.findViewById(R.id.tv_topic);
-//        CardView cvMatch = (CardView) convertView.findViewById(R.id.cvMatch);
 
         CircleImageView civOpponentDp = (CircleImageView) convertView.findViewById(R.id.civ_opponent);
         CircleImageView civOutcome = (CircleImageView) convertView.findViewById(R.id.civ_outcome);
@@ -78,42 +77,45 @@ public class PrevMatchesAdapter extends ArrayAdapter<String> {
                 civOutcome.setImageResource(R.mipmap.tuzhan_dnf);
                 break;
             default:
-//                cvMatch.setBackground(getContext().getResources().getDrawable(R.drawable.challenge_list_background));
                 civOutcome.setBorderColor(getContext().getResources().getColor(R.color.colorAccentYellow));
                 civOutcome.setImageResource(R.mipmap.tuzhan_vs);
                 break;
         }
 
+        // set an onClick listener for the list item.
+
         convertView.setOnClickListener(v -> {
-            if(!isNewMacth) {
-                Intent intent = new Intent(getContext(), GameFinishedActivity.class);
-                intent.putExtra("matchId", matchDetails.match_id);
-                intent.putExtra("isMatchFinished", true);
-                intent.putExtra("opp_dpURL", opponent.dpURL);
-                getContext().startActivity(intent);
-            }else{
-                //retrieve user info
-                FirebaseUser curuser = FirebaseAuth.getInstance().getCurrentUser();
-                User user = DataSource.shared.userWithParameters(curuser.getUid(), curuser.getPhotoUrl().toString(), curuser.getDisplayName(), curuser.getEmail());
+            if (!isNewMatch) {
+                // if the current list item is listing out a PREVIOUS MATCH
+                Intent i = new Intent(getContext(), GameFinishedActivity.class);
+                i.putExtra(Constants.C_MATCH_ID, matchDetails.match_id);
+                i.putExtra("isMatchFinished", true);
+                i.putExtra(Constants.C_OPPONENT_DPURL, opponent.dpURL);
+                getContext().startActivity(i);
+            } else {
+                // if the current list item is listing out a CHALLENGE
 
-                Intent intent = new Intent(getContext(), CountdownActivity.class);
-                intent.putExtra("opp", opponent);
-                intent.putExtra("theme", topic);
-                intent.putExtra("user", user);
+                //retrieve self info
+                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                User self = DataSource.shared.userWithParameters(currentUser.getUid(), currentUser.getPhotoUrl().toString(), currentUser.getDisplayName(), currentUser.getEmail());
 
-                //retrieve cardIds
-                FirebaseDatabase.getInstance().getReference().child("Matches").child(matchDetails.match_id).addListenerForSingleValueEvent(new ValueEventListener() {
+                Intent i = new Intent(getContext(), CountdownActivity.class);
+                i.putExtra(Constants.C_USER_OPPONENT, opponent);
+                i.putExtra(Constants.C_THEME, topic);
+                i.putExtra(Constants.C_USER_SELF, self);
+                i.putExtra(Constants.C_MATCH_ID, matchDetails.match_id);
+
+                //retrieve card ids of the current match under /Matches/matchID/cardIds
+                FirebaseDatabase.getInstance().getReference().child(Constants.F_MATCHES).child(matchDetails.match_id).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        String cardIds = dataSnapshot.child("cardIds").getValue()+"";
-                        intent.putExtra("cardIds", cardIds);
-                        getContext().startActivity(intent);
+                        String cardIds = dataSnapshot.child(Constants.F_MATCHES_CARDIDS).getValue()+"";
+                        i.putExtra(Constants.C_CARD_IDS_STRING, cardIds);
+                        getContext().startActivity(i);
                     }
 
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
+                    public void onCancelled(DatabaseError databaseError) {}
                 });
 
             }

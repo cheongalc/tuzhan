@@ -17,7 +17,7 @@ import java.util.List;
  * Created by Dhaulagiri on 2/12/2017.
  */
 
-public class QuestionCard extends DatabaseModel implements Parcelable {
+public class QuestionCard extends DatabaseModel implements Parcelable{
 
     Integer id;
     String theme;

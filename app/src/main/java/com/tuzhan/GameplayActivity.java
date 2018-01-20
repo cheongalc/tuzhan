@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -35,7 +36,7 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
     private List<String> cardIDs;
     private String matchID;
 
-    private static final int NUM_IMAGES = 4;
+    private static final int NUM_IMAGES = 10;
     private static final int DELAY = 12000;
     private static final int TOOLTIP_SHOW_ANS_ID = 123;
     private int playerScore = 0, currImageIndex = 0; // currImage represents the current position in ViewPager
@@ -54,17 +55,17 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
         Intent pastIntent = getIntent();
 
         // Set toolbar title to nothing so that the theme prevails
-        LinearLayout toolbar = (LinearLayout) findViewById(R.id.tb_toolbarGameplay);
+        // LinearLayout toolbar = (LinearLayout) findViewById(R.id.tb_toolbarGameplay);
 
         // Save instance of the root layout to use for modification during submitting words
         rootLayout = (RelativeLayout) findViewById(R.id.rl_gameplayUI);
 
-        // Setup the QuestionCards
-        currQuestionCards = pastIntent.getParcelableArrayListExtra("question_cards");
-
         // Setup the intent extras
-        cardIDs = Utils.split(pastIntent.getStringExtra("card_IDs_string"));
-        matchID = pastIntent.getStringExtra("matchID");
+        String delete = pastIntent.getStringExtra("meme");
+
+        cardIDs = Utils.split(pastIntent.getStringExtra(Constants.C_CARD_IDS_STRING));
+        matchID = pastIntent.getStringExtra(Constants.C_MATCH_ID);
+        currQuestionCards =  pastIntent.getParcelableArrayListExtra(Constants.C_QUESTION_CARD_LIST);
 
         // Setup the viewpager and its fragment manager
         viewPager = (NonSwipeableViewPager) findViewById(R.id.vp_imagePager);
@@ -134,7 +135,7 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
                 currImageIndex++;
 
                 if (currImageIndex < NUM_IMAGES) {
-                    handler.postDelayed(this, DELAY); // 15 seconds delay is to make sure that user can see the full countdown
+                    handler.postDelayed(this, DELAY); // 15 seconds delay is to make sure that self can see the full countdown
                 }
             }
         };

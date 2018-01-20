@@ -22,7 +22,7 @@ public class MatchRecord extends DatabaseModel {
     List<Integer> scoresSelf, scoresOpp;
     String oppEmail, winnerEmail;
 
-    // initialize a match record with partial data immediately when this user completes the match
+    // initialize a match record with partial data immediately when this self completes the match
     public MatchRecord(String id, String topic, List<Integer> cardIds, String oppEmail, Integer scoreSelf, Double timeSelf, List<String> entriesSelf, List<Integer> scoresSelf){
         this.id = id;
         this.topic = topic;
