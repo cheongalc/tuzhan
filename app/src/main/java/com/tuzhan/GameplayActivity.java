@@ -30,12 +30,12 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
     private RelativeLayout rootLayout;
     private List<RelativeLayout> currImageRelativeLayouts = new ArrayList<>(); // Because ViewPager generates 1 page more than the current one, keep array to prevent overriding
 
-    private List<QuestionCard> currQuestionCards; // represents the list of Question Card, passed over from CountdownActivity
+    private ArrayList<QuestionCard> currQuestionCards; // represents the list of Question Card, passed over from CountdownActivity
     private QuestionCard currQuestionCard; // represents current Question Card
     private List<String> cardIDs;
     private String matchID;
 
-    private static final int NUM_IMAGES = 4;
+    private static final int NUM_IMAGES = 10;
     private static final int DELAY = 12000;
     private static final int TOOLTIP_SHOW_ANS_ID = 123;
     private int playerScore = 0, currImageIndex = 0; // currImage represents the current position in ViewPager
@@ -52,23 +52,22 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
         setContentView(R.layout.activity_gameplay_ui);
 
         Intent pastIntent = getIntent();
-        Bundle pastExtras = pastIntent.getExtras();
+
+
 
         // Set toolbar title to nothing so that the theme prevails
-//        LinearLayout toolbar = (LinearLayout) findViewById(R.id.tb_toolbarGameplay);
+        // LinearLayout toolbar = (LinearLayout) findViewById(R.id.tb_toolbarGameplay);
 
         // Save instance of the root layout to use for modification during submitting words
         rootLayout = (RelativeLayout) findViewById(R.id.rl_gameplayUI);
 
-        // Setup the QuestionCards
-        Parcelable objects = (Parcelable) pastExtras.get("question_cards");
 
-        currQuestionCards = Utils.QuestionCardTemp;
-        
         // Setup the intent extras
-        cardIDs = Utils.split(pastExtras.getString("card_IDs_string"));
-        matchID = pastExtras.getString("matchID");
+        String delete = pastIntent.getStringExtra("meme");
 
+        cardIDs = Utils.split(pastIntent.getStringExtra(Constants.C_CARD_IDS_STRING));
+        matchID = pastIntent.getStringExtra(Constants.C_MATCH_ID);
+        currQuestionCards = (ArrayList<QuestionCard>) pastIntent.getSerializableExtra(Constants.C_QUESTION_CARD_LIST);
 
         // Setup the viewpager and its fragment manager
         viewPager = (NonSwipeableViewPager) findViewById(R.id.vp_imagePager);
@@ -138,7 +137,7 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
                 currImageIndex++;
 
                 if (currImageIndex < NUM_IMAGES) {
-                    handler.postDelayed(this, DELAY); // 15 seconds delay is to make sure that user can see the full countdown
+                    handler.postDelayed(this, DELAY); // 15 seconds delay is to make sure that self can see the full countdown
                 }
             }
         };

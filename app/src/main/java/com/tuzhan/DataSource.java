@@ -174,7 +174,7 @@ public class DataSource extends Application {
         return users;
     }
 
-    // retrieves user by email from local array, returns null if user with the specified email is not found
+    // retrieves self by email from local array, returns null if self with the specified email is not found
     public User userForEmail(String userEmail){
         for(User user: encounteredUsers){
             if(user.email.equals(userEmail)) return user;
@@ -183,16 +183,16 @@ public class DataSource extends Application {
     }
 
 
-    // call this method instead of the 'arbitrary user' constructor of the User class
-    // checks if user object with same email already exists
+    // call this method instead of the 'arbitrary self' constructor of the User class
+    // checks if self object with same email already exists
     // if not, create new User object with given parameters and store it in local array & database
-    // if yes, returns the found user object
+    // if yes, returns the found self object
     public User userWithParameters(String userId, String dpURL, String dpName, String email){
 
         User user = userForEmail(email);
         if(user != null) return user;
 
-        // create user & add it to local array and database
+        // create self & add it to local array and database
         user = new User(dpName, email, userId, dpURL);
         encounteredUsers.add(user);
         user.updateDB(database);

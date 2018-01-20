@@ -46,7 +46,7 @@ public class UserInfo extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         root = database.getReference();
 
-        //retrieve user info
+        //retrieve self info
         mAuth = FirebaseAuth.getInstance();
         currUser = mAuth.getCurrentUser();
 
@@ -60,7 +60,7 @@ public class UserInfo extends AppCompatActivity {
         tv_userDisplayName.setText(currUser.getDisplayName());
         tv_userEmail.setText(currUser.getEmail());
 
-        //set user win rate and rounds played
+        //set self win rate and rounds played
         if(MainActivity.isConnectedInternet(this)) {
             setWR();
         }else{
@@ -87,7 +87,7 @@ public class UserInfo extends AppCompatActivity {
         user_info.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                //make sure that there rounds_won is present under user info
+                //make sure that there rounds_won is present under self info
                 if(dataSnapshot.hasChild("rounds_won")) {
                     int rounds_won = (int) dataSnapshot.child("rounds_won").getValue();
                     int rounds_played = (int) dataSnapshot.child("rounds_played").getValue();

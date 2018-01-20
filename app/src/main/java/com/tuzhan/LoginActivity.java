@@ -63,16 +63,16 @@ public class LoginActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         root = database.getReference();
 
-        //move to user directory
+        //move to self directory
         userDirectory = root.child("Users");
 
         //check if this activity is created for the first time
         Intent intent = getIntent();
         boolean isFirstStart = intent.getBooleanExtra("isFirstStart", true);
 
-        //check if user has already logged in
+        //check if self has already logged in
         if (isFirstStart && mAuth.getCurrentUser() != null) {
-            //user has already connected to the app from previous sessions, move to mainactivity
+            //self has already connected to the app from previous sessions, move to mainactivity
             updateUserInfo();
             Intent intent_main = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent_main);
@@ -106,8 +106,8 @@ public class LoginActivity extends AppCompatActivity {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
-                //google sign in failed, toast to the user
-                //status code 12501 is returned when user cancels the login
+                //google sign in failed, toast to the self
+                //status code 12501 is returned when self cancels the login
                 if (e.getStatusCode() != 12501) {
                     Toast.makeText(this, "登陆失败" + e.getStatusCode(), Toast.LENGTH_SHORT).show();
                 }
@@ -123,12 +123,12 @@ public class LoginActivity extends AppCompatActivity {
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-                        //sign in success, retrieved user credentials
+                        //sign in success, retrieved self credentials
                         Log.d(DEBUG_TAG, "signInWithCredential:success");
                         FirebaseUser user = mAuth.getCurrentUser();
 
                         DatabaseReference currUserDir = userDirectory.child(user.getEmail().replace('.',','));
-                        //upload user data to firebase
+                        //upload self data to firebase
                         //convert uri to string as uri is not supported by firebase
                         User currUser = DataSource.shared.userWithParameters(user.getUid(), user.getPhotoUrl().toString(), user.getDisplayName(), user.getEmail());
                         //replace '.' in email address with ',' as firebase paths must not contain '.'
@@ -144,7 +144,7 @@ public class LoginActivity extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                     } else {
-                        // sign in fails, toast to the user
+                        // sign in fails, toast to the self
                         Log.w(DEBUG_TAG, "signInWithCredential:failure", task.getException());
                         Toast.makeText(LoginActivity.this, "登陆失败", Toast.LENGTH_SHORT).show();
                         rl_progressOverlay.setVisibility(View.GONE);
@@ -152,7 +152,7 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    //update logged in user info
+    //update logged in self info
     private void updateUserInfo(){
 
         root.child("players").child(mAuth.getCurrentUser().getEmail().replace('.',',')).addListenerForSingleValueEvent(new ValueEventListener() {

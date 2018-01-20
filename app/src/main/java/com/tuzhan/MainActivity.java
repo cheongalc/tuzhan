@@ -81,13 +81,13 @@ public class MainActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         root = database.getReference();
 
-        //retrieve user info
+        //retrieve self info
         mAuth = FirebaseAuth.getInstance();
         currUser = mAuth.getCurrentUser();
 
         DatabaseReference user_ref = root.child("UsersStates").child(currUser.getEmail().replace('.', ','));
 
-        //required for signing out the user
+        //required for signing out the self
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
         OverScrollDecoratorHelper.setUpOverScroll(scrollView);
 
 
-        //check for user network status and update accordingly
+        //check for self network status and update accordingly
         DatabaseReference ConnectionRef = root.child(".info/connected");
         ConnectionRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -135,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
 
         user_ref.onDisconnect().setValue(false);
 
@@ -182,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
         getPrevMatches();
     }
 
-    //listener to check individual match id under match object of user
+    //listener to check individual match id under match object of self
     private void getPrevMatches() {
         DatabaseReference user_matches_ref = root.child("Users").child(currUser.getEmail().replace('.', ',')).child("matches");
 
@@ -273,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
 
                     } else {
                         if (!child.child("state").getValue().toString().equals("dns")) {
-                            //set user info
+                            //set self info
                             user_score = Integer.parseInt(child.child("score").getValue() + "");
                             user_time = (double) child.child("time").getValue();
                             user_entries = Utils.split(child.child("entries").getValue() + "");
@@ -286,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
                 //figure out match outcome
                 if (opp_score >= 0 && !outcome.equals("dns")) {
                     //match finished
-                    //set match outcome, "0" means user lost, "1" means user won and "2" means draw
+                    //set match outcome, "0" means self lost, "1" means self won and "2" means draw
                     if (user_score > opp_score) outcome = "1";
                     else if (user_score < opp_score) outcome = "0";
                     else outcome = "2";
@@ -369,12 +370,11 @@ public class MainActivity extends AppCompatActivity {
         if (matchDetailsList.size() == 0) container.setVisibility(View.GONE);
         else container.setVisibility(View.VISIBLE);
 
-        //all info retrieved, set listview
         if (lv.getAdapter() == null) {
-            PrevMatchesAdapter prevMatchesAdapter = new PrevMatchesAdapter(MainActivity.this, matchIds, matchDetailsList, isNewMatch);
-            lv.setAdapter(prevMatchesAdapter);
+            MatchDetailsAdapter matchDetailsAdapter = new MatchDetailsAdapter(MainActivity.this, matchIds, matchDetailsList, isNewMatch);
+            lv.setAdapter(matchDetailsAdapter);
         } else {
-            ((PrevMatchesAdapter) lv.getAdapter()).notifyDataSetChanged();
+            ((MatchDetailsAdapter) lv.getAdapter()).notifyDataSetChanged();
         }
         setListViewHeightBasedOnChildren(lv);
         list_view_load.setVisibility(View.GONE);
@@ -405,7 +405,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void signOut() {
-        //change user status
+        //change self status
         root.child("Users").child(currUser.getEmail().replace('.', ',')).child("isOnline").setValue(false);
         //sign out of firebase
         mAuth.signOut();

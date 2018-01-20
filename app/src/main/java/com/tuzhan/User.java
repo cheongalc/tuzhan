@@ -23,7 +23,7 @@ public class User extends DatabaseModel implements Serializable {
         //required empty constructor
     }
 
-    //constructor for any arbitrary user
+    //constructor for any arbitrary self
     public User(String displayname, String email, String userId, String dpURL){
 
         this.tableName = "USERS";
@@ -34,7 +34,7 @@ public class User extends DatabaseModel implements Serializable {
 
     }
 
-    //special constructor for current user
+    //special constructor for current self
     public User(String displayname, String email, String userId, String dpURL, int won_rounds, int played_rounds){
 
         this.tableName = "USERS";
@@ -47,7 +47,7 @@ public class User extends DatabaseModel implements Serializable {
 
     }
 
-    // initialize arbitrary user object from database cursor
+    // initialize arbitrary self object from database cursor
     public User(Cursor cursor){
         this.userId = cursor.getString(0);
         this.dpURL = cursor.getString(1);

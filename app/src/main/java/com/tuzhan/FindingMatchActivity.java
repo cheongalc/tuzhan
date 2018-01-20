@@ -37,6 +37,7 @@ public class FindingMatchActivity extends AppCompatActivity {
         findMatch(currUser.getEmail(), Volley.newRequestQueue(this));
     }
 
+    // finding match by sending a POST request to zairui's herokuapp node server.
     public void findMatch(String email, RequestQueue find_match_queue){
         String url = "https://shielded-anchorage-95513.herokuapp.com/?email=";
         url += email;
@@ -49,17 +50,18 @@ public class FindingMatchActivity extends AppCompatActivity {
         find_match_queue.add(matchRequest);
     }
 
+
     public void getCardIds(String matchId){
-        root.child("Matches").child(matchId).addListenerForSingleValueEvent(new ValueEventListener() {
+        root.child(Constants.F_MATCHES).child(matchId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String cardsIds = dataSnapshot.child("cardIds").getValue()+"";
-                String theme = dataSnapshot.child("theme").getValue()+"";
+                String cardsIds = dataSnapshot.child(Constants.F_MATCHES_CARDIDS).getValue()+"";
+                String theme = dataSnapshot.child(Constants.F_MATCHES_THEME).getValue()+"";
 
                 //get opponent data
                 String opp_email = "";
 
-                for(DataSnapshot player : dataSnapshot.child("players").getChildren()){
+                for(DataSnapshot player : dataSnapshot.child(Constants.F_MATCHES_PLAYERS).getChildren()){
                     if(!player.getKey().equals(currUser.getEmail().replace('.', ','))){
                         opp_email = player.getKey()+"";
                     }
@@ -69,24 +71,21 @@ public class FindingMatchActivity extends AppCompatActivity {
                 final String cardIds_fin = cardsIds;
                 final String theme_fin = theme;
 
-                root.child("Users").child(opp_email).addListenerForSingleValueEvent(new ValueEventListener() {
+                root.child(Constants.F_USERS).child(opp_email).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        String displayername = dataSnapshot.child("displayname").getValue()+"";
-                        String dpURL = dataSnapshot.child("dpURL").getValue()+"";
-                        String userId = dataSnapshot.child("userId").getValue()+"";
 
-                        //make opp user object
+                        //make opponent self object
                         User opp = DataSource.shared.userWithParameters(currUser.getUid(), currUser.getPhotoUrl().toString(), currUser.getDisplayName(), currUser.getEmail());
-                        //make curruser user object
+                        //make curruser self object
                         User user = DataSource.shared.userWithParameters(currUser.getUid(), currUser.getPhotoUrl().toString(), currUser.getDisplayName(), currUser.getEmail());
 
                         Intent i = new Intent(FindingMatchActivity.this, CountdownActivity.class);
-                        i.putExtra("cardIds", cardIds_fin);
-                        i.putExtra("theme", theme_fin);
-                        i.putExtra("user", user);
-                        i.putExtra("opp", opp);
-                        i.putExtra("matchID", matchId);
+                        i.putExtra(Constants.C_CARD_IDS_STRING, cardIds_fin);
+                        i.putExtra(Constants.C_THEME, theme_fin);
+                        i.putExtra(Constants.C_USER_SELF, user);
+                        i.putExtra(Constants.C_USER_OPPONENT, opp);
+                        i.putExtra(Constants.C_MATCH_ID, matchId);
                         startActivity(i);
                     }
 

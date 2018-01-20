@@ -48,7 +48,6 @@ public class ImageFragment extends Fragment {
         super.onCreate(savedInstanceState);
         imageIndex = getArguments().getInt("imageIndex");
         questionCard = getArguments().getParcelable("questionCard");
-
     }
 
     @Nullable
@@ -86,7 +85,6 @@ public class ImageFragment extends Fragment {
     }
 
     public static ImageFragment newInstance(int imageIndex, QuestionCard questionCard) {
-
         Bundle args = new Bundle();
         args.putInt("imageIndex", imageIndex + 1);
         args.putParcelable("questionCard", questionCard);
