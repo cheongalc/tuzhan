@@ -46,13 +46,13 @@ function randomInt(upperBound){
   return Math.floor(Math.random() * upperBound);
 }
 
-function randomElement(array){
-  return array[randomInt(array.length)];
+function randomElement(arr){
+  return arr[randomInt(arr.length)];
 }
 
 const cardsPerMatch = 2;
 // randomly sample a theme and 10 cards from that theme
-function sampleMatchParams(email1, email2){
+function sampleMatchParams(){
   let themeIndex = randomInt(data.themes.length);
   var cards = {};
   let upperBound = data.cardCounts[themeIndex] - cardsPerMatch + 1;
@@ -73,16 +73,15 @@ function createMatch(email1, email2, res){
   let newMatchRef = rootRef.child("Matches").push();
   let matchID = newMatchRef.key;
 
-  var matchParams = sampleMatchParams(email1, email2);
+  var matchParams = sampleMatchParams();
   matchParams["players"][email1] = defaultState;
   matchParams["players"][email2] = defaultState;
 
   newMatchRef.set(matchParams, error=>{
 
     var updateParams = {};
-    [email1, email2].forEach(email=>{
-      updateParams[email + "/matches/" + matchID] = true;
-    });
+    updateParams[email1 + "/matches/" + matchID] = true;
+    updateParams[email2 + "/matches/" + matchID] = true;
     usersRef.update(updateParams, error2=>{
       res.end(matchID);
     });
@@ -104,12 +103,12 @@ function findMatch(email, res){
 
   if(onlineUsers.length > 0){
     let otherEmail = randomElement(onlineUsers);
-    onlineUsers.push(thisUserIndex);
+    onlineUsers.push(email);
     createMatch(email, otherEmail, res);
   }
   else if(offlineUsers.length > 0){
     let otherEmail = randomElement(offlineUsers);
-    onlineUsers.push(thisUserIndex);
+    onlineUsers.push(email);
     createMatch(email, otherEmail, res);
   }
   else{
@@ -130,7 +129,7 @@ http.createServer((req, res)=>{
     findMatch(query.email.replace(/\./g, ","), res);
   }
 
-}).listen(process.env.PORT || 8000);
+}).listen(process.env.PORT || 8080);
 
 // ping itself every 10 mins to prevent sleep
 setInterval(function() {
