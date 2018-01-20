@@ -16,7 +16,7 @@
 
 
     <LinearLayout
-        android:id="@+id/tb_toolbarGameplay"
+        android:id="@+id/ll_toolbarGameplay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
@@ -99,7 +99,7 @@
         android:id="@+id/sv_gameplayUI"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/tb_toolbarGameplay">
+        android:layout_below="@+id/ll_toolbarGameplay">
 
         <RelativeLayout
             android:id="@+id/rl_gameplayWrapper"

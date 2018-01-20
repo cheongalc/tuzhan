@@ -2,8 +2,9 @@ package com.tuzhan;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Parcelable;
 
-public abstract class DatabaseModel implements DatabaseInterface {
+public abstract class DatabaseModel implements DatabaseInterface  {
 
     String tableName;
 

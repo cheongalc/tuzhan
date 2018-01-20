@@ -45,6 +45,7 @@ import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String LOG_TAG = "MAINACTIVITY";
     FirebaseUser currUser;
     FirebaseAuth mAuth;
     GoogleSignInClient mGoogleSignInClient;
@@ -100,8 +101,8 @@ public class MainActivity extends AppCompatActivity {
         rl_userInfoBtnContainer = (RelativeLayout) findViewById(R.id.rl_userInfoBtnContainer);
         lv_prevMatches = (ListView) findViewById(R.id.lv_prev_matches);
         lv_newMatches = (ListView) findViewById(R.id.lv_new_matches);
-        prev_matches = (LinearLayout) findViewById(R.id.linear_new_matches);
-        new_matches = (LinearLayout) findViewById(R.id.linear_prev_matches);
+        new_matches = (LinearLayout) findViewById(R.id.linear_new_matches);
+        prev_matches = (LinearLayout) findViewById(R.id.linear_prev_matches);
         prev_matches_title = (RelativeLayout) findViewById(R.id.tuzhan_matches_title);
         new_challenges_title = (RelativeLayout) findViewById(R.id.tuzhan_challenge_title);
         list_view_load = (AVLoadingIndicatorView) findViewById(R.id.list_view_load_indicator);
@@ -296,12 +297,15 @@ public class MainActivity extends AppCompatActivity {
 
                     //match is complete, stop listening for updates
                     match_details_ref.removeEventListener(this);
-
+                    DataSource.shared.matches.add(matchRecord);
                 } else if (!outcome.equals("dns")) {
                     //match did not finish, create new unfinished MatchRecord object to update local database
                     MatchRecord matchRecord = new MatchRecord(match_id, topic, cardIds, opponent_email, user_score, user_time, user_entries, user_scores);
                     matchRecord.updateDB(DataSource.shared.database);
+                    DataSource.shared.matches.add(matchRecord);
                 }//else match did not start
+
+
 
                 //final versions of oppemail and match outcome to pass to second listener
                 final String fin_opponent_email = opponent_email;
@@ -311,6 +315,7 @@ public class MainActivity extends AppCompatActivity {
                 root.child("Users").child(fin_opponent_email.replace('.', ',')).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+
                         String display_name = dataSnapshot.child("displayname").getValue() + "";
                         String dpURL = dataSnapshot.child("dpURL").getValue() + "";
                         String userId = dataSnapshot.child("userId").getValue() + "";

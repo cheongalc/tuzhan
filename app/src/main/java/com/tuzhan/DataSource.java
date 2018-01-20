@@ -46,6 +46,8 @@ public class DataSource extends Application {
     public List<MatchRecord> matches;
     public List<User> encounteredUsers;
 
+    public static final String LOG_TAG = "DATASOURCE";
+
     // init function to be called at the start of MainActivity
     static void init(Context context){
         shared = new DataSource(context);
@@ -55,6 +57,7 @@ public class DataSource extends Application {
         }
         shared.matches = shared.fetchAllMatches();
         shared.encounteredUsers = shared.fetchAllEncounteredUsers();
+        Log.d(LOG_TAG, String.valueOf(shared.matches.size()));
     }
 
     public DataSource(Context context){

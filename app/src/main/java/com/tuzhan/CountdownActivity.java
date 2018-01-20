@@ -2,6 +2,7 @@ package com.tuzhan;
 
 import android.content.Intent;
 import android.os.CountDownTimer;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -65,7 +66,7 @@ public class CountdownActivity extends AppCompatActivity {
 
             public void onFinish() {
                 Intent intent = new Intent(CountdownActivity.this, GameplayActivity.class);
-                intent.putParcelableArrayListExtra("question_cards", questionCardList);
+                Utils.QuestionCardTemp = questionCardList;
                 intent.putExtra("card_IDs_string", cardIdsString);
                 intent.putExtra("matchID", matchID);
                 intent.putExtra("opp_dpURL", opp.dpURL);

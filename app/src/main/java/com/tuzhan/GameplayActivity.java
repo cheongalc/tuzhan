@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -54,14 +55,16 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
         Bundle pastExtras = pastIntent.getExtras();
 
         // Set toolbar title to nothing so that the theme prevails
-        LinearLayout toolbar = (LinearLayout) findViewById(R.id.tb_toolbarGameplay);
+//        LinearLayout toolbar = (LinearLayout) findViewById(R.id.tb_toolbarGameplay);
 
         // Save instance of the root layout to use for modification during submitting words
         rootLayout = (RelativeLayout) findViewById(R.id.rl_gameplayUI);
 
         // Setup the QuestionCards
-        currQuestionCards = (List<QuestionCard>) pastExtras.get("question_cards");
+        Parcelable objects = (Parcelable) pastExtras.get("question_cards");
 
+        currQuestionCards = Utils.QuestionCardTemp;
+        
         // Setup the intent extras
         cardIDs = Utils.split(pastExtras.getString("card_IDs_string"));
         matchID = pastExtras.getString("matchID");
