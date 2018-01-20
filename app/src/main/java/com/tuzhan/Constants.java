@@ -20,16 +20,16 @@ public class Constants {
 
     public static final String F_CARDS = "Cards";
     public static final String F_MATCHES = "Matches";
-        public static final String F_MATCHES_CARDIDS = "cardIds";
-        public static final String F_MATCHES_PLAYERS = "players";
-        public static final String F_MATCHES_PLAYERS_STATE = "state";
-        public static final String F_MATCHES_THEME = "theme";
+    public static final String F_MATCHES_CARDIDS = "cardIds";
+    public static final String F_MATCHES_PLAYERS = "players";
+    public static final String F_MATCHES_PLAYERS_STATE = "state";
+    public static final String F_MATCHES_THEME = "theme";
     public static final String F_USERS = "Users";
-        public static final String F_USERS_DISPLAYNAME = "displayname";
-        public static final String F_USERS_DPURL = "dpURL";
-        public static final String F_USERS_EMAIL = "email";
-        public static final String F_USERS_MATCHES = "matches";
-        public static final String F_USERS_USERID = "userId";
+    public static final String F_USERS_DISPLAYNAME = "displayname";
+    public static final String F_USERS_DPURL = "dpURL";
+    public static final String F_USERS_EMAIL = "email";
+    public static final String F_USERS_MATCHES = "matches";
+    public static final String F_USERS_USERID = "userId";
     public static final String F_USERSSTATES = "UsersStates";
 
     // Constants for SQLiteDatabase fields
