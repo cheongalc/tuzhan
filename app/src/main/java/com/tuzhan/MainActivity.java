@@ -231,16 +231,16 @@ public class MainActivity extends AppCompatActivity {
     private void getMatchesDetails(final String match_id) {
 
         //move to actual match object under Matches
-        DatabaseReference match_details_ref = root.child("Matches").child(match_id);
+        DatabaseReference match_details_ref = root.child(Constants.F_MATCHES).child(match_id);
 
         match_details_ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                final String topic = dataSnapshot.child("theme").getValue() + "";
+                final String topic = dataSnapshot.child(Constants.F_MATCHES_THEME).getValue() + "";
 
                 //get list of cards used in match
-                List<Integer> cardIds = Utils.splitToInts(dataSnapshot.child("cardIds").getValue() + "");
+                List<Integer> cardIds = Utils.splitToInts(dataSnapshot.child(Constants.F_MATCHES_CARDIDS).getValue() + "");
 
                 String opponent_email = "";
 
@@ -260,11 +260,11 @@ public class MainActivity extends AppCompatActivity {
                 String outcome = "dnf";
 
                 //get scores, time and entries for respective players and retrieve opponent email
-                for (DataSnapshot child : dataSnapshot.child("players").getChildren()) {
+                for (DataSnapshot child : dataSnapshot.child(Constants.F_MATCHES_PLAYERS).getChildren()) {
                     if (!child.getKey().equals(currUser.getEmail().replace('.', ','))) {
                         //set opponent info
                         opponent_email = child.getKey();
-                        if (child.child("state").getValue().toString().equals("fin")) {
+                        if (child.child(Constants.F_MATCHES_PLAYERS_STATE).getValue().toString().equals("fin")) {
                             opp_score = Integer.parseInt(child.child("score").getValue() + "");
                             opp_time = (double) child.child("time").getValue();
                             opp_entries = Utils.split(child.child("entries").getValue() + "");

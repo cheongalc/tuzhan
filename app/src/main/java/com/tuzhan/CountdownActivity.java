@@ -16,13 +16,15 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CountdownActivity extends AppCompatActivity {
 
+    private static final String LOG_TAG = "COUNTDOWNACTIVITY";
+
     CircleImageView civ_selfDP, civ_opponentDP;
     CircleImageView civ_centerCountDown;
 
     TextView tv_selfName, tv_opponentName;
     String cardIDsString, theme, matchID;
 
-    ArrayList<QuestionCard> questionCardList = new ArrayList<>();
+    ArrayList<QuestionCard> questionCardArrayList = new ArrayList<>();
 
     User self, opponent;
 
@@ -60,11 +62,9 @@ public class CountdownActivity extends AppCompatActivity {
         Picasso.with(this).load(opponent.dpURL).into(civ_opponentDP);
 
         Intent i = new Intent(CountdownActivity.this, GameplayActivity.class);
-        i.putParcelableArrayListExtra(Constants.C_QUESTION_CARD_LIST, questionCardList);
-        i.putExtra(Constants.C_CARD_IDS_STRING, cardIDsString);
-        i.putExtra(Constants.C_MATCH_ID, matchID);
-        i.putExtra(Constants.C_OPPONENT_DPURL, opponent.dpURL);
-        i.putExtra("meme", "Test");
+
+
+
 
         // init the countdown timer
         countDownTimer = new CountDownTimer(4000, 1000) {
@@ -75,6 +75,10 @@ public class CountdownActivity extends AppCompatActivity {
             }
 
             public void onFinish() {
+                i.putExtra(Constants.C_CARD_IDS_STRING, cardIDsString);
+                i.putExtra(Constants.C_MATCH_ID, matchID);
+                i.putExtra(Constants.C_OPPONENT_DPURL, opponent.dpURL);
+                Constants.Miscellaneous.questionCardArrayList = questionCardArrayList;
                 startActivity(i);
             }
         };
@@ -83,12 +87,12 @@ public class CountdownActivity extends AppCompatActivity {
     }
 
     private void retrieveMaterials() {
-        //populate questionCardList...
+        //populate questionCardArrayList...
         List<Integer> cardIDsList = Utils.splitToInts(cardIDsString);
 
         DataSource.shared.fetchCards(theme, cardIDsList, qCardList -> {
             if(qCardList != null) {
-                questionCardList.addAll(qCardList);
+                questionCardArrayList.addAll(qCardList);
             }
         });
         beginCountDown();

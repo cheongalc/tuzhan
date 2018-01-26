@@ -3,6 +3,7 @@ package com.tuzhan;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.Log;
 
 import java.util.List;
 
@@ -13,7 +14,9 @@ import java.util.List;
 
 public class GamePagerAdapter extends FragmentStatePagerAdapter {
 
-    int numberOfPages;
+    private int numberOfPages;
+
+    private static final String LOG_TAG = "GAMEPAGERADAPTER";
 
     List<QuestionCard> questionCardList;
 

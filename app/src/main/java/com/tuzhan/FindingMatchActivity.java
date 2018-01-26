@@ -1,8 +1,10 @@
 package com.tuzhan;
 
 import android.content.Intent;
+import android.graphics.LinearGradient;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -19,6 +21,8 @@ import com.google.firebase.database.ValueEventListener;
 
 
 public class FindingMatchActivity extends AppCompatActivity {
+
+    public static final String LOG_TAG = "FINDINGMATCHACTIVITY";
 
     FirebaseUser currUser;
 
@@ -39,6 +43,7 @@ public class FindingMatchActivity extends AppCompatActivity {
 
     // finding match by sending a POST request to zairui's herokuapp node server.
     public void findMatch(String email, RequestQueue find_match_queue){
+
         String url = "https://shielded-anchorage-95513.herokuapp.com/?email=";
         url += email;
 

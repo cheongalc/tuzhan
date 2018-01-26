@@ -16,6 +16,16 @@
 #   public *;
 #}
 
+-keepclassmembers class * implements android.os.Parcelable {
+    static ** CREATOR;
+    public static final android.os.Parcelable$Creator *;
+}
+
+-keepclassmembers class * implements android.os.Parcel {
+    static ** CREATOR;
+    public static final android.os.Parcel$Creator *;
+}
+
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
 #-keepattributes SourceFile,LineNumberTable

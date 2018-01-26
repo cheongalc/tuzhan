@@ -72,7 +72,6 @@ public class ImageFragment extends Fragment {
         ImageView iv_gameplayImage = (ImageView) rootLayout.findViewById(R.id.iv_gameplayImage);
         TextView tv_imageCredits = (TextView) rootLayout.findViewById(R.id.tv_imageCredits);
 
-
         Picasso.with(getContext()).load(imageURL+"").into(iv_gameplayImage);
         tv_imageCredits.setText(credit);
 

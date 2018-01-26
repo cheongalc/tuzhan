@@ -3,6 +3,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
 
@@ -17,7 +18,9 @@ import java.util.List;
  * Created by Dhaulagiri on 2/12/2017.
  */
 
-public class QuestionCard extends DatabaseModel implements Parcelable{
+public class QuestionCard extends DatabaseModel implements Parcelable {
+
+    private static final String LOG_TAG = "QUESTIONCARD";
 
     Integer id;
     String theme;
@@ -119,9 +122,11 @@ public class QuestionCard extends DatabaseModel implements Parcelable{
             dest.writeByte((byte) 1);
             dest.writeInt(id);
         }
+        String finalURL = imageURL + "";
         dest.writeString(theme);
         dest.writeStringList(answers);
         dest.writeStringList(harderAnswers);
         dest.writeString(credit);
+        dest.writeString(finalURL);
     }
 }

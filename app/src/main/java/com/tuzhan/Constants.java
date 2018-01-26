@@ -1,5 +1,7 @@
 package com.tuzhan;
 
+import java.util.ArrayList;
+
 /**
  * Created by Al Cheong on 20/01/2018.
  */
@@ -9,12 +11,14 @@ public class Constants {
     // Constants for intent keys
 
     public static final String C_QUESTION_CARD_LIST = "C_QUESTION_CARD_LIST";
+    public static final String C_CARD_IDS_LIST = "C_CARD_IDS_LIST";
     public static final String C_CARD_IDS_STRING = "C_CARD_IDS_STRING";
     public static final String C_MATCH_ID = "C_MATCH_ID";
     public static final String C_THEME = "C_THEME";
     public static final String C_OPPONENT_DPURL = "C_OPPONENT_DPURL";
     public static final String C_USER_SELF = "C_USER_SELF";
     public static final String C_USER_OPPONENT = "C_USER_OPPONENT";
+    public static final String C_PLAYER_ENTRIES_STRING = "C_PLAYER_ENTRIES_STRING";
 
     // Constants for firebase dictionary names
 
@@ -36,4 +40,7 @@ public class Constants {
 
 
     // Miscellaneous
+    public static class Miscellaneous {
+        public static ArrayList<QuestionCard> questionCardArrayList;
+    }
 }
