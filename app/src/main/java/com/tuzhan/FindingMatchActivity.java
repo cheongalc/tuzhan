@@ -80,10 +80,15 @@ public class FindingMatchActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
+                        Log.e(LOG_TAG, dataSnapshot.child(Constants.F_USERS_DISPLAYNAME).getValue().toString());
+
+
                         //make opponent self object
-                        User opp = DataSource.shared.userWithParameters(currUser.getUid(), currUser.getPhotoUrl().toString(), currUser.getDisplayName(), currUser.getEmail());
+                        User opp = DataSource.shared.userWithParameters(dataSnapshot.child(Constants.F_USERS_USERID).getValue().toString(), dataSnapshot.child(Constants.F_USERS_DPURL).getValue().toString(), dataSnapshot.child(Constants.F_USERS_DISPLAYNAME).getValue().toString(), dataSnapshot.child(Constants.F_USERS_EMAIL).getValue().toString());
                         //make curruser self object
                         User user = DataSource.shared.userWithParameters(currUser.getUid(), currUser.getPhotoUrl().toString(), currUser.getDisplayName(), currUser.getEmail());
+
+                        Log.e(LOG_TAG, opp.email);
 
                         Intent i = new Intent(FindingMatchActivity.this, CountdownActivity.class);
                         i.putExtra(Constants.C_CARD_IDS_STRING, cardIds_fin);
