@@ -119,14 +119,17 @@ function findMatch(email, res){
 http.createServer((req, res)=>{
 
   let query = url.parse(req.url, true).query;
-
-  if(!query || !query.email){
+  if((!query || !query.email) && !query.debug){
     res.writeHead(403, {"Content-Type" : "text/html"});
     res.end("<!doctype html><html><head><title>403</title></head><body>403: Missing user 'email' parameter in request!</body></html>");
   }
   else{
     res.writeHead(200, {"Content-Type" : "text/plain"});
-    findMatch(query.email.replace(/\./g, ","), res);
+    if(query.debug) res.end(JSON.stringify({
+      "online" : onlineUsers,
+      "offline": offlineUsers
+    }));
+    else findMatch(query.email.replace(/\./g, ","), res);
   }
 
 }).listen(process.env.PORT || 8080);
