@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -29,6 +28,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FragmentGameFinished extends android.support.v4.app.Fragment {
 
+    private static final String LOG_TAG = "FRAGMENTGAMEFINISHED";
+
     ListView lv_oppEntries, lv_userEntries;
     TextView tv_userScore, tv_oppScore;
     CircleImageView civ_user, civ_opp;
@@ -37,7 +38,7 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
     DatabaseReference rootRef;
     Boolean isOppInfoPresent = false;
 
-    String opp_dpURL;
+    String opponentDPURL;
 
     int userScore = -1, oppScore = -1;
     double userTime = 0.0, oppTime = 0.0;
@@ -72,10 +73,11 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
         lv_oppEntries = (ListView) rootview.findViewById(R.id.lv_opp_entries);
 
         Intent intent = getActivity().getIntent();
-        String matchId = intent.getStringExtra("matchId");
-        opp_dpURL = intent.getStringExtra("opp_dpURL");
+
+        String matchId = intent.getStringExtra(Constants.C_MATCH_ID);
+        opponentDPURL = intent.getStringExtra(Constants.C_OPPONENT_DPURL);
         //boolean value to determine whether the self is accessing this page immediately after match or from mainactivity list
-        Boolean isMatchFinished = intent.getBooleanExtra("isMatchFinished", false);
+        Boolean isMatchFinished = intent.getBooleanExtra(Constants.C_GAMEFINISHED_KEY, Constants.M.START_FROM_GAMEPLAY);
 
         //self is accessing match from MainActivity, retrieve cached match record
         if(matchId != null && isMatchFinished){
@@ -224,7 +226,7 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
         lv_userEntries.setAdapter(userEntriesAdapter);
 
         Picasso.with(getActivity()).load(curUser.getPhotoUrl()).into(civ_user);
-        Picasso.with(getActivity()).load(opp_dpURL).into(civ_opp);
+        Picasso.with(getActivity()).load(opponentDPURL).into(civ_opp);
 
 
         return rootview;

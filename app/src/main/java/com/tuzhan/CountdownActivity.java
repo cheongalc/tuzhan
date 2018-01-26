@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -77,8 +76,10 @@ public class CountdownActivity extends AppCompatActivity {
             public void onFinish() {
                 i.putExtra(Constants.C_CARD_IDS_STRING, cardIDsString);
                 i.putExtra(Constants.C_MATCH_ID, matchID);
+                i.putExtra(Constants.C_THEME, theme);
                 i.putExtra(Constants.C_OPPONENT_DPURL, opponent.dpURL);
-                Constants.Miscellaneous.questionCardArrayList = questionCardArrayList;
+                i.putExtra(Constants.C_USER_OPPONENT, opponent);
+                Constants.M.questionCardArrayList = questionCardArrayList;
                 startActivity(i);
             }
         };

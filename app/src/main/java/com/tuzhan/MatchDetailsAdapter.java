@@ -89,7 +89,7 @@ public class MatchDetailsAdapter extends ArrayAdapter<String> {
                 // if the current list item is listing out a PREVIOUS MATCH
                 Intent i = new Intent(getContext(), GameFinishedActivity.class);
                 i.putExtra(Constants.C_MATCH_ID, matchDetails.match_id);
-                i.putExtra("isMatchFinished", true);
+                i.putExtra(Constants.C_GAMEFINISHED_KEY, Constants.M.START_FROM_MAIN);
                 i.putExtra(Constants.C_OPPONENT_DPURL, opponent.dpURL);
                 getContext().startActivity(i);
             } else {

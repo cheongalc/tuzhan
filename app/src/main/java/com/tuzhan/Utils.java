@@ -33,7 +33,7 @@ public class Utils {
         return list;
     }
 
-    static List splitToInts(String formattedStr){
+    static List<Integer> splitToInts(String formattedStr){
         return map(split(formattedStr), Integer::valueOf);
     }
 

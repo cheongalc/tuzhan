@@ -23,24 +23,31 @@ import java.util.List;
 public class GameplayActivity extends AppCompatActivity implements GameFragmentInterface {
 
     private static final String LOG_TAG = "GAMEPLAYACTIVITY";
+
+    //ALL PRIVATE VARIABLES PERTAINING TO LAYOUT
     private NonSwipeableViewPager viewPager;
     private RelativeLayout rootLayout;
-    private List<RelativeLayout> currImageRelativeLayouts = new ArrayList<>(); // Because ViewPager generates 1 page more than the current one, keep array to prevent overriding
 
+    //ALL PRIVATE VARIABLES PERTAINING TO QUESTION CARDS
     private ArrayList<QuestionCard> questionCardArrayList = new ArrayList<>(); // represents the list of Question Card, passed over from CountdownActivity
     private QuestionCard currQuestionCard; // represents current Question Card
-    private List<String> cardIDs;
-    private String matchID;
-
     private static final int NUM_IMAGES = 2; // 2 for experimental purposes
     private static final int DELAY = 12000;
-    private int playerScore = 0, currImageIndex = 0; // currImage represents the current position in ViewPager
+    private int currImageIndex = 0;
     private List<String> formattedAnswers = new ArrayList<>(); // global list to store the answers
     private List<String> formattedHarderAnswers = new ArrayList<>(); // global list to store harder answers
     private List< Pair<String, Integer> > possibleMatches = new ArrayList<>();
 
-    private String playerEntries = "";
-    private String opponentDPUrl = "";
+
+    //ALL PRIVATE VARIABLES PERTAINING TO MATCH INFORMATION
+    private String matchID, theme;
+    private List<String> cardIDs; // stores a list of the IDs of the cards involved in the current match
+    private User opponent;
+    private double timeSelf;
+    private int scoreSelf = 0;
+    private List<Integer> scoresSelf = new ArrayList<>(); // stores a list of individual scores of each card
+    private List<String> entriesSelf = new ArrayList<>(); // stores a list of individual entries of each card
+    //TAKE NOTE FOR ENTRIES, IF THERE IS A "P" IN FRONT IT MEANS THAT IT IS PARTIALLY DONE
 
 
     @Override
@@ -54,10 +61,11 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
 
         // setup the intent extras
         Intent pastIntent = getIntent();
-        questionCardArrayList =  Constants.Miscellaneous.questionCardArrayList;
+        questionCardArrayList =  Constants.M.questionCardArrayList;
         cardIDs = Utils.split(pastIntent.getStringExtra(Constants.C_CARD_IDS_STRING));
         matchID = pastIntent.getStringExtra(Constants.C_MATCH_ID);
-        opponentDPUrl = pastIntent.getStringExtra(Constants.C_OPPONENT_DPURL);
+        theme = pastIntent.getStringExtra(Constants.C_THEME);
+        opponent = (User) pastIntent.getSerializableExtra(Constants.C_USER_OPPONENT);
 
 
         // Setup the viewpager and its fragment manager
@@ -72,7 +80,7 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
 
     @Override
     public void onImageFragmentCreated(RelativeLayout relativeLayout) {
-        currImageRelativeLayouts.add(relativeLayout);
+        // Might need to place a currentRelativeLayouts list, removed for now because its not of use.
     }
 
     public void startTimer() {
@@ -110,7 +118,7 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
 
         // Setup the player score text view
         TextView tv_playerScore = (TextView) findViewById(R.id.tv_playerScore);
-        tv_playerScore.setText(String.valueOf(playerScore));
+        tv_playerScore.setText(String.valueOf(scoreSelf));
 
         final Handler handler = new Handler();
 
@@ -155,15 +163,22 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
                     handler.postDelayed(this, DELAY);
                 } else {
                     //TODO pass everything needed to make a partial MatchRecord object,
-                    //TODO pass these, String matchId,  String topic, List<Integer> cardIds, String oppEmail, Integer scoreSelf, Double timeSelf, List<String> entriesSelf, List<Integer> scoresSelf, also pass opp_dpURL (parsed from count down activity)
-                    Intent i = new Intent(GameplayActivity.this, MainActivity.class);
+                    //TODO these remaining:  Double timeSelf
+                    Intent i = new Intent(GameplayActivity.this, GameFinishedActivity.class);
+
+                    i.putExtra(Constants.C_MATCH_ID, matchID);
+                    i.putExtra(Constants.C_THEME, theme);
+                    i.putExtra(Constants.C_CARD_IDS_LIST, (Serializable) Utils.splitToInts(Utils.concatenate(cardIDs)));
+                    i.putExtra(Constants.C_OPPONENT_EMAIL, opponent.email);
+                    i.putExtra(Constants.C_SCORE_SELF, scoreSelf);
+                    i.putExtra(Constants.C_SCORE_SELF_LIST, (Serializable) scoresSelf);
+                    i.putExtra(Constants.C_TIME_SELF, timeSelf); // TODO: 26/01/2018 add functionality for time self !!!
+
+                    i.putExtra(Constants.C_OPPONENT_DPURL, opponent.dpURL);
+                    i.putExtra(Constants.C_PLAYER_ENTRIES_LIST, (Serializable) entriesSelf);
+
+                    i.putExtra(Constants.C_GAMEFINISHED_KEY, Constants.M.START_FROM_GAMEPLAY);
                     startActivity(i);
-//                    List<Integer> cardIDsFinal = Utils.splitToInts(Utils.concatenate(cardIDs));
-//                    i.putExtra(Constants.C_CARD_IDS_LIST, (Serializable) cardIDsFinal);
-//                    i.putExtra(Constants.C_PLAYER_ENTRIES_STRING, playerEntries);
-//                    i.putExtra("playerScore", playerScore);
-//                    i.putExtra("isMatchFinished", false);
-//                    startActivity(i);
                 }
             }
         };
@@ -183,12 +198,14 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
     }
 
     private void awardScore(int numFilledBoxes) {
-        playerScore += numFilledBoxes * 5;
+        scoreSelf += numFilledBoxes * 5;
+        scoresSelf.add(numFilledBoxes * 5);
         TextView tv_playerScore = (TextView) findViewById(R.id.tv_playerScore);
-        tv_playerScore.setText(String.valueOf(playerScore));
+        tv_playerScore.setText(String.valueOf(scoreSelf));
     }
 
     private int countFilledBoxes() {
+        String entryToAdd = "";
         int result = 0;
         StringBuilder stack = new StringBuilder();
         for (int i = 0; i < formattedAnswers.get(0).length(); i++) {
@@ -202,9 +219,9 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
         }
         if (stack.length() < formattedAnswers.get(0).length()) {
             // this means it is partial
-            playerEntries += "p";
+            entryToAdd += "p";
         }
-        playerEntries = playerEntries + stack + "-";
+        entriesSelf.add(entryToAdd + stack);
         return result;
     }
 
