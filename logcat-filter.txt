@@ -1,0 +1,1 @@
+^((?!wpa_supplicant|NetStatUtil|MSM-irqbalance|Finsky|art|FA-SVC|WifiHAL|IzatSvc_OSObserver|WifiStateMachine|LocSvc_api_v02|LocSvc_ApiV02|LocSvc_libulp|FA|Settings|MediaPlayer-JNI|ShortcutBadger|Conscrypt|ACDB-LOADER|soundtrigger|msm8916_platform|audio_hw_primary|aud_dev_arbi).*)$
