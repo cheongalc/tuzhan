@@ -19,6 +19,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Objects;
+
 
 public class FindingMatchActivity extends AppCompatActivity {
 
@@ -72,15 +74,16 @@ public class FindingMatchActivity extends AppCompatActivity {
                     }
                 }
 
-                final String opp_email_fin = opp_email;
                 final String cardIds_fin = cardsIds;
                 final String theme_fin = theme;
+
 
                 root.child(Constants.F_USERS).child(opp_email).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        Log.e(LOG_TAG, dataSnapshot.child(Constants.F_USERS_DISPLAYNAME).getValue().toString());
+
+                        Log.e(LOG_TAG, dataSnapshot.getKey());
 
                         //make opponent self object
                         User opp = DataSource.shared.userWithParameters(

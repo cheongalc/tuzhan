@@ -2,6 +2,7 @@ package com.tuzhan;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -95,14 +97,15 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
             GameFinishedActivity.theme = matchRecord.topic;
 
             userScore = matchRecord.scoreSelf;
-            oppScore = matchRecord.scoreOpp;
-
             userScores = matchRecord.scoresSelf;
             userEntries = matchRecord.entriesSelf;
+
+            oppScore = matchRecord.scoreOpp;
 
 
             //check if opponent has finished the match
             String oppEmail = matchRecord.oppEmail;
+            Log.w(LOG_TAG, oppEmail);
             if(oppEmail != null && oppEmail.length() > 0){
                 //opponent info exists
                 isOppInfoPresent = true;
@@ -115,13 +118,14 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
             }
 
         }else{
-            String topic = intent.getStringExtra("topic");
-            String oppEmail = intent.getStringExtra("oppEmail");
-            userScore = intent.getIntExtra("scoreSelf", -1);
-            userTime = intent.getDoubleExtra("timeSelf", 0.0);
-            userEntries = intent.getStringArrayListExtra("entriesSelf");
-            userScores = intent.getIntegerArrayListExtra("scoresSelf");
-            List<Integer> cardIds = intent.getIntegerArrayListExtra("cardIds");
+            String topic = intent.getStringExtra(Constants.C_THEME);
+            String oppEmail = intent.getStringExtra(Constants.C_OPPONENT_EMAIL);
+            userScore = intent.getIntExtra(Constants.C_SCORE_SELF, -1);
+            userTime = intent.getDoubleExtra(Constants.C_TIME_SELF, 0.0);
+            userEntries = intent.getStringArrayListExtra(Constants.C_PLAYER_ENTRIES_LIST);
+            Log.w(LOG_TAG, Arrays.toString(new List[]{userEntries}));
+            userScores = intent.getIntegerArrayListExtra(Constants.C_SCORE_SELF_LIST);
+            List<Integer> cardIds = intent.getIntegerArrayListExtra(Constants.C_CARD_IDS_LIST);
 
             GameFinishedActivity.cardIds = Utils.concatenate(cardIds);
             GameFinishedActivity.theme = topic;
@@ -254,6 +258,7 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
         if(oppScore < 0){
             tv_oppScore.setText("DNF");
         }else tv_oppScore.setText(oppScore + "");
+
 
         PlayerEntriesAdapter oppEntriesAdapter = new PlayerEntriesAdapter(getActivity(), oppEntries, oppScores);
         lv_oppEntries.setAdapter(oppEntriesAdapter);

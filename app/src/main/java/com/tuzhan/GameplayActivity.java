@@ -16,6 +16,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -34,20 +36,24 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
     private static final int NUM_IMAGES = 2; // 2 for experimental purposes
     private static final int DELAY = 12000;
     private int currImageIndex = 0;
+    private int maxScore = 0, currScore = 0;
     private List<String> formattedAnswers = new ArrayList<>(); // global list to store the answers
     private List<String> formattedHarderAnswers = new ArrayList<>(); // global list to store harder answers
     private List< Pair<String, Integer> > possibleMatches = new ArrayList<>();
-
+    private Runnable mainRunnable, scoreThreadRunnable;
+    private CountDownTimer cdt;
 
     //ALL PRIVATE VARIABLES PERTAINING TO MATCH INFORMATION
     private String matchID, theme;
     private List<String> cardIDs; // stores a list of the IDs of the cards involved in the current match
     private User opponent;
+    private long startTime, endTime, elapsedTime;
     private double timeSelf;
     private int scoreSelf = 0;
-    private List<Integer> scoresSelf = new ArrayList<>(); // stores a list of individual scores of each card
-    private List<String> entriesSelf = new ArrayList<>(); // stores a list of individual entries of each card
+    private ArrayList<Integer> scoresSelf = new ArrayList<>(); // stores a list of individual scores of each card
+    private ArrayList<String> entriesSelf = new ArrayList<>(); // stores a list of individual entries of each card
     //TAKE NOTE FOR ENTRIES, IF THERE IS A "P" IN FRONT IT MEANS THAT IT IS PARTIALLY DONE
+    final Handler handler = new Handler();
 
 
     @Override
@@ -76,6 +82,7 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
 
 
         startGame();
+        startTime = System.nanoTime();
     }
 
     @Override
@@ -85,7 +92,7 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
 
     public void startTimer() {
         final TextView tv_playerTime = (TextView) findViewById(R.id.tv_playerTime);
-        new CountDownTimer(DELAY-1000, 1000) {
+        cdt = new CountDownTimer(DELAY-1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 tv_playerTime.setText(String.valueOf(millisUntilFinished / 1000));
@@ -112,6 +119,19 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
                 if (word.length() > 0) submitWord(word);
                 et_wordEntry.setText(""); // set text to nothing
                 handled = true;
+
+                if (currScore == maxScore) {
+                    Log.e(LOG_TAG, "currentScore = " + currScore + ", maxScore = " + maxScore);
+                    // jump straight to the next card.
+                    currScore = 0;
+                    handler.removeCallbacks(mainRunnable);
+                    handler.removeCallbacks(scoreThreadRunnable);
+                    Log.w(LOG_TAG, "Logging from Submit: " + Arrays.toString(new List[]{entriesSelf}));
+                    awardScore(maxScore/5);
+                    cdt.cancel();
+                    if (currImageIndex < NUM_IMAGES) handler.postDelayed(mainRunnable, 500);
+                    else moveToGameFinished();
+                }
             }
             return handled;
         });
@@ -120,13 +140,13 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
         TextView tv_playerScore = (TextView) findViewById(R.id.tv_playerScore);
         tv_playerScore.setText(String.valueOf(scoreSelf));
 
-        final Handler handler = new Handler();
-
 
         // attach the Runnable that does the gameplay functionality, recurs once every 15 seconds
-        final Runnable mainRunnable = new Runnable() {
+        mainRunnable = new Runnable() {
             @Override
             public void run() {
+                Log.e(LOG_TAG, "mainRunnable reposted");
+
                 currQuestionCard = questionCardArrayList.get(currImageIndex);
                 possibleMatches.clear(); // clear possible combinations of card answers
 
@@ -141,48 +161,76 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
                 formattedAnswers = currQuestionCard.answers;
                 formattedHarderAnswers = currQuestionCard.harderAnswers;
 
+                maxScore = formattedAnswers.get(0).length()*5;
+
                 fillBlueBoxes(formattedAnswers.get(0).length()); // okay to take the first element, because all answers will always have the same number of chars
                 currImageIndex++;
 
+
+
+                // attach Runnable that executes once every 15 seconds
+                scoreThreadRunnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.w(LOG_TAG, "Logging from STR (entries): " + Arrays.toString(new List[]{entriesSelf}));
+                        Log.e(LOG_TAG, "scoreThreadRunnable reposted");
+                        int numFilledBoxes = countFilledBoxes();
+                        awardScore(numFilledBoxes);
+                        showAnswers(numFilledBoxes);
+
+                        if (currImageIndex < NUM_IMAGES) {
+                            handler.postDelayed(this, DELAY);
+                        } else {
+                            moveToGameFinished();
+                        }
+                    }
+                };
+                handler.postDelayed(scoreThreadRunnable, DELAY-1000); // a bit shorter so you can check the answers
+
+
                 if (currImageIndex < NUM_IMAGES) {
                     handler.postDelayed(this, DELAY); // 15 seconds delay is to make sure that self can see the full countdown
+                } else if (currImageIndex > NUM_IMAGES) {
+                    Log.e(LOG_TAG, "removing excess score thread runnables");
+                    handler.removeCallbacks(scoreThreadRunnable);
                 }
             }
         };
         handler.post(mainRunnable); // post the Runnable for the first time
+    }
 
+    private void moveToGameFinished() {
+        endTime = System.nanoTime();
+        elapsedTime = (endTime - startTime);
+        timeSelf = (double) elapsedTime / 1000000000.0;
+        timeSelf = roundOff(timeSelf, 4);
 
-        // attach Runnable that executes once every 15 seconds
-        final Runnable scoreThreadRunnable = new Runnable() {
-            @Override
-            public void run() {
-                int numFilledBoxes = countFilledBoxes();
-                awardScore(numFilledBoxes);
-                showAnswers(numFilledBoxes);
-                if (currImageIndex < NUM_IMAGES) {
-                    handler.postDelayed(this, DELAY);
-                } else {
-                    //TODO pass everything needed to make a partial MatchRecord object,
-                    //TODO these remaining:  Double timeSelf
-                    Intent i = new Intent(GameplayActivity.this, GameFinishedActivity.class);
+        Log.e(LOG_TAG, "timeSelf: " + String.valueOf(timeSelf));
+        Log.e(LOG_TAG, "scoresSelf: " + String.valueOf(scoresSelf.size()));
+        Intent i = new Intent(GameplayActivity.this, GameFinishedActivity.class);
 
-                    i.putExtra(Constants.C_MATCH_ID, matchID);
-                    i.putExtra(Constants.C_THEME, theme);
-                    i.putExtra(Constants.C_CARD_IDS_LIST, (Serializable) Utils.splitToInts(Utils.concatenate(cardIDs)));
-                    i.putExtra(Constants.C_OPPONENT_EMAIL, opponent.email);
-                    i.putExtra(Constants.C_SCORE_SELF, scoreSelf);
-                    i.putExtra(Constants.C_SCORE_SELF_LIST, (Serializable) scoresSelf);
-                    i.putExtra(Constants.C_TIME_SELF, timeSelf); // TODO: 26/01/2018 add functionality for time self !!!
+        i.putExtra(Constants.C_MATCH_ID, matchID);
+        i.putExtra(Constants.C_THEME, theme);
+        i.putExtra(Constants.C_CARD_IDS_LIST, (Serializable) Utils.splitToInts(Utils.concatenate(cardIDs)));
+        i.putExtra(Constants.C_OPPONENT_EMAIL, opponent.email);
+        i.putExtra(Constants.C_SCORE_SELF, scoreSelf);
+        i.putExtra(Constants.C_SCORE_SELF_LIST, (Serializable) scoresSelf);
+        i.putExtra(Constants.C_TIME_SELF, timeSelf);
 
-                    i.putExtra(Constants.C_OPPONENT_DPURL, opponent.dpURL);
-                    i.putExtra(Constants.C_PLAYER_ENTRIES_LIST, (Serializable) entriesSelf);
+        i.putExtra(Constants.C_OPPONENT_DPURL, opponent.dpURL);
+        i.putStringArrayListExtra(Constants.C_PLAYER_ENTRIES_LIST, entriesSelf);
 
-                    i.putExtra(Constants.C_GAMEFINISHED_KEY, Constants.M.START_FROM_GAMEPLAY);
-                    startActivity(i);
-                }
-            }
-        };
-        handler.postDelayed(scoreThreadRunnable, DELAY-1000); // 12 seconds delay then check the answers
+        i.putExtra(Constants.C_GAMEFINISHED_KEY, Constants.M.START_FROM_GAMEPLAY);
+        startActivity(i);
+        handler.removeCallbacks(scoreThreadRunnable);
+        handler.removeCallbacksAndMessages(null);
+    }
+
+    private double roundOff(double value, int numOfPlaces) {
+        if (numOfPlaces < 0) throw new IllegalArgumentException();
+        BigDecimal bd = new BigDecimal(Double.toString(value));
+        bd = bd.setScale(numOfPlaces, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 
     private void showAnswers(int numFilledBoxes) {
@@ -226,6 +274,7 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
     }
 
     private void submitWord(String word) {
+        currScore = 0;
         // start reading the word from left to right
         char firstCharacter = word.charAt(0);
         // check whether formatted answer dict contains the first character or not
@@ -261,6 +310,8 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
                 }
             }
         }
+        currScore = countFilledBoxes() * 5;
+        Log.e(LOG_TAG, String.valueOf(currScore));
     }
 
     private void clearBlueBoxes(char excludedChar) {
@@ -286,10 +337,10 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
         return output;
     }
 
-    private void fillBlueBox(int index, char firstCharacter, int mode) {
+    private void fillBlueBox(int index, char characterToFill, int mode) {
         Log.d(LOG_TAG, "Index: " + index);
         TextView tv_characterBox = (TextView) rootLayout.findViewWithTag(index);
-        tv_characterBox.setText(String.valueOf(firstCharacter));
+        tv_characterBox.setText(String.valueOf(characterToFill));
         if (mode == 0) {
             tv_characterBox.setBackgroundResource(R.drawable.background_accent_green);
         } else if (mode == 1) {

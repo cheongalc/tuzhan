@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import java.util.List;
 
 public class PlayerEntriesAdapter extends ArrayAdapter<String> {
 
+    private static final String LOG_TAG = "PLAYERENTRIESADAPTER";
     private List<String> entires;
     private List<Integer> scores;
 
@@ -35,8 +37,12 @@ public class PlayerEntriesAdapter extends ArrayAdapter<String> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.player_entries_item, parent, false);
         }
 
+        int score = 0;
         String entry = entires.get(position);
-        int score = scores.get(position);
+        char startingChar = entry.charAt(0);
+        if (startingChar == 'p') {
+            entry = entry.substring(1, entry.length());
+        } else score = scores.get(position);
 
         TextView tvEntry = (TextView) convertView.findViewById(R.id.tv_entry);
         TextView tvScore = (TextView) convertView.findViewById(R.id.tv_score);
