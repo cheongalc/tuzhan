@@ -34,14 +34,15 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/civ_user_dp"
-                android:layout_width="95dp"
-                android:layout_height="95dp"
+                android:layout_width="85dp"
+                android:layout_height="85dp"
                 android:layout_centerVertical="true"
                 android:src="@mipmap/tuzhan_vs"
                 app:civ_border_color="@color/colorAccentYellow"
                 app:civ_border_width="5dp" />
 
             <TextView
+                android:maxLines="1"
                 android:id="@+id/tv_userScore"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -50,7 +51,7 @@
                 android:text="20"
                 android:textAlignment="center"
                 android:textColor="@color/colorAccentYellow"
-                android:textSize="35sp"
+                android:textSize="30sp"
                 android:textStyle="bold" />
 
         </RelativeLayout>
@@ -81,8 +82,8 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/civ_opp_dp"
-                android:layout_width="95dp"
-                android:layout_height="95dp"
+                android:layout_width="85dp"
+                android:layout_height="85dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:src="@mipmap/tuzhan_vs"
@@ -91,6 +92,7 @@
 
 
             <TextView
+                android:maxLines="1"
                 android:id="@+id/tv_oppScore"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -99,7 +101,7 @@
                 android:text="20"
                 android:textAlignment="center"
                 android:textColor="@color/colorAccentYellow"
-                android:textSize="35sp"
+                android:textSize="30sp"
                 android:textStyle="bold" />
 
 
