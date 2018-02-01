@@ -39,7 +39,10 @@ public class GameFinishedActivity extends AppCompatActivity {
         btn_back = (ImageButton) findViewById(R.id.btn_returnHome);
         btn_flip = (ImageButton) findViewById(R.id.btn_flip_card);
 
-        btn_back.setOnClickListener(v -> finish());
+        btn_back.setOnClickListener(v -> {
+            Intent i = new Intent(this, MainActivity.class);
+            startActivity(i);
+        });
         btn_flip.setOnClickListener(v -> {
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             if(currentFrag.equals("game_finished")) {
@@ -59,10 +62,5 @@ public class GameFinishedActivity extends AppCompatActivity {
                 transaction.commit();
             }
         });
-    }
-
-    public void returnHome(View view) {
-        Intent i = new Intent(this, MainActivity.class);
-        startActivity(i);
     }
 }

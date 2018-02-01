@@ -50,6 +50,7 @@ public class DataSource extends Application {
 
     // init function to be called at the start of MainActivity
     static void init(Context context){
+        if (shared != null) return ;
         shared = new DataSource(context);
         ArrayList<QuestionCard> allCards = shared.fetchAllCards();
         for (QuestionCard card:allCards) {

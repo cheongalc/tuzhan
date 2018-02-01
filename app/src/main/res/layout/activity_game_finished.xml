@@ -45,8 +45,7 @@
             android:textColor="@color/colorAccent"
             android:textSize="@dimen/Heading1"
             android:textStyle="bold"
-            android:tint="@color/colorAccent"
-            android:onClick="returnHome"/>
+            android:tint="@color/colorAccent" />
 
         <View
             android:layout_width="0dp"

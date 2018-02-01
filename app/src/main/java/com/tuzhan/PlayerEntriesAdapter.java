@@ -42,7 +42,8 @@ public class PlayerEntriesAdapter extends ArrayAdapter<String> {
         char startingChar = entry.charAt(0);
         if (startingChar == 'p') {
             entry = entry.substring(1, entry.length());
-        } else score = scores.get(position);
+        }
+        score = scores.get(position);
 
         TextView tvEntry = (TextView) convertView.findViewById(R.id.tv_entry);
         TextView tvScore = (TextView) convertView.findViewById(R.id.tv_score);

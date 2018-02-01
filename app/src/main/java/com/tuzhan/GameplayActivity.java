@@ -33,7 +33,7 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
     //ALL PRIVATE VARIABLES PERTAINING TO QUESTION CARDS
     private ArrayList<QuestionCard> questionCardArrayList = new ArrayList<>(); // represents the list of Question Card, passed over from CountdownActivity
     private QuestionCard currQuestionCard; // represents current Question Card
-    private static final int NUM_IMAGES = 2; // 2 for experimental purposes
+    private static final int NUM_IMAGES = 4; // 4 for experimental purposes
     private static final int DELAY = 12000;
     private int currImageIndex = 0;
     private int maxScore = 0, currScore = 0;
@@ -42,6 +42,7 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
     private List< Pair<String, Integer> > possibleMatches = new ArrayList<>();
     private Runnable mainRunnable, scoreThreadRunnable;
     private CountDownTimer cdt;
+    private String currentEntry = "";
 
     //ALL PRIVATE VARIABLES PERTAINING TO MATCH INFORMATION
     private String matchID, theme;
@@ -126,12 +127,13 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
                     currScore = 0;
                     handler.removeCallbacks(mainRunnable);
                     handler.removeCallbacks(scoreThreadRunnable);
-                    Log.w(LOG_TAG, "Logging from Submit: " + Arrays.toString(new List[]{entriesSelf}));
                     awardScore(maxScore/5);
                     cdt.cancel();
                     if (currImageIndex < NUM_IMAGES) handler.postDelayed(mainRunnable, 500);
                     else moveToGameFinished();
                 }
+
+                Log.w(LOG_TAG, "Logging from Submit: " + Arrays.toString(new List[]{entriesSelf}));
             }
             return handled;
         });
@@ -248,6 +250,8 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
     private void awardScore(int numFilledBoxes) {
         scoreSelf += numFilledBoxes * 5;
         scoresSelf.add(numFilledBoxes * 5);
+        entriesSelf.add(currentEntry);
+        currentEntry = "";
         TextView tv_playerScore = (TextView) findViewById(R.id.tv_playerScore);
         tv_playerScore.setText(String.valueOf(scoreSelf));
     }
@@ -269,7 +273,6 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
             // this means it is partial
             entryToAdd += "p";
         }
-        entriesSelf.add(entryToAdd + stack);
         return result;
     }
 
@@ -301,6 +304,7 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
             } else possibleMatches = findPossibleMatches(firstCharacter); // find all the other possible characters that match
         }
         Log.d(LOG_TAG, possibleMatches.toString());
+        currentEntry = word;
         word = word.substring(1, word.length()); // take out first character
         for (int i = 0; i < word.length(); i++) {
             char currentCharacter = word.charAt(i);
