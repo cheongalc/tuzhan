@@ -162,10 +162,10 @@ public class LoginActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 int rounds_won = 0, rounds_played = 0;
                 if(dataSnapshot.hasChild("rounds_won")){
-                    rounds_won = (int) dataSnapshot.child("rounds_won").getValue();
+                    rounds_won = (int)(long) dataSnapshot.child("rounds_won").getValue();
                 }
                 if(dataSnapshot.hasChild("rounds_played")){
-                    rounds_played = (int) dataSnapshot.child("rounds_played").getValue();
+                    rounds_played = (int)(long) dataSnapshot.child("rounds_played").getValue();
                 }
 
                 //store to shared preferences

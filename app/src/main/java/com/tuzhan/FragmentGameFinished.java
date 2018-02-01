@@ -100,8 +100,6 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
             userScores = matchRecord.scoresSelf;
             userEntries = matchRecord.entriesSelf;
 
-            oppScore = matchRecord.scoreOpp;
-
 
             //check if opponent has finished the match
             String oppEmail = matchRecord.oppEmail;
@@ -153,7 +151,7 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
                     if(dataSnapshot.child("state").getValue().toString().equals("fin")){
                         //opponent has finished the match, retrieve *HIS* data
                         isOppInfoPresent = true;
-                        oppScore = (int) dataSnapshot.child("score").getValue();
+                        oppScore = (int)(long) dataSnapshot.child("score").getValue();
                         oppEntries = Utils.split(dataSnapshot.child("entries").getValue()+"");
                         oppScores = Utils.splitToInts(dataSnapshot.child("scores").getValue()+"");
                         oppTime = (double) dataSnapshot.child("time").getValue();
@@ -238,11 +236,11 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
 
     private void updateInfo(DataSnapshot dataSnapshot, String email, String winner){
         if(dataSnapshot.hasChild("rounds_played")){
-            int opp_rounds_played = (int) dataSnapshot.child("rounds_played").getValue();
+            int opp_rounds_played = (int)(long) dataSnapshot.child("rounds_played").getValue();
             rootRef.child("players").child(email.replace('.',',')).child("rounds_played").setValue(opp_rounds_played + 1);
 
             if(winner.equals(email) || winner.equals("")){
-                int opp_rounds_won = (int) dataSnapshot.child("rounds_won").getValue();
+                int opp_rounds_won = (int)(long) dataSnapshot.child("rounds_won").getValue();
                 rootRef.child("players").child(email.replace('.',',')).child("rounds_won").setValue(opp_rounds_won+ 1);
             }
 
@@ -255,13 +253,14 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
     }
 
     private void setOppStuff(){
-        if(oppScore < 0){
+        if(oppScore <= 0){
             tv_oppScore.setText("DNF");
-        }else tv_oppScore.setText(oppScore + "");
+        }else {
+            tv_oppScore.setText(oppScore + "");
 
-
-        PlayerEntriesAdapter oppEntriesAdapter = new PlayerEntriesAdapter(getActivity(), oppEntries, oppScores);
-        lv_oppEntries.setAdapter(oppEntriesAdapter);
+            PlayerEntriesAdapter oppEntriesAdapter = new PlayerEntriesAdapter(getActivity(), oppEntries, oppScores);
+            lv_oppEntries.setAdapter(oppEntriesAdapter);
+        }
     }
 
 }
