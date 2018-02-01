@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -104,12 +105,13 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
             //check if opponent has finished the match
             String oppEmail = matchRecord.oppEmail;
             Log.w(LOG_TAG, oppEmail);
-            if(oppEmail != null && oppEmail.length() > 0){
+            if(oppEmail != null && oppEmail.length() > 0 && matchRecord.scoreOpp != null){
                 //opponent info exists
                 isOppInfoPresent = true;
 
                 oppEntries = matchRecord.entriesOpp;
                 oppScores = matchRecord.scoresOpp;
+                oppScore = matchRecord.scoreOpp;
 
                 //set opponent info
                 setOppStuff();

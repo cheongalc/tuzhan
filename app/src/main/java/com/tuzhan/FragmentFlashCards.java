@@ -131,6 +131,8 @@ public class FragmentFlashCards extends Fragment {
         pbFlashCardProgress.setProgress(0);
         guessedCards = 0;
 
+        bTick.setVisibility(View.VISIBLE);
+        bCross.setVisibility(View.VISIBLE);
 
     }
 
@@ -157,6 +159,8 @@ public class FragmentFlashCards extends Fragment {
                     rl_finished_page.setVisibility(View.VISIBLE);
                 }
 
+                bTick.setVisibility(View.GONE);
+                bCross.setVisibility(View.GONE);
             }
         };
 
