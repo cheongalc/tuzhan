@@ -116,6 +116,7 @@ public class FragmentFlashCards extends Fragment {
 
         return rootview;
     }
+    //
 
     private void restart(){
 
