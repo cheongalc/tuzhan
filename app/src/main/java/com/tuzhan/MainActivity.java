@@ -71,6 +71,12 @@ public class MainActivity extends AppCompatActivity {
     ImageView background;
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Toast.makeText(this, "main_ended", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -161,23 +167,27 @@ public class MainActivity extends AppCompatActivity {
         List<MatchDetails> prevmatchDetailsList = new ArrayList<>();
         List<String> prevmatchId = new ArrayList<>();
 
-        for (MatchRecord matchRecord : matchRecords) {
-            User opponent = DataSource.shared.userForEmail(matchRecord.oppEmail.replace('.',','));
-            if (opponent != null) {
-                prevmatchId.add(matchRecord.id);
+        if(!isConnectedInternet(this)) {
+            if (lv_prevMatches.getChildCount() < 1 || prevmatchId.size() < 1 || prevmatchDetailsList.size() < 1) {
+                for (MatchRecord matchRecord : matchRecords) {
+                    User opponent = DataSource.shared.userForEmail(matchRecord.oppEmail.replace('.', ','));
+                    if (opponent != null) {
+                        prevmatchId.add(matchRecord.id);
 
-                String outcome = "dnf";
+                        String outcome = "dnf";
 
-                if (matchRecord.scoreOpp != null) {
-                    if (matchRecord.scoreOpp < matchRecord.scoreSelf) outcome = "1";
-                    else if (matchRecord.scoreOpp > matchRecord.scoreSelf) outcome = "0";
-                    else if (Objects.equals(matchRecord.scoreOpp, matchRecord.scoreSelf))
-                        outcome = "2";
+                        if (matchRecord.scoreOpp != null) {
+                            if (matchRecord.scoreOpp < matchRecord.scoreSelf) outcome = "1";
+                            else if (matchRecord.scoreOpp > matchRecord.scoreSelf) outcome = "0";
+                            else if (Objects.equals(matchRecord.scoreOpp, matchRecord.scoreSelf))
+                                outcome = "2";
+                        }
+                        prevmatchDetailsList.add(new MatchDetails(matchRecord.id, opponent, outcome, matchRecord.topic));
+                    }
                 }
-                prevmatchDetailsList.add(new MatchDetails(matchRecord.id, opponent, outcome, matchRecord.topic));
+                updateMatchesList(lv_prevMatches, prevmatchId, prevmatchDetailsList, prev_matches, false);
             }
         }
-        updateMatchesList(lv_prevMatches, prevmatchId, prevmatchDetailsList, prev_matches, false);
 
         //update matches list
         getPrevMatches();
