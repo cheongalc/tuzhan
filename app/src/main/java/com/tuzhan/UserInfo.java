@@ -71,7 +71,7 @@ public class UserInfo extends AppCompatActivity {
                 double win_rate = (double) rounds_won / (double) rounds_played;
                 win_rate = win_rate * 100;
                 tv_userKD.setText(win_rate + "%");
-                tv_userRounds.setText(rounds_played);
+                tv_userRounds.setText(rounds_played+"");
             }else{
                 tv_userKD.setText("无");
                 tv_userRounds.setText("0");
@@ -82,19 +82,19 @@ public class UserInfo extends AppCompatActivity {
 
     public void setWR() {
 
-        DatabaseReference user_info =  root.child("Users").child(currUser.getEmail().replace('.',','));
+        DatabaseReference user_info =  root.child("players").child(currUser.getEmail().replace('.',','));
 
         user_info.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //make sure that there rounds_won is present under self info
                 if(dataSnapshot.hasChild("rounds_won")) {
-                    int rounds_won = (int) dataSnapshot.child("rounds_won").getValue();
-                    int rounds_played = (int) dataSnapshot.child("rounds_played").getValue();
+                    int rounds_won = (int)(long) dataSnapshot.child("rounds_won").getValue();
+                    int rounds_played = (int)(long) dataSnapshot.child("rounds_played").getValue();
                     double win_rate = (double) rounds_won / (double) rounds_played;
                     win_rate = win_rate * 100;
                     tv_userKD.setText(win_rate + "%");
-                    tv_userRounds.setText(rounds_played);
+                    tv_userRounds.setText(rounds_played+"");
                 }else{
                     tv_userKD.setText("无");
                     tv_userRounds.setText("0");
