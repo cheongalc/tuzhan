@@ -128,6 +128,8 @@ public class FragmentFlashCards extends Fragment {
 
         vpFlashCards.setAdapter(gamePagerAdapter);
         pbFlashCardProgress.setProgress(0);
+        guessedCards = 0;
+
 
     }
 
