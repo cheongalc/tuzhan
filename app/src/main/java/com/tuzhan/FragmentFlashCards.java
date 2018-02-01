@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class FragmentFlashCards extends Fragment {
@@ -140,6 +141,13 @@ public class FragmentFlashCards extends Fragment {
         rl_ans_reveal.setVisibility(View.VISIBLE);
 
         tv_correct_ans.setText(questionCard.answers.get(0));
+        char startingChar = entry.charAt(0);
+        if (startingChar == 'p') {
+            entry = entry.substring(1, entry.length());
+        }
+        if (Objects.equals(entry, "")) {
+            entry = "-";
+        }
         tv_user_ans.setText(entry);
 
         CountDownTimer countDownTimer = new CountDownTimer(3000, 1000) {
@@ -157,10 +165,9 @@ public class FragmentFlashCards extends Fragment {
 
                 if (questionCards.size() == 0){
                     rl_finished_page.setVisibility(View.VISIBLE);
+                    bTick.setVisibility(View.GONE);
+                    bCross.setVisibility(View.GONE);
                 }
-
-                bTick.setVisibility(View.GONE);
-                bCross.setVisibility(View.GONE);
             }
         };
 

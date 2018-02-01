@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by Dhaulagiri on 18/12/2017.
@@ -44,6 +45,9 @@ public class PlayerEntriesAdapter extends ArrayAdapter<String> {
         if (startingChar == 'p') {
             isPartial = true;
             entry = entry.substring(1, entry.length());
+        }
+        if (Objects.equals(entry, "")) {
+            entry = "-";
         }
         score = scores.get(position);
 

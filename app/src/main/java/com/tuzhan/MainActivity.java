@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Toast.makeText(this, "main_ended", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "main_ended", Toast.LENGTH_SHORT).show();
     }
 
     @Override

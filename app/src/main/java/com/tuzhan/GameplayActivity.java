@@ -248,7 +248,7 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
             for (int i = 0; i < answerLength; i++) {
                 TextView tv_characterBox = (TextView) rootLayout.findViewWithTag(i);
                 tv_characterBox.setText(String.valueOf(formattedAnswers.get(0).charAt(i)));
-                tv_characterBox.setBackgroundResource(R.drawable.background_accent_red);
+                tv_characterBox.setBackgroundResource(R.drawable.item_character_red);
             }
         }
     }
