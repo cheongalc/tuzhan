@@ -47,7 +47,7 @@ public class GameFinishedActivity extends AppCompatActivity {
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             if(currentFrag.equals("game_finished")) {
                 currentFrag = "flash_cards";
-                //current page is game finished frag, set page to flash card fragment
+                //current page is game finished frag, set pagFe to flash card fragment
                 FragmentFlashCards fragmentFlashCards = new FragmentFlashCards();
                 transaction.replace(R.id.fragment_container, fragmentFlashCards);
                 transaction.addToBackStack(null);

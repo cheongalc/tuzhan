@@ -37,10 +37,12 @@ public class PlayerEntriesAdapter extends ArrayAdapter<String> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.player_entries_item, parent, false);
         }
 
-        int score = 0;
+        int score;
+        boolean isPartial = false;
         String entry = entires.get(position);
         char startingChar = entry.charAt(0);
         if (startingChar == 'p') {
+            isPartial = true;
             entry = entry.substring(1, entry.length());
         }
         score = scores.get(position);
@@ -55,9 +57,8 @@ public class PlayerEntriesAdapter extends ArrayAdapter<String> {
 
 
         if(score == 0) cvScore.setCardBackgroundColor(getContext().getResources().getColor(R.color.colorAccentRed));
-        else if(score == 1) cvScore.setCardBackgroundColor(getContext().getResources().getColor(R.color.colorAccentGreen));
-        else if(score == 2) cvScore.setCardBackgroundColor(getContext().getResources().getColor(R.color.colorPrimary));
-        else cvScore.setCardBackgroundColor(getContext().getResources().getColor(R.color.colorAccentYellow));
+        else if(isPartial) cvScore.setCardBackgroundColor(getContext().getResources().getColor(R.color.colorAccentYellow));
+        else cvScore.setCardBackgroundColor(getContext().getResources().getColor(R.color.colorAccentGreen));
 
         return convertView;
     }

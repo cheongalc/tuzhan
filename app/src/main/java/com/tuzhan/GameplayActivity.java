@@ -21,6 +21,7 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class GameplayActivity extends AppCompatActivity implements GameFragmentInterface {
 
@@ -117,7 +118,10 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
             boolean handled = false;
             if (actionID == EditorInfo.IME_ACTION_DONE) {
                 String word = String.valueOf(view.getText());
-                if (word.length() > 0) submitWord(word);
+                if (word.length() > 0) {
+                    Log.w(LOG_TAG, "Submitting word " + word);
+                    submitWord(word);
+                }
                 et_wordEntry.setText(""); // set text to nothing
                 handled = true;
 
@@ -128,12 +132,13 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
                     handler.removeCallbacks(mainRunnable);
                     handler.removeCallbacks(scoreThreadRunnable);
                     awardScore(maxScore/5);
+                    Log.w(LOG_TAG, "Logging from Submit: " + Arrays.toString(new List[]{entriesSelf}));
                     cdt.cancel();
                     if (currImageIndex < NUM_IMAGES) handler.postDelayed(mainRunnable, 500);
                     else moveToGameFinished();
                 }
 
-                Log.w(LOG_TAG, "Logging from Submit: " + Arrays.toString(new List[]{entriesSelf}));
+
             }
             return handled;
         });
@@ -174,17 +179,18 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
                 scoreThreadRunnable = new Runnable() {
                     @Override
                     public void run() {
-                        Log.w(LOG_TAG, "Logging from STR (entries): " + Arrays.toString(new List[]{entriesSelf}));
+
                         Log.e(LOG_TAG, "scoreThreadRunnable reposted");
                         int numFilledBoxes = countFilledBoxes();
                         awardScore(numFilledBoxes);
                         showAnswers(numFilledBoxes);
-
+                        Log.w(LOG_TAG, "Logging from STR (entries): " + Arrays.toString(new List[]{entriesSelf}));
                         if (currImageIndex < NUM_IMAGES) {
                             handler.postDelayed(this, DELAY);
                         } else {
                             moveToGameFinished();
                         }
+                        handler.removeCallbacks(scoreThreadRunnable);
                     }
                 };
                 handler.postDelayed(scoreThreadRunnable, DELAY-1000); // a bit shorter so you can check the answers
@@ -250,6 +256,11 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
     private void awardScore(int numFilledBoxes) {
         scoreSelf += numFilledBoxes * 5;
         scoresSelf.add(numFilledBoxes * 5);
+        currentEntry = readFilledBoxes();
+        if (currentEntry.length() < (maxScore / 5)) {
+            // partial
+            currentEntry = "p" + currentEntry;
+        }
         entriesSelf.add(currentEntry);
         currentEntry = "";
         TextView tv_playerScore = (TextView) findViewById(R.id.tv_playerScore);
@@ -257,7 +268,6 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
     }
 
     private int countFilledBoxes() {
-        String entryToAdd = "";
         int result = 0;
         StringBuilder stack = new StringBuilder();
         for (int i = 0; i < formattedAnswers.get(0).length(); i++) {
@@ -268,10 +278,6 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
                 result++;
                 stack.append(content);
             }
-        }
-        if (stack.length() < formattedAnswers.get(0).length()) {
-            // this means it is partial
-            entryToAdd += "p";
         }
         return result;
     }
@@ -304,7 +310,6 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
             } else possibleMatches = findPossibleMatches(firstCharacter); // find all the other possible characters that match
         }
         Log.d(LOG_TAG, possibleMatches.toString());
-        currentEntry = word;
         word = word.substring(1, word.length()); // take out first character
         for (int i = 0; i < word.length(); i++) {
             char currentCharacter = word.charAt(i);
@@ -315,7 +320,21 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
             }
         }
         currScore = countFilledBoxes() * 5;
+        currentEntry = readFilledBoxes();
         Log.e(LOG_TAG, String.valueOf(currScore));
+    }
+
+    private String readFilledBoxes() {
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < formattedAnswers.get(0).length(); i++) {
+            TextView tv_characterBox = (TextView) rootLayout.findViewWithTag(i);
+            String content = String.valueOf(tv_characterBox.getText());
+            if (!content.equals("")) {
+                // it is filled
+                result.append(content);
+            }
+        }
+        return result.toString();
     }
 
     private void clearBlueBoxes(char excludedChar) {
