@@ -365,9 +365,9 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
         TextView tv_characterBox = (TextView) rootLayout.findViewWithTag(index);
         tv_characterBox.setText(String.valueOf(characterToFill));
         if (mode == 0) {
-            tv_characterBox.setBackgroundResource(R.drawable.background_accent_green);
+            tv_characterBox.setBackgroundResource(R.drawable.item_character_green);
         } else if (mode == 1) {
-            tv_characterBox.setBackgroundResource(R.drawable.background_accent_red);
+            tv_characterBox.setBackgroundResource(R.drawable.item_character_red);
         }
     }
 
