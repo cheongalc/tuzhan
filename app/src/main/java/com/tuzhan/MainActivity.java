@@ -355,8 +355,18 @@ public class MainActivity extends AppCompatActivity {
 
                         } else {
                             //match is new challenge
-                            newMatchDetails.add(matchDetails);
-                            newMatchIds.add(match_id);
+                            if(newMatchIds.contains(matchDetails.match_id)) {
+                                for (MatchDetails m : newMatchDetails) {
+                                    if (m.match_id.equals(matchDetails.match_id)) {
+                                        newMatchDetails.remove(m);
+                                        newMatchDetails.add(matchDetails);
+                                        break;
+                                    }
+                                }
+                            }else {
+                                newMatchDetails.add(matchDetails);
+                                newMatchIds.add(match_id);
+                            }
 
                             updateMatchesList(lv_newMatches, newMatchIds, newMatchDetails, new_matches, true);
                         }
