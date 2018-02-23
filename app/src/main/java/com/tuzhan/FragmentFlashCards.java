@@ -140,7 +140,7 @@ public class FragmentFlashCards extends Fragment {
     private void revealAns(QuestionCard questionCard, String entry){
         rl_ans_reveal.setVisibility(View.VISIBLE);
 
-        tv_correct_ans.setText(questionCard.answers.get(0));
+        tv_correct_ans.setText(questionCard.answers+"");
         char startingChar = entry.charAt(0);
         if (startingChar == 'p') {
             entry = entry.substring(1, entry.length());
@@ -150,7 +150,10 @@ public class FragmentFlashCards extends Fragment {
         }
         tv_user_ans.setText(entry);
 
-        CountDownTimer countDownTimer = new CountDownTimer(3000, 1000) {
+        bTick.setVisibility(View.GONE);
+        bCross.setVisibility(View.GONE);
+
+        CountDownTimer countDownTimer = new CountDownTimer(2000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 //do nothing
@@ -158,6 +161,8 @@ public class FragmentFlashCards extends Fragment {
 
             @Override
             public void onFinish() {
+                bTick.setVisibility(View.VISIBLE);
+                bCross.setVisibility(View.VISIBLE);
                 //update vp
                 rl_ans_reveal.setVisibility(View.GONE);
                 GamePagerAdapter gamePagerAdapter1 = new GamePagerAdapter(getFragmentManager(), questionCards.size(), questionCards);

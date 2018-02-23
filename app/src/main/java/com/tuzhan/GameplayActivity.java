@@ -34,7 +34,7 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
     //ALL PRIVATE VARIABLES PERTAINING TO QUESTION CARDS
     private ArrayList<QuestionCard> questionCardArrayList = new ArrayList<>(); // represents the list of Question Card, passed over from CountdownActivity
     private QuestionCard currQuestionCard; // represents current Question Card
-    private static final int NUM_IMAGES = 4; // 4 for experimental purposes
+    private static final int NUM_IMAGES = 5;
     private static final int DELAY = 12000;
     private int currImageIndex = 0;
     private int maxScore = 0, currScore = 0;
@@ -56,6 +56,7 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
     private ArrayList<String> entriesSelf = new ArrayList<>(); // stores a list of individual entries of each card
     //TAKE NOTE FOR ENTRIES, IF THERE IS A "P" IN FRONT IT MEANS THAT IT IS PARTIALLY DONE
     final Handler handler = new Handler();
+    private TextView tvThemeTitle;
 
 
     @Override
@@ -65,6 +66,7 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
 
         // Save instance of the root layout to use for modification during submitting words
         rootLayout = (RelativeLayout) findViewById(R.id.rl_gameplayUI);
+        tvThemeTitle = (TextView) findViewById(R.id.tv_themeTitle);
 
 
         // setup the intent extras
@@ -75,6 +77,8 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
         theme = pastIntent.getStringExtra(Constants.C_THEME);
         opponent = (User) pastIntent.getSerializableExtra(Constants.C_USER_OPPONENT);
 
+        //set title text
+        tvThemeTitle.setText(theme);
 
         // Setup the viewpager and its fragment manager
         viewPager = (NonSwipeableViewPager) findViewById(R.id.vp_imagePager);
