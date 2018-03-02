@@ -98,7 +98,7 @@ public class FragmentFlashCards extends Fragment {
                         userEntries.remove(0);
 
                         //variable used for updating progress bar
-                        guessedCards+=1;
+                        guessedCards+=2;
 
                         //update progress bar
                         pbFlashCardProgress.setProgress((int) (((double) guessedCards / (double) original_size) * 100));
@@ -141,6 +141,9 @@ public class FragmentFlashCards extends Fragment {
         rl_ans_reveal.setVisibility(View.VISIBLE);
 
         tv_correct_ans.setText(questionCard.answers+"");
+
+        MainActivity.readText(questionCard.answers.get(0));
+
         char startingChar = entry.charAt(0);
         if (startingChar == 'p') {
             entry = entry.substring(1, entry.length());

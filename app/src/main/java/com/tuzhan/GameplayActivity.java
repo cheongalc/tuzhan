@@ -247,6 +247,7 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
 
     private void showAnswers(int numFilledBoxes) {
         final int answerLength = formattedAnswers.get(0).length();
+        MainActivity.readText(formattedAnswers.get(0));
         if (numFilledBoxes < answerLength) {
             //Show the first answer because it is the most important.
             for (int i = 0; i < answerLength; i++) {

@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
+import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -39,6 +41,7 @@ import com.wang.avi.AVLoadingIndicatorView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -68,6 +71,9 @@ public class MainActivity extends AppCompatActivity {
     private List<MatchDetails> newMatchDetails = new ArrayList<>();
 
     AVLoadingIndicatorView list_view_load;
+
+    static public TextToSpeech mtts;
+    int MY_DATA_CHECK_CODE = 666;
 
     ImageView background;
 
@@ -192,6 +198,13 @@ public class MainActivity extends AppCompatActivity {
 
         //update matches list
         getPrevMatches();
+
+
+        //test text to speech
+        Intent checkIntent = new Intent();
+        checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+        startActivityForResult(checkIntent, MY_DATA_CHECK_CODE);
+
     }
 
     //listener to check individual match id under match object of self
@@ -530,6 +543,23 @@ public class MainActivity extends AppCompatActivity {
         mAnimator.start();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == MY_DATA_CHECK_CODE) {
+            if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
+                // success, create the TTS instance
+                mtts = new TextToSpeech(this, status -> mtts.setLanguage(Locale.CHINESE));
+
+            } else {
+                // missing data, install it
+                Intent installIntent = new Intent();
+                installIntent.setAction(
+                        TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
+                startActivity(installIntent);
+            }
+        }
+    }
+
     private ValueAnimator slideAnimator(int start, int end, ListView lv) {
 
         ValueAnimator animator = ValueAnimator.ofInt(start, end);
@@ -545,5 +575,28 @@ public class MainActivity extends AppCompatActivity {
         return animator;
     }
 
+    public void readRecord(View view){
+        if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
+            mtts.speak("战绩！", TextToSpeech.QUEUE_FLUSH, null);
+        }else{
+            mtts.speak("战绩！", TextToSpeech.QUEUE_FLUSH, null, null);
+        }
+    }
+
+    public void readChallenge(View view){
+        if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
+            mtts.speak("挑战！", TextToSpeech.QUEUE_FLUSH, null);
+        }else{
+            mtts.speak("挑战！", TextToSpeech.QUEUE_FLUSH, null, null);
+        }
+    }
+
+    public static void readText(String text){
+        if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP){
+            mtts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+        }else{
+            mtts.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
+        }
+    }
 
 }

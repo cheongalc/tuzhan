@@ -2,6 +2,7 @@ package com.tuzhan;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -126,6 +127,10 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
             Log.w(LOG_TAG, Arrays.toString(new List[]{userEntries}));
             userScores = intent.getIntegerArrayListExtra(Constants.C_SCORE_SELF_LIST);
             List<Integer> cardIds = intent.getIntegerArrayListExtra(Constants.C_CARD_IDS_LIST);
+
+            //read out score
+            String scoreRead = "你得到了"+userScore+"分";
+            MainActivity.readText(scoreRead);
 
             GameFinishedActivity.cardIds = Utils.concatenate(cardIds);
             GameFinishedActivity.theme = topic;
