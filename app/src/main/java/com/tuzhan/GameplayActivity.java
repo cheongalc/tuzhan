@@ -2,6 +2,7 @@ package com.tuzhan;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +26,8 @@ import java.util.Objects;
 
 public class GameplayActivity extends AppCompatActivity implements GameFragmentInterface {
 
+
+    private MediaPlayer mediaPlayer;
     private static final String LOG_TAG = "GAMEPLAYACTIVITY";
 
     //ALL PRIVATE VARIABLES PERTAINING TO LAYOUT
@@ -86,6 +89,7 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(0);
 
+        MainActivity.audioService.changeAudio(R.raw.battle_theme, this);
 
         startGame();
         startTime = System.nanoTime();
@@ -236,6 +240,10 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
         startActivity(i);
         handler.removeCallbacks(scoreThreadRunnable);
         handler.removeCallbacksAndMessages(null);
+
+        //change audio back
+        MainActivity.audioService.changeAudio(R.raw.mean_theme, this);
+        finish();
     }
 
     private double roundOff(double value, int numOfPlaces) {

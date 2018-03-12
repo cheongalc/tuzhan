@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -49,6 +50,10 @@ import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
 public class MainActivity extends AppCompatActivity {
 
+    //play audio
+    public static AudioService audioService;
+
+    public static MediaPlayer mediaPlayer;
     private static final String LOG_TAG = "MAINACTIVITY";
     FirebaseUser currUser;
     FirebaseAuth mAuth;
@@ -198,6 +203,9 @@ public class MainActivity extends AppCompatActivity {
 
         //update matches list
         getPrevMatches();
+
+        audioService = new AudioService();
+        audioService.changeAudio(R.raw.mean_theme, this);
 
 
         //test text to speech
@@ -598,5 +606,6 @@ public class MainActivity extends AppCompatActivity {
             mtts.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
         }
     }
+
 
 }

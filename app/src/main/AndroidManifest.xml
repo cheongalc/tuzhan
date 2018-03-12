@@ -45,6 +45,7 @@
             android:theme="@style/AppTheme.PopUp"/>
         <service android:name=".ClosingService"
             android:stopWithTask="false"/>
+        <service android:name=".AudioService"/>
     </application>
 
 </manifest>

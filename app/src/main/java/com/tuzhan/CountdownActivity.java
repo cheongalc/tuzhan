@@ -5,6 +5,7 @@ import android.os.CountDownTimer;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -45,6 +46,8 @@ public class CountdownActivity extends AppCompatActivity {
         cardIDsString = pastIntent.getStringExtra(Constants.C_CARD_IDS_STRING);
         theme = pastIntent.getStringExtra(Constants.C_THEME);
         matchID = pastIntent.getStringExtra(Constants.C_MATCH_ID);
+
+        Log.d("cards_for_match", cardIDsString);
 
         // init the text views
         tv_selfName = (TextView) findViewById(R.id.tv_user_name);
