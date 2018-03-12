@@ -17,11 +17,13 @@ var onlineUsers = [];
 var offlineUsers = [];
 
 userStatesRef.on("child_added", (snapshot, uselessKey)=>{
+  console.log("child_added: " + snapshot.key);
   if(snapshot.val()) onlineUsers.push(snapshot.key);
   else offlineUsers.push(snapshot.key);
 });
 
 userStatesRef.on("child_changed", (snapshot)=>{
+  console.log("child_changed: " + snapshot.key);
   let email = snapshot.key;
   if(snapshot.val()){
     let index = offlineUsers.indexOf(email);
@@ -50,12 +52,12 @@ function randomElement(arr){
   return arr[randomInt(arr.length)];
 }
 
-const cardsPerMatch = 2;
+const cardsPerMatch = 5;
 // randomly sample a theme and 10 cards from that theme
 function sampleMatchParams(){
   let themeIndex = randomInt(data.themes.length);
   var cards = {};
-  let upperBound = data.cardCounts[themeIndex] - cardsPerMatch + 1;
+  let upperBound = data.cardCounts[themeIndex];
   while(Object.keys(cards).length < cardsPerMatch){
     cards[randomInt(upperBound)] = true;
   }
@@ -93,12 +95,12 @@ function createMatch(email1, email2, res){
 
 function findMatch(email, res){
 
-  // little hack to make sampling simpler + fix wrong user status, restore immediately after sampling
+  // little hack to make sampling simpler , restore immediately after sampling
   let thisUserIndex = onlineUsers.indexOf(email);
   if(thisUserIndex >= 0) onlineUsers.splice(thisUserIndex, 1);
   else{
-    let i = offlineUsers.indexOf(email);
-    if(i >= 0) offlineUsers.splice(i, 1);
+    res.end("NO_MATCH");
+    return;
   }
 
   if(onlineUsers.length > 0){
@@ -125,10 +127,23 @@ http.createServer((req, res)=>{
   }
   else{
     res.writeHead(200, {"Content-Type" : "text/plain"});
-    if(query.debug) res.end(JSON.stringify({
+    if(query.debug == 1) res.end(JSON.stringify({
       "online" : onlineUsers,
       "offline": offlineUsers
     }));
+    else if(query.debug){
+      if(onlineUsers.indexOf(query.debug) != null){
+        onlineUsers.splice(onlineUsers.indexOf(query.debug), 1);
+        res.end("deleted from onlineUsers");
+      }
+      else if(offlineUsers.indexOf(query.debug) != null){
+        offlineUsers.splice(offlineUsers.indexOf(query.debug), 1);
+        res.end("deleted from offlineUsers");
+      }
+      else{
+        res.end("email not found!");
+      }
+    }
     else findMatch(query.email.replace(/\./g, ","), res);
   }
 
