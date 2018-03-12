@@ -35,7 +35,7 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
     private static final String LOG_TAG = "FRAGMENTGAMEFINISHED";
 
     ListView lv_oppEntries, lv_userEntries;
-    TextView tv_userScore, tv_oppScore;
+    TextView tv_userScore, tv_oppScore, tv_userTime, tv_oppTime;
     CircleImageView civ_user, civ_opp;
     FirebaseUser curUser;
     FirebaseDatabase database;
@@ -70,6 +70,9 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
         tv_userScore = (TextView) rootview.findViewById(R.id.tv_userScore);
         tv_oppScore = (TextView) rootview.findViewById(R.id.tv_oppScore);
 
+        tv_oppTime = (TextView) rootview.findViewById(R.id.t_opp_time);
+        tv_userTime = (TextView) rootview.findViewById(R.id.t_user_time);
+
         civ_opp = (CircleImageView) rootview.findViewById(R.id.civ_opp_dp);
         civ_user = (CircleImageView) rootview.findViewById(R.id.civ_user_dp);
 
@@ -101,6 +104,7 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
             userScore = matchRecord.scoreSelf;
             userScores = matchRecord.scoresSelf;
             userEntries = matchRecord.entriesSelf;
+            userTime = matchRecord.timeSelf;
 
 
             //check if opponent has finished the match
@@ -113,6 +117,7 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
                 oppEntries = matchRecord.entriesOpp;
                 oppScores = matchRecord.scoresOpp;
                 oppScore = matchRecord.scoreOpp;
+                oppTime = matchRecord.timeOpp;
 
                 //set opponent info
                 setOppStuff();
@@ -182,6 +187,12 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
                             winner = oppEmail;
                         }else if(userScore > oppScore){
                             winner = curUser.getEmail();
+                        }else if(userScore == oppScore){
+                            if(userTime < oppTime){
+                                winner = curUser.getEmail();
+                            }else{
+                                winner = oppEmail;
+                            }
                         }
 
                         //game is finished, update both players' info
@@ -230,6 +241,8 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
         if(userScore < 0){
             tv_userScore.setText("DNF");
         }else tv_userScore.setText(userScore + "");
+        tv_userTime.setText(String.format("%.1f", userTime) + "秒");
+
 
         PlayerEntriesAdapter userEntriesAdapter = new PlayerEntriesAdapter(getActivity(), userEntries, userScores);
         lv_userEntries.setAdapter(userEntriesAdapter);
@@ -264,6 +277,7 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
             tv_oppScore.setText("DNF");
         }else {
             tv_oppScore.setText(oppScore + "");
+            tv_oppTime.setText(String.format("%.1f", oppTime) + "秒");
 
             PlayerEntriesAdapter oppEntriesAdapter = new PlayerEntriesAdapter(getActivity(), oppEntries, oppScores);
             lv_oppEntries.setAdapter(oppEntriesAdapter);

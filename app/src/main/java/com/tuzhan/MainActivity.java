@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     //play audio
     public static AudioService audioService;
 
+
     public static MediaPlayer mediaPlayer;
     private static final String LOG_TAG = "MAINACTIVITY";
     FirebaseUser currUser;
@@ -606,6 +607,5 @@ public class MainActivity extends AppCompatActivity {
             mtts.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
         }
     }
-
 
 }

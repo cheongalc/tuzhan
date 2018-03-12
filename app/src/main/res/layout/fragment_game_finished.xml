@@ -33,10 +33,10 @@
 
 
             <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_marginTop="10dp"
                 android:id="@+id/civ_user_dp"
                 android:layout_width="85dp"
                 android:layout_height="85dp"
-                android:layout_centerVertical="true"
                 android:src="@mipmap/tuzhan_vs"
                 app:civ_border_color="@color/colorAccentYellow"
                 app:civ_border_width="5dp" />
@@ -53,6 +53,23 @@
                 android:textColor="@color/colorAccentYellow"
                 android:textSize="30sp"
                 android:textStyle="bold" />
+
+            <TextView
+                android:drawableStart="@drawable/ic_access_time_black_24dp"
+                android:backgroundTint="@color/colorAccentYellow"
+                android:padding="5dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/background_rounded"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:text="..:.."
+                android:textSize="18sp"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_below="@+id/civ_user_dp"
+                android:maxLines="1"
+                android:id="@+id/t_user_time"/>
 
         </RelativeLayout>
 
@@ -81,11 +98,11 @@
             android:padding="5dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_marginTop="10dp"
                 android:id="@+id/civ_opp_dp"
                 android:layout_width="85dp"
                 android:layout_height="85dp"
                 android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
                 android:src="@mipmap/tuzhan_vs"
                 app:civ_border_color="@color/colorAccentYellow"
                 app:civ_border_width="5dp" />
@@ -103,6 +120,25 @@
                 android:textColor="@color/colorAccentYellow"
                 android:textSize="30sp"
                 android:textStyle="bold" />
+
+
+            <TextView
+                android:drawableTint="@color/colorWhite"
+                android:drawableEnd="@drawable/ic_access_time_black_24dp"
+                android:backgroundTint="@color/colorAccentYellow"
+                android:padding="5dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/background_rounded"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:text="..:.."
+                android:textSize="18sp"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_below="@+id/civ_opp_dp"
+                android:maxLines="1"
+                android:id="@+id/t_opp_time"/>
 
 
         </RelativeLayout>
