@@ -47,6 +47,7 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
     private Runnable mainRunnable, scoreThreadRunnable;
     private CountDownTimer cdt;
     private String currentEntry = "";
+    private boolean isCurrCardFinished;
 
     //ALL PRIVATE VARIABLES PERTAINING TO MATCH INFORMATION
     private String matchID, theme;
@@ -105,11 +106,13 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
         cdt = new CountDownTimer(DELAY-1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
+                isCurrCardFinished = false;
                 tv_playerTime.setText(String.valueOf(millisUntilFinished / 1000));
             }
 
             @Override
             public void onFinish() {
+                isCurrCardFinished = true;
                 tv_playerTime.setText("0");
             }
         }.start();
@@ -126,7 +129,7 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
             boolean handled = false;
             if (actionID == EditorInfo.IME_ACTION_DONE) {
                 String word = String.valueOf(view.getText());
-                if (word.length() > 0) {
+                if (word.length() > 0 && isCurrCardFinished == false) {
                     Log.w(LOG_TAG, "Submitting word " + word);
                     submitWord(word);
                 }
@@ -368,6 +371,7 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
             if (index != -1) {
                 fillBlueBox(index, firstCharacter, 0);
                 output = true;
+                break;
             }
         }
         return output;
