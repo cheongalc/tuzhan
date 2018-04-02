@@ -49,6 +49,7 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
     private CountDownTimer cdt;
     private String currentEntry = "";
     private boolean isCurrCardFinished;
+    private String OLD_TEST = "";
 
     //ALL PRIVATE VARIABLES PERTAINING TO MATCH INFORMATION
     private String matchID, theme;
@@ -164,6 +165,7 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
         mainRunnable = new Runnable() {
             @Override
             public void run() {
+                OLD_TEST = "";
                 Log.e(LOG_TAG, "mainRunnable reposted");
 
                 currQuestionCard = questionCardArrayList.get(currImageIndex);
@@ -301,44 +303,119 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
 
     private void submitWord(String word) {
         currScore = 0;
-        // start reading the word from left to right
-        char firstCharacter = word.charAt(0);
-        // check whether formatted answer dict contains the first character or not
-        Log.d(LOG_TAG, Arrays.toString(new List[]{formattedAnswers}));
-        if (isAnswer(firstCharacter)) {
-            if (possibleMatches.size() > 0) {
-                Log.d(LOG_TAG, "This isn't first time entering something.");
-                // this means that a first character has been entered before
-                boolean isContinuation = false;
-                for (int i = 0; i < possibleMatches.size(); i++) {
-                    if (possibleMatches.get(i).getLeft().equals(String.valueOf(firstCharacter))) {
-                        isContinuation = true;
-                        break;
-                    }
-                }
-                Log.d(LOG_TAG, String.valueOf(isContinuation));
-                if (!isContinuation) {
-                    // if there is a discontinuation
-                    possibleMatches.clear();
-                    clearBlueBoxes(firstCharacter);
-                    possibleMatches = findPossibleMatches(firstCharacter); // regenerate the array
-                }
 
-            } else possibleMatches = findPossibleMatches(firstCharacter); // find all the other possible characters that match
-        }
-        Log.d(LOG_TAG, possibleMatches.toString());
-        word = word.substring(1, word.length()); // take out first character
-        for (int i = 0; i < word.length(); i++) {
-            char currentCharacter = word.charAt(i);
-            for (int j = 0; j < possibleMatches.size(); j++) {
-                if (possibleMatches.get(j).getLeft().equals(String.valueOf(currentCharacter))) {
-                    fillBlueBox(possibleMatches.get(j).getRight(), currentCharacter, 0);
+        int[] matrix = new int[10]; // each index in this matrix corresponds to the index of each answer set Si
+
+        String NEW_TEST = OLD_TEST + word;
+
+        Log.d(LOG_TAG, "New Test: " + NEW_TEST);
+
+        // check whether each word inside each answer set Si is present inside word
+        for (int i = 0; i < formattedAnswers.size(); i++) {
+            String currentAnswerSet = formattedAnswers.get(i);
+            for (int j = 0; j < currentAnswerSet.length(); j++) {
+                char currentCharacter = currentAnswerSet.charAt(j);
+                if (NEW_TEST.indexOf(currentCharacter) != -1) {
+                    matrix[i]++;
                 }
             }
         }
+
+        Log.d(LOG_TAG, "Answers: " + Arrays.toString(new List[]{formattedAnswers}));
+        Log.d(LOG_TAG, "Matrix is as follows: " + Arrays.toString(matrix));
+
+        // pick the highest score, criteria goes as follows:
+        // 1) check whether magnitude is bigger
+        // 2) if the magnitude is the same, then take the smallest index
+
+        String bestWordSuggestion = "";
+        int bestScore = -1;
+        if (formattedAnswers.size() > 1) {
+            for (int i = 1; i < formattedAnswers.size(); i++) {
+                int currentScore = matrix[i];
+                int previousScore = matrix[i-1];
+                if (bestScore == -1) {
+                    if (currentScore > previousScore) {
+                        bestWordSuggestion = formattedAnswers.get(i);
+                        bestScore = currentScore;
+                    } else if (currentScore <= previousScore) {
+                        bestWordSuggestion = formattedAnswers.get(i-1);
+                        bestScore = previousScore;
+                    }
+                } else {
+                    if (currentScore > bestScore) {
+                        bestWordSuggestion = formattedAnswers.get(i);
+                        bestScore = currentScore;
+                    }
+                }
+            }
+        } else {
+            bestWordSuggestion = formattedAnswers.get(0);
+            bestScore = matrix[0];
+        }
+
+        Log.d(LOG_TAG, "Best suggestion is: " + bestWordSuggestion);
+
+        for (int i = 0; i < NEW_TEST.length(); i++) {
+            char currentCharacter = NEW_TEST.charAt(i);
+            int indexToFill = bestWordSuggestion.indexOf(currentCharacter);
+            if (indexToFill != -1) {
+                fillBlueBox(indexToFill, currentCharacter, 0);
+            } else {
+                StringBuilder sb = new StringBuilder(NEW_TEST);
+                sb.deleteCharAt(i);
+                NEW_TEST = sb.toString();
+            }
+        }
+
+        OLD_TEST = NEW_TEST;
+
+        Log.d(LOG_TAG, "New Test: " + NEW_TEST);
+
         currScore = countFilledBoxes() * 5;
         currentEntry = readFilledBoxes();
-        Log.e(LOG_TAG, String.valueOf(currScore));
+
+//        // start reading the word from left to right
+//        char firstCharacter = word.charAt(0);
+//        // check whether formatted answer dict contains the first character or not
+//        Log.d(LOG_TAG, Arrays.toString(new List[]{formattedAnswers}));
+//        if (isAnswer(firstCharacter)) {
+//            Log.d(LOG_TAG, "The first character " + firstCharacter + " is part of an answer");
+//            if (possibleMatches.size() > 0) {
+//                Log.d(LOG_TAG, "The first character " + firstCharacter + " is a continuation of one of the previous answers.");
+//                boolean isContinuation = false;
+//                for (int i = 0; i < possibleMatches.size(); i++) {
+//                    if (possibleMatches.get(i).getLeft().equals(String.valueOf(firstCharacter))) {
+//                        isContinuation = true;
+//                        break;
+//                    }
+//                }
+//                if (!isContinuation) {
+//                    // if there is a discontinuation
+//                    possibleMatches.clear();
+//                    clearBlueBoxes(firstCharacter);
+//                    possibleMatches = findPossibleMatches(firstCharacter); // regenerate the array
+//                }
+//
+//            } else {
+//                possibleMatches = findPossibleMatches(firstCharacter); // find all the other possible characters that match
+//                Log.d(LOG_TAG, "the list of possible matches for first character " + firstCharacter + " are: " + Arrays.toString(new List[]{possibleMatches}));
+//            }
+//
+//        }
+//        Log.d(LOG_TAG, possibleMatches.toString());
+//        word = word.substring(1, word.length()); // take out first character
+//        for (int i = 0; i < word.length(); i++) {
+//            char currentCharacter = word.charAt(i);
+//            for (int j = 0; j < possibleMatches.size(); j++) {
+//                if (possibleMatches.get(j).getLeft().equals(String.valueOf(currentCharacter))) {
+//                    fillBlueBox(possibleMatches.get(j).getRight(), currentCharacter, 0);
+//                }
+//            }
+//        }
+//        currScore = countFilledBoxes() * 5;
+//        currentEntry = readFilledBoxes();
+//        Log.e(LOG_TAG, String.valueOf(currScore));
     }
 
     private String readFilledBoxes() {
@@ -379,7 +456,6 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
     }
 
     private void fillBlueBox(int index, char characterToFill, int mode) {
-        Log.d(LOG_TAG, "Index: " + index);
         TextView tv_characterBox = (TextView) rootLayout.findViewWithTag(index);
         tv_characterBox.setText(String.valueOf(characterToFill));
         if (mode == 0) {
@@ -387,6 +463,7 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
         } else if (mode == 1) {
             tv_characterBox.setBackgroundResource(R.drawable.item_character_red);
         }
+        Log.d(LOG_TAG, "Filling blue box " + String.valueOf(index) + " with character " + characterToFill);
     }
 
     private List< Pair <String, Integer> > findPossibleMatches(char character) {
