@@ -1,15 +1,23 @@
 package com.tuzhan;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.CountDownTimer;
 import android.speech.tts.TextToSpeech;
+import android.support.constraint.solver.Cache;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.LruCache;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +33,21 @@ public class CountdownActivity extends AppCompatActivity {
     TextView tv_selfName, tv_opponentName;
     String cardIDsString, theme, matchID;
 
+    int cardSize = 0;
+
     ArrayList<QuestionCard> questionCardArrayList = new ArrayList<>();
+
+    public static int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+    public static int maxCacheSize = maxMemory / 8;
+    public static LruCache<String, Bitmap> cache = new LruCache<String, Bitmap>(maxCacheSize){
+
+        @Override
+        protected int sizeOf(String key, Bitmap value) {
+            return value.getByteCount() / 1024;
+        }
+
+    };
+
 
     User self, opponent;
 
@@ -100,11 +122,16 @@ public class CountdownActivity extends AppCompatActivity {
                 questionCardArrayList.addAll(qCardList);
             }
         });
-        beginCountDown();
+
+        for(QuestionCard card : questionCardArrayList){
+            new DownloadImage().execute(card.imageURL);
+        }
+
+
     }
 
     private void beginCountDown(){
-        MainActivity.readText("游戏即将开始");
+        //MainActivity.readText("游戏即将开始");
         countDownTimer.start();
     }
 
@@ -113,4 +140,57 @@ public class CountdownActivity extends AppCompatActivity {
         super.onDestroy();
         countDownTimer.cancel();
     }
+
+    private class DownloadImage extends AsyncTask<URL,Integer, Bitmap>{
+
+
+        @Override
+        protected Bitmap doInBackground(URL... params) {
+            URL image = params[0];
+
+            if(GetBitMapFromCache(image.toString()) == null){
+                try {
+                    Bitmap feteched =  BitmapFactory.decodeStream(image.openStream());
+                    Cache(image.toString(), feteched);
+                    return BitmapFactory.decodeStream(image.openStream());
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }else{
+                return GetBitMapFromCache(image.toString());
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            cardSize++;
+            if(cardSize == questionCardArrayList.size()){
+                beginCountDown();
+            }
+            super.onPostExecute(bitmap);
+        }
+
+    }
+
+    private void Cache(String key, Bitmap bitmap){
+        if ( GetBitMapFromCache(key) == null) cache.put(key, bitmap);
+    }
+
+    public static Bitmap GetBitMapFromCache(String key){
+        return cache.get(key);
+    }
+
+//    private class MyParams{
+//
+//        URL image;
+//        DataFetchedCallback callback;
+//
+//        public MyParams(URL image, DataFetchedCallback callback) {
+//            this.image = image;
+//            this.callback = callback;
+//        }
+//    }
+
 }
