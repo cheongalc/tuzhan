@@ -27,9 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:background="@drawable/background_image_credits"
             android:padding="@dimen/PaddingS"
-            android:text="摘于 Sapann | Freepik"
             android:textColor="@color/colorAccent"
             android:textAlignment="center"/>
 

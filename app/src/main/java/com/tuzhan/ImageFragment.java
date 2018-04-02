@@ -67,7 +67,7 @@ public class ImageFragment extends Fragment {
 
         //Parse the current Question Card
         URL imageURL = questionCard.imageURL;
-        String credit = questionCard.credit;
+//        String credit = questionCard.credit;
 
         ImageView iv_gameplayImage = (ImageView) rootLayout.findViewById(R.id.iv_gameplayImage);
         TextView tv_imageCredits = (TextView) rootLayout.findViewById(R.id.tv_imageCredits);
@@ -75,7 +75,7 @@ public class ImageFragment extends Fragment {
         if(CountdownActivity.GetBitMapFromCache(imageURL.toString()) != null) {
             iv_gameplayImage.setImageBitmap(CountdownActivity.GetBitMapFromCache(imageURL.toString()));
         }else Picasso.with(getContext()).load(imageURL+"").into(iv_gameplayImage);
-        tv_imageCredits.setText(credit);
+//        tv_imageCredits.setText(credit);
 
         try {
             GameFragmentInterface gfi = (GameFragmentInterface) getActivity();

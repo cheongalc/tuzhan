@@ -375,6 +375,8 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
         currScore = countFilledBoxes() * 5;
         currentEntry = readFilledBoxes();
 
+        // OLD, UNUSED ALGORITHM
+
 //        // start reading the word from left to right
 //        char firstCharacter = word.charAt(0);
 //        // check whether formatted answer dict contains the first character or not
