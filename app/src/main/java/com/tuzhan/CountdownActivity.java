@@ -118,8 +118,6 @@ public class CountdownActivity extends AppCompatActivity {
         //populate questionCardArrayList...
         cardIDsList = Utils.splitToInts(cardIDsString);
 
-        Toast.makeText(this, cardIDsList.size()+"", Toast.LENGTH_SHORT).show();
-
         DataSource.shared.fetchCards(theme, cardIDsList, qCardList -> {
             if(qCardList != null) {
                 questionCardArrayList.addAll(qCardList);
