@@ -72,9 +72,9 @@ public class ImageFragment extends Fragment {
         ImageView iv_gameplayImage = (ImageView) rootLayout.findViewById(R.id.iv_gameplayImage);
         TextView tv_imageCredits = (TextView) rootLayout.findViewById(R.id.tv_imageCredits);
 
-        iv_gameplayImage.setImageBitmap(CountdownActivity.GetBitMapFromCache(imageURL.toString()));
-
-        //Picasso.with(getContext()).load(imageURL+"").into(iv_gameplayImage);
+        if(CountdownActivity.GetBitMapFromCache(imageURL.toString()) != null) {
+            iv_gameplayImage.setImageBitmap(CountdownActivity.GetBitMapFromCache(imageURL.toString()));
+        }else Picasso.with(getContext()).load(imageURL+"").into(iv_gameplayImage);
         tv_imageCredits.setText(credit);
 
         try {

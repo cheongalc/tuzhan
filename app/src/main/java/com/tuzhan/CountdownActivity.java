@@ -36,9 +36,10 @@ public class CountdownActivity extends AppCompatActivity {
     int cardSize = 0;
 
     ArrayList<QuestionCard> questionCardArrayList = new ArrayList<>();
+    List<Integer> cardIDsList;
 
     public static int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-    public static int maxCacheSize = maxMemory / 8;
+    public static int maxCacheSize = maxMemory / 4;
     public static LruCache<String, Bitmap> cache = new LruCache<String, Bitmap>(maxCacheSize){
 
         @Override
@@ -115,23 +116,25 @@ public class CountdownActivity extends AppCompatActivity {
 
     private void retrieveMaterials() {
         //populate questionCardArrayList...
-        List<Integer> cardIDsList = Utils.splitToInts(cardIDsString);
+        cardIDsList = Utils.splitToInts(cardIDsString);
+
+        Toast.makeText(this, cardIDsList.size()+"", Toast.LENGTH_SHORT).show();
 
         DataSource.shared.fetchCards(theme, cardIDsList, qCardList -> {
             if(qCardList != null) {
                 questionCardArrayList.addAll(qCardList);
+
+                for(QuestionCard card : questionCardArrayList){
+                    new DownloadImage().execute(card.imageURL);
+                }
+
             }
         });
-
-        for(QuestionCard card : questionCardArrayList){
-            new DownloadImage().execute(card.imageURL);
-        }
 
 
     }
 
     private void beginCountDown(){
-        //MainActivity.readText("游戏即将开始");
         countDownTimer.start();
     }
 
@@ -148,25 +151,30 @@ public class CountdownActivity extends AppCompatActivity {
         protected Bitmap doInBackground(URL... params) {
             URL image = params[0];
 
-            if(GetBitMapFromCache(image.toString()) == null){
-                try {
-                    Bitmap feteched =  BitmapFactory.decodeStream(image.openStream());
-                    Cache(image.toString(), feteched);
-                    return BitmapFactory.decodeStream(image.openStream());
+            if(image != null) {
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return null;
+                if (GetBitMapFromCache(image.toString()) == null) {
+                    try {
+                        Bitmap feteched = BitmapFactory.decodeStream(image.openStream());
+                        if(feteched!= null) {
+                            Cache(image.toString(), feteched);
+                            return BitmapFactory.decodeStream(image.openStream());
+                        }else return  null;
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                } else {
+                    return GetBitMapFromCache(image.toString());
                 }
-            }else{
-                return GetBitMapFromCache(image.toString());
-            }
+            }else return null;
         }
 
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             cardSize++;
-            if(cardSize == questionCardArrayList.size()){
+            if(cardSize == cardIDsList.size()){
                 beginCountDown();
             }
             super.onPostExecute(bitmap);
