@@ -100,8 +100,6 @@ public class FragmentFlashCards extends Fragment {
                         //variable used for updating progress bar
                         guessedCards+=1;
 
-                        Toast.makeText(getContext(), (int) (((double) guessedCards / (double) original_size) * 100)+"", Toast.LENGTH_SHORT).show();
-
                         //update progress bar
                         pbFlashCardProgress.setProgress((int) (((double) guessedCards / (double) original_size) * 100));
                         if(questionCards.size() != 0){
