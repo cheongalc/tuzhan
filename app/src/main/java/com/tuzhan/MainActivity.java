@@ -70,6 +70,9 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout prev_matches, new_matches;
     RelativeLayout prev_matches_title, new_challenges_title;
 
+    ImageView ivStartGame,startGameArrow;
+
+
     private List<String> prevMatchIds = new ArrayList<>();
     private List<MatchDetails> prevMatchDetails = new ArrayList<>();
 
@@ -126,6 +129,8 @@ public class MainActivity extends AppCompatActivity {
         new_challenges_title = (RelativeLayout) findViewById(R.id.tuzhan_challenge_title);
         list_view_load = (AVLoadingIndicatorView) findViewById(R.id.list_view_load_indicator);
         background = (ImageView) findViewById(R.id.pattern_back);
+        startGameArrow = (ImageView) findViewById(R.id.startArrow);
+        ivStartGame = (ImageView)findViewById(R.id.ivStartGame);
         ImageButton bStartGame = (ImageButton) findViewById(R.id.bStartGame);
 
         Picasso.with(this).load(currUser.getPhotoUrl()).into(civ_displayPhoto);
@@ -203,7 +208,23 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //update matches list
-        getPrevMatches();
+        root.child("Users").child(currUser.getEmail().replace('.', ',')).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChild("matches")){
+                    getPrevMatches();
+                }else{
+                    list_view_load.setVisibility(View.GONE);
+                    startGameArrow.setVisibility(View.VISIBLE);
+                    ivStartGame.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         audioService = new AudioService();
         audioService.changeAudio(R.raw.mean_theme, this);
@@ -421,6 +442,9 @@ public class MainActivity extends AppCompatActivity {
         }
         setListViewHeightBasedOnChildren(lv);
         list_view_load.setVisibility(View.GONE);
+        startGameArrow.setVisibility(View.GONE);
+        ivStartGame.setVisibility(View.GONE);
+
     }
 
     View.OnClickListener userInfoClick = v -> {

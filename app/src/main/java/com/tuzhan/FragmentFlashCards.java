@@ -98,7 +98,9 @@ public class FragmentFlashCards extends Fragment {
                         userEntries.remove(0);
 
                         //variable used for updating progress bar
-                        guessedCards+=2;
+                        guessedCards+=1;
+
+                        Toast.makeText(getContext(), (int) (((double) guessedCards / (double) original_size) * 100)+"", Toast.LENGTH_SHORT).show();
 
                         //update progress bar
                         pbFlashCardProgress.setProgress((int) (((double) guessedCards / (double) original_size) * 100));
