@@ -655,13 +655,12 @@ public class MainActivity extends AppCompatActivity {
         if (!hasPinyin) {
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             dialog.setMessage("Please install a Chinese keyboard")
-                    .setTitle("Missing Chinese keyboard")
                     .setPositiveButton("Install Now", (_dialog, _which) -> {
                         openInputDownload();
                     });
             AlertDialog alertDialog = dialog.create();
 
-            alertDialog.setOnShowListener(dialog1 -> alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(getColor(R.color.colorAccentYellow)));
+            alertDialog.setOnShowListener(dialog1 -> alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(getColor(R.color.colorPrimaryDark)));
             alertDialog.show();
 
 
