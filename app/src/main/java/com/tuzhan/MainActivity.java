@@ -3,18 +3,26 @@ package com.tuzhan;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.speech.tts.TextToSpeech;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethod;
+import android.view.inputmethod.InputMethodInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.view.inputmethod.InputMethodSubtype;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -70,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout prev_matches, new_matches;
     RelativeLayout prev_matches_title, new_challenges_title;
 
-    ImageView ivStartGame,startGameArrow;
+    ImageView ivStartGame, startGameArrow;
 
 
     private List<String> prevMatchIds = new ArrayList<>();
@@ -130,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
         list_view_load = (AVLoadingIndicatorView) findViewById(R.id.list_view_load_indicator);
         background = (ImageView) findViewById(R.id.pattern_back);
         startGameArrow = (ImageView) findViewById(R.id.startArrow);
-        ivStartGame = (ImageView)findViewById(R.id.ivStartGame);
+        ivStartGame = (ImageView) findViewById(R.id.ivStartGame);
         ImageButton bStartGame = (ImageButton) findViewById(R.id.bStartGame);
 
         Picasso.with(this).load(currUser.getPhotoUrl()).into(civ_displayPhoto);
@@ -142,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
         ScrollView scrollView = (ScrollView) findViewById(R.id.main_scroll_view);
         OverScrollDecoratorHelper.setUpOverScroll(scrollView);
 
+        checkLanguage();
 
         //check for self network status and update accordingly
         DatabaseReference ConnectionRef = root.child(".info/connected");
@@ -185,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
         List<MatchDetails> prevmatchDetailsList = new ArrayList<>();
         List<String> prevmatchId = new ArrayList<>();
 
-        if(!isConnectedInternet(this)) {
+        if (!isConnectedInternet(this)) {
             if (lv_prevMatches.getChildCount() < 1 || prevmatchId.size() < 1 || prevmatchDetailsList.size() < 1) {
                 for (MatchRecord matchRecord : matchRecords) {
                     User opponent = DataSource.shared.userForEmail(matchRecord.oppEmail.replace('.', ','));
@@ -211,9 +220,9 @@ public class MainActivity extends AppCompatActivity {
         root.child("Users").child(currUser.getEmail().replace('.', ',')).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.hasChild("matches")){
+                if (dataSnapshot.hasChild("matches")) {
                     getPrevMatches();
-                }else{
+                } else {
                     list_view_load.setVisibility(View.GONE);
                     startGameArrow.setVisibility(View.VISIBLE);
                     ivStartGame.setVisibility(View.VISIBLE);
@@ -361,7 +370,6 @@ public class MainActivity extends AppCompatActivity {
                 }//else match did not start
 
 
-
                 //final versions of oppemail and match outcome to pass to second listener
                 final String fin_opponent_email = opponent_email;
                 final String fin_outcome = outcome;
@@ -398,7 +406,7 @@ public class MainActivity extends AppCompatActivity {
 
                         } else {
                             //match is new challenge
-                            if(newMatchIds.contains(matchDetails.match_id)) {
+                            if (newMatchIds.contains(matchDetails.match_id)) {
                                 for (MatchDetails m : newMatchDetails) {
                                     if (m.match_id.equals(matchDetails.match_id)) {
                                         newMatchDetails.remove(m);
@@ -406,7 +414,7 @@ public class MainActivity extends AppCompatActivity {
                                         break;
                                     }
                                 }
-                            }else {
+                            } else {
                                 newMatchDetails.add(matchDetails);
                                 newMatchIds.add(match_id);
                             }
@@ -608,28 +616,65 @@ public class MainActivity extends AppCompatActivity {
         return animator;
     }
 
-    public void readRecord(View view){
-        if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
+    public void readRecord(View view) {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
             mtts.speak("战绩！", TextToSpeech.QUEUE_FLUSH, null);
-        }else{
+        } else {
             mtts.speak("战绩！", TextToSpeech.QUEUE_FLUSH, null, null);
         }
     }
 
-    public void readChallenge(View view){
-        if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
+    public void readChallenge(View view) {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
             mtts.speak("挑战！", TextToSpeech.QUEUE_FLUSH, null);
-        }else{
+        } else {
             mtts.speak("挑战！", TextToSpeech.QUEUE_FLUSH, null, null);
         }
     }
 
-    public static void readText(String text){
-        if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP){
+    public static void readText(String text) {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
             mtts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
-        }else{
+        } else {
             mtts.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
         }
+    }
+
+    private void checkLanguage() {
+        InputMethodManager ims = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        assert ims != null;
+        Boolean hasPinyin = false;
+        List<InputMethodInfo> ims_info = ims.getEnabledInputMethodList();
+        for (InputMethodInfo info : ims_info) {
+            if (info.getServiceName().equals("com.google.android.inputmethod.pinyin.PinyinIME")) {
+                hasPinyin = true;
+                break;
+            }
+        }
+
+        if (!hasPinyin) {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setMessage("Please install a Chinese keyboard")
+                    .setTitle("Missing Chinese keyboard")
+                    .setPositiveButton("Install Now", (_dialog, _which) -> {
+                        openInputDownload();
+                    });
+            AlertDialog alertDialog = dialog.create();
+
+            alertDialog.setOnShowListener(dialog1 -> alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(getColor(R.color.colorAccentYellow)));
+            alertDialog.show();
+
+
+
+        }
+
+
+    }
+
+    private void openInputDownload() {
+        String url = "market://details?id=com.google.android.inputmethod.pinyin";
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+        Log.d("Play", String.valueOf(Uri.parse(url)));
     }
 
 }
