@@ -89,7 +89,7 @@ public class CountdownActivity extends AppCompatActivity {
 
         Intent i = new Intent(CountdownActivity.this, GameplayActivity.class);
 
-        MainActivity.readText("看图片，输入汉语拼音！");
+        MainActivity.readText("看图片，输入汉语拼音!");
 
         // init the countdown timer
         countDownTimer = new CountDownTimer(4000, 1000) {
