@@ -90,13 +90,13 @@ public class CountdownActivity extends AppCompatActivity {
         Intent i = new Intent(CountdownActivity.this, GameplayActivity.class);
 
         MainActivity.readText("看图片，输入汉语拼音!");
-
         // init the countdown timer
         countDownTimer = new CountDownTimer(4000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 int secondsRemaining = (int) millisUntilFinished/1000;
                 civ_centerCountDown.setImageResource(countDownNumbers[secondsRemaining-1]);
+                Log.e(LOG_TAG, "Countdown at: " + secondsRemaining);
             }
 
             public void onFinish() {
@@ -133,6 +133,7 @@ public class CountdownActivity extends AppCompatActivity {
 
     private void beginCountDown(){
         countDownTimer.start();
+        Log.e(LOG_TAG, "countdown started");
     }
 
     @Override
