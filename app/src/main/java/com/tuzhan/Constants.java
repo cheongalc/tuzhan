@@ -75,5 +75,6 @@ public class Constants {
         public static ArrayList<QuestionCard> questionCardArrayList;
         public static final boolean START_FROM_MAIN = true;
         public static final boolean START_FROM_GAMEPLAY = false;
+        public static final String AUDIO_POSITION = "AUDIO_POSITION";
     }
 }

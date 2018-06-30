@@ -91,6 +91,7 @@ public class MatchDetailsAdapter extends ArrayAdapter<String> {
                 i.putExtra(Constants.C_MATCH_ID, matchDetails.match_id);
                 i.putExtra(Constants.C_GAMEFINISHED_KEY, Constants.M.START_FROM_MAIN);
                 i.putExtra(Constants.C_OPPONENT_DPURL, opponent.dpURL);
+
                 getContext().startActivity(i);
             } else {
                 // if the current list item is listing out a CHALLENGE

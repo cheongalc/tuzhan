@@ -94,11 +94,21 @@ public class MainActivity extends AppCompatActivity {
 
     ImageView background;
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-//        Toast.makeText(this, "main_ended", Toast.LENGTH_SHORT).show();
-    }
+//    Unused code attempt to stop audio once user exits app
+
+//    @Override
+//    protected void onUserLeaveHint() {
+//        super.onUserLeaveHint();
+//        audioService.pause();
+//        Log.d(LOG_TAG, "User has exitted the app");
+//    }
+//
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        audioService.resume();
+//        Log.d(LOG_TAG, "User has reentered the app");
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
