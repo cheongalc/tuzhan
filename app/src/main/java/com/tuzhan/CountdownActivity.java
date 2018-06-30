@@ -95,8 +95,7 @@ public class CountdownActivity extends AppCompatActivity {
 
             public void onTick(long millisUntilFinished) {
                 int secondsRemaining = (int) millisUntilFinished/1000;
-                civ_centerCountDown.setImageResource(countDownNumbers[secondsRemaining-1]);
-                Log.e(LOG_TAG, "Countdown at: " + secondsRemaining);
+                civ_centerCountDown.setImageResource(countDownNumbers[secondsRemaining]);
             }
 
             public void onFinish() {
