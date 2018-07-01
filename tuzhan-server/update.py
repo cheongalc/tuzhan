@@ -7,7 +7,7 @@ data = {}
 
 for row in reader:
     card = {}
-    card['answersRaw'] = row[2] + ';' + row[3]
+    card['answersRaw'] = row[2] + ';'
     card['credit'] = 'placeholder'
     card['imageURL'] = row[1]
 
