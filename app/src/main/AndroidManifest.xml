@@ -46,6 +46,10 @@
         <service android:name=".ClosingService"
             android:stopWithTask="false"/>
         <service android:name=".AudioService"/>
+        <meta-data
+            tools:replace="android:value"
+            android:name="android.support.VERSION"
+            android:value="26.1.0"/>
     </application>
 
 </manifest>
