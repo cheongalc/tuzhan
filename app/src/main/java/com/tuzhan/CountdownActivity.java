@@ -52,7 +52,7 @@ public class CountdownActivity extends AppCompatActivity {
 
     User self, opponent;
 
-    CountDownTimer countDownTimer;
+    PreciseCountDownTimer countDownTimer;
 
     int[] countDownNumbers = {R.mipmap.tuzhan_1, R.mipmap.tuzhan_2, R.mipmap.tuzhan_3, R.mipmap.tuzhan_4, R.mipmap.tuzhan_5};
 
@@ -90,16 +90,19 @@ public class CountdownActivity extends AppCompatActivity {
         Intent i = new Intent(CountdownActivity.this, GameplayActivity.class);
 
         MainActivity.readText("看图片，输入汉语拼音!");
-
         // init the countdown timer
-        countDownTimer = new CountDownTimer(4000, 1000) {
 
-            public void onTick(long millisUntilFinished) {
-                int secondsRemaining = (int) millisUntilFinished/1000;
+        countDownTimer = new PreciseCountDownTimer(4000, 1000) {
+            @Override
+            public void onTick(long timeLeft) {
+                int secondsRemaining = (int) timeLeft/1000;
                 civ_centerCountDown.setImageResource(countDownNumbers[secondsRemaining-1]);
+                Log.d(LOG_TAG, String.valueOf("timeLeft Millis: " + timeLeft));
+                Log.d(LOG_TAG, String.valueOf("timeLeft Secs: " + timeLeft/1000));
             }
 
-            public void onFinish() {
+            @Override
+            public void onFinished() {
                 i.putExtra(Constants.C_CARD_IDS_STRING, cardIDsString);
                 i.putExtra(Constants.C_MATCH_ID, matchID);
                 i.putExtra(Constants.C_THEME, theme);
@@ -133,6 +136,7 @@ public class CountdownActivity extends AppCompatActivity {
 
     private void beginCountDown(){
         countDownTimer.start();
+        Log.e(LOG_TAG, "countdown started");
     }
 
     @Override

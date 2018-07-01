@@ -140,6 +140,8 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
             GameFinishedActivity.cardIds = Utils.concatenate(cardIds);
             GameFinishedActivity.theme = topic;
 
+            // TODO: 26/05/2018 check tutorial here
+
             //format stuff for uploading to fdb
             String formattedUserEntries = Utils.concatenate(userEntries);
             String formattedUserScores = Utils.concatenate(userScores);

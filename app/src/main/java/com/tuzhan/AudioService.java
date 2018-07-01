@@ -11,6 +11,10 @@ public class AudioService extends Service {
 
     public static MediaPlayer mediaPlayer;
 
+    public int audioPosition;
+
+
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -36,5 +40,27 @@ public class AudioService extends Service {
         mediaPlayer.setLooping(true);
         mediaPlayer.start();
 
+    }
+
+    public void pause() {
+        if (mediaPlayer != null) {
+            mediaPlayer.pause();
+            audioPosition = mediaPlayer.getCurrentPosition();
+        }
+    }
+
+    public void resume() {
+        if (mediaPlayer != null) {
+            mediaPlayer.seekTo(audioPosition);
+            mediaPlayer.start();
+        }
+    }
+
+    public void seekTo(int position) {
+        if (mediaPlayer != null) {
+            pause();
+            mediaPlayer.seekTo(position);
+            mediaPlayer.start();
+        }
     }
 }

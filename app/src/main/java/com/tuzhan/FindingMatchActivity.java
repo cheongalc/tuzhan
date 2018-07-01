@@ -26,6 +26,7 @@ public class FindingMatchActivity extends AppCompatActivity {
 
     public static final String LOG_TAG = "FINDINGMATCHACTIVITY";
 
+
     FirebaseUser currUser;
 
     FirebaseDatabase database;

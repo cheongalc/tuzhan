@@ -39,7 +39,7 @@ public class GameplayActivity extends AppCompatActivity implements GameFragmentI
     private ArrayList<QuestionCard> questionCardArrayList = new ArrayList<>(); // represents the list of Question Card, passed over from CountdownActivity
     private QuestionCard currQuestionCard; // represents current Question Card
     private static final int NUM_IMAGES = 5;
-    private static final int DELAY = 12000;
+    private static final int DELAY = 22000;
     private int currImageIndex = 0;
     private int maxScore = 0, currScore = 0;
     private List<String> formattedAnswers = new ArrayList<>(); // global list to store the answers
