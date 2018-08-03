@@ -56,7 +56,7 @@ public class UserInfo extends AppCompatActivity {
         tv_userKD = (TextView) findViewById(R.id.tv_userKD);
         tv_userRounds = (TextView) findViewById(R.id.tv_userRoundsPlayed);
 
-        Picasso.with(this).load(currUser.getPhotoUrl()).into(civ_userDisplayPhoto);
+        Picasso.get().load(currUser.getPhotoUrl()).into(civ_userDisplayPhoto);
         tv_userDisplayName.setText(currUser.getDisplayName());
         tv_userEmail.setText(currUser.getEmail());
 

@@ -122,7 +122,7 @@ public class MatchDetailsAdapter extends ArrayAdapter<String> {
             }
         });
 
-        Picasso.with(getContext()).load(opponent.dpURL).into(civOpponentDp);
+        Picasso.get().load(opponent.dpURL).into(civOpponentDp);
 
         tvOpponentName.setText(opponent.displayname);
         tvTopic.setText(topic);

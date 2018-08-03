@@ -249,8 +249,8 @@ public class FragmentGameFinished extends android.support.v4.app.Fragment {
         PlayerEntriesAdapter userEntriesAdapter = new PlayerEntriesAdapter(getActivity(), userEntries, userScores);
         lv_userEntries.setAdapter(userEntriesAdapter);
 
-        Picasso.with(getActivity()).load(curUser.getPhotoUrl()).into(civ_user);
-        Picasso.with(getActivity()).load(opponentDPURL).into(civ_opp);
+        Picasso.get().load(curUser.getPhotoUrl()).into(civ_user);
+        Picasso.get().load(opponentDPURL).into(civ_opp);
 
 
         return rootview;

@@ -150,10 +150,9 @@ public class MainActivity extends AppCompatActivity {
         startGameArrow = (ImageView) findViewById(R.id.startArrow);
         ivStartGame = (ImageView) findViewById(R.id.ivStartGame);
         ImageButton bStartGame = (ImageButton) findViewById(R.id.bStartGame);
-
-        Picasso.with(this).load(currUser.getPhotoUrl()).into(civ_displayPhoto);
+        Picasso.get().load(currUser.getPhotoUrl()).into(civ_displayPhoto);
         tv_displayName.setText(currUser.getDisplayName());
-        //Picasso.with(this).load(R.mipmap.tuzhan_pattern).into(background);
+        //Picasso.get().load(R.mipmap.tuzhan_pattern).into(background);
 
         rl_userInfoBtnContainer.setOnClickListener(userInfoClick);
 

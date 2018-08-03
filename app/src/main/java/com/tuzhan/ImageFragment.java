@@ -74,7 +74,7 @@ public class ImageFragment extends Fragment {
 
         if(CountdownActivity.GetBitMapFromCache(imageURL.toString()) != null) {
             iv_gameplayImage.setImageBitmap(CountdownActivity.GetBitMapFromCache(imageURL.toString()));
-        }else Picasso.with(getContext()).load(imageURL+"").into(iv_gameplayImage);
+        }else Picasso.get().load(imageURL+"").into(iv_gameplayImage);
 //        tv_imageCredits.setText(credit);
 
         try {

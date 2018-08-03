@@ -84,8 +84,8 @@ public class CountdownActivity extends AppCompatActivity {
         civ_centerCountDown = (CircleImageView) findViewById(R.id.civ_center_count_down);
 
         // load the display photos into the circle image views
-        Picasso.with(this).load(self.dpURL).into(civ_selfDP);
-        Picasso.with(this).load(opponent.dpURL).into(civ_opponentDP);
+        Picasso.get().load(self.dpURL).into(civ_selfDP);
+        Picasso.get().load(opponent.dpURL).into(civ_opponentDP);
 
         Intent i = new Intent(CountdownActivity.this, GameplayActivity.class);
 
