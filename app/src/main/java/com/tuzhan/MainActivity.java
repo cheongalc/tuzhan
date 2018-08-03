@@ -2,6 +2,7 @@ package com.tuzhan;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.arch.lifecycle.ProcessLifecycleOwner;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -60,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
 
     //play audio
     public static AudioService audioService;
-
 
     public static MediaPlayer mediaPlayer;
     private static final String LOG_TAG = "MAINACTIVITY";
@@ -247,6 +247,7 @@ public class MainActivity extends AppCompatActivity {
         audioService = new AudioService();
         audioService.changeAudio(R.raw.mean_theme, this);
 
+        ProcessLifecycleOwner.get().getLifecycle().addObserver(new AppLifecycleListener());
 
         //test text to speech
         Intent checkIntent = new Intent();
